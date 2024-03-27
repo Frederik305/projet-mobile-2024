@@ -8,6 +8,8 @@ Composant de l'appareil : accès aux photos enregistrées, et accès aux notific
   • HighScore
   • Changement de véhicule
   • Bouton jouer
+  • Ajout image de profil
+  • Page instruction
 
 2 - Ecran de jeu (VueGame)
   • Score
@@ -20,3 +22,4 @@ Composant de l'appareil : accès aux photos enregistrées, et accès aux notific
   • Distance parcourue
   • Bouton rejouer
   • Bouton retour VueHomePage
+

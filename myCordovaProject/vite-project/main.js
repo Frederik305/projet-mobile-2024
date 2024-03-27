@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -23,11 +22,11 @@ scene.add(ground);
 
 
 // Ajout de lumières à la scène
-var ambientLight = new THREE.AmbientLight(0xffffff, 1); // Lumière ambiante
+var ambientLight = new THREE.AmbientLight(0xffffff, 5); // Lumière ambiante
 scene.add(ambientLight);
 
-var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // Lumière directionnelle
-directionalLight.position.set(0, 1, 0);
+var directionalLight = new THREE.DirectionalLight(0xffffff, 5); // Lumière directionnelle
+directionalLight.position.set(1, 1, 1);
 scene.add(directionalLight);
 
 window.addEventListener('resize', onWindowResize, false)
@@ -38,6 +37,9 @@ function onWindowResize() {
     render()
 }
 
+function render() {
+    renderer.render(scene, camera);
+}
 
 let voiture;
 
@@ -67,10 +69,8 @@ function resizeModel(scale) {
 function animate() {
 	requestAnimationFrame( animate );
 
-	voiture.rotation.x += 0.01;
+	//voiture.rotation.x += 0.01;
 	//voiture.rotation.y += 0.01;
-	
-	
 }
 
 animate();

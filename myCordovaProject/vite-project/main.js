@@ -48,6 +48,7 @@ function render() {
 }
 
 let voiture;
+const cameraDistance = 700;
 
 const loader = new GLTFLoader();
 
@@ -62,7 +63,14 @@ loader.load( 'public/Sports.glb', ( gltf )=> {
 	
 
 	scene.add( voiture );
-	camera.lookAt(voiture.position)
+
+	const cameraOffset = new THREE.Vector3(0, -200, cameraDistance);
+    const cameraPosition = new THREE.Vector3();
+    cameraPosition.copy(voiture.position).add(cameraOffset);
+    camera.position.copy(cameraPosition);
+
+    // Look at the car
+    camera.lookAt(voiture.position);
 }, undefined, function ( error ) {
 
 	console.error( error );

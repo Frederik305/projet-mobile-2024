@@ -1,6 +1,6 @@
 class CarDAO{
     constructor(){
-        this.cars = [{id: "1", name: "Test", model: "Sports.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10}];
+        this.cars = [{id: 0, name: "Test", model: "Sports.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10}];
     }
 
     getAllCars(){
@@ -17,8 +17,8 @@ class CarDAO{
                 this.cars[position].maneuvrability);
 
                 this.cars[car.id] = car;
+                console.error(this.cars)
         }
-        console.error(cars)
         return this.cars;
         
     }

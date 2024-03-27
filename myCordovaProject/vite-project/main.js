@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -27,13 +26,26 @@ scene.add(ground);
 
 
 // Ajout de lumières à la scène
-var ambientLight = new THREE.AmbientLight(0xffffff, 10); // Lumière ambiante
+
+var ambientLight = new THREE.AmbientLight(0xffffff, 5); // Lumière ambiante
 scene.add(ambientLight);
 
-var directionalLight = new THREE.DirectionalLight(0xffffff, 10); // Lumière directionnelle
+var directionalLight = new THREE.DirectionalLight(0xffffff, 5); // Lumière directionnelle
+
 directionalLight.position.set(1, 1, 1);
 scene.add(directionalLight);
 
+window.addEventListener('resize', onWindowResize, false)
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    render()
+}
+
+function render() {
+    renderer.render(scene, camera);
+}
 
 let voiture;
 
@@ -41,12 +53,14 @@ const loader = new GLTFLoader();
 
 loader.load( 'public/Sports.glb', ( gltf )=> {
 	voiture=gltf.scene
+
 	voiture.position.set(sphericalCoords.x, sphericalCoords.y, sphericalCoords.z); // Positionnement sur la sphère
     
 	voiture.rotation.y = Math.PI;
 	voiture.rotation.x = 1;
 	resizeModel(0.8);
 	
+
 	scene.add( voiture );
 	camera.lookAt(voiture.position)
 }, undefined, function ( error ) {
@@ -64,6 +78,7 @@ function resizeModel(scale) {
 
 function animate() {
 	requestAnimationFrame( animate );
+
 	
 	ground.rotation.x += 0.001;
 	//voiture.rotation.y += 0.01;
@@ -90,6 +105,7 @@ if (voiture) {
     // Vous pouvez ajuster la rotation de la voiture en fonction de la sphère
     voiture.rotation.x = azimuth; // Rotation autour de l'axe vertical (Y)
 	
+
 }
 
 animate();

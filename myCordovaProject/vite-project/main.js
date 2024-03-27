@@ -30,6 +30,14 @@ var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // Lumière di
 directionalLight.position.set(0, 1, 0);
 scene.add(directionalLight);
 
+window.addEventListener('resize', onWindowResize, false)
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    render()
+}
+
 
 let voiture;
 
@@ -40,6 +48,7 @@ loader.load( 'public/Sports.glb', ( gltf )=> {
 	voiture.position.x =0;
 	resizeModel(0.8)
 	voiture.rotation.y=3.1 ;
+	camera.lookAt(voiture.position);
 	scene.add( voiture );
 	renderer.render( scene, camera );
 }, undefined, function ( error ) {

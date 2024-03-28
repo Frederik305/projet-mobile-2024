@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import TWEEN from '@tweenjs/tween.js'
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.1, 10000 );
+const camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 100000 );
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -31,13 +31,14 @@ ground.position.y=-7;
 scene.add(ground);
 
 
-for (let i = -10; i <= 300; i++) { // Nombre d'instances du terrain
+for (let i = -10; i <= 600; i++) { // Nombre d'instances du terrain
     const roadInstance = road.clone(); // Clonage du terrain
     roadInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
     const groundInstance = ground.clone(); // Clonage
     groundInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
     scene.add(groundInstance); // Ajout de l'instance au scène
     scene.add(roadInstance); // Ajout de l'instance au scène
+    console.log(i);
 }
 
 
@@ -68,7 +69,7 @@ const cameraDistance = 700;
 const cameraOffset = new THREE.Vector3(0, 400, cameraDistance);
 const loader = new GLTFLoader();
 
-loader.load( 'public/Muscle 2.glb', ( gltf )=> {
+loader.load( 'public/Muscle.glb', ( gltf )=> {
 	voiture=gltf.scene;
 
 	voiture.position.set(0, 1, 0); // Positionnement sur la sphère
@@ -145,12 +146,12 @@ function animate() {
 	if (voiture) {
 		// Exemple de contrôles basiques (à remplacer par votre logique de contrôles)
 		if (Key.isDown(Key.LEFT_ARROW)) {
-            if (voiture.rotation.y > -0.52)
+            if (voiture.rotation.y > -0.30)
             {voiture.rotation.y -= rotationSpeed;}
             voiture.position.x -= speed/1.1;
 		}
 		if (Key.isDown(Key.RIGHT_ARROW)) {
-            if (voiture.rotation.y < 0.52) { 
+            if (voiture.rotation.y < 0.30) { 
                 voiture.rotation.y += rotationSpeed;
             }voiture.position.x += speed/1.1;
 

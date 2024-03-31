@@ -1,8 +1,8 @@
 class CarDAO{
     constructor(){
         this.cars = [
-            {id: 0, name: "Test", model: "Sports.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10},
-            {id: 1, name: "Test", model: "Sports.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10},
+            {id: 0, name: "Test", model: "public/Muscle.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10, rotation: null},
+            {id: 1, name: "Test", model: "public/Muscle.glb", acceleration: 1.1, baseMaxSpeed: 30, currentSpeed: 0.0, weight: 1000, brakePower: 1, maneuvrability: 10, rotation: null},
         ];
     }
 
@@ -17,12 +17,13 @@ class CarDAO{
                 this.cars[position].currentSpeed, 
                 this.cars[position].weight, 
                 this.cars[position].brakePower, 
-                this.cars[position].maneuvrability);
+                this.cars[position].maneuvrability,
+                this.cars[position].rotation
+                );
 
                 this.cars[car.id] = car;
         }
-        console.error(this.cars)
+        console.log(this.cars)
         return this.cars;
-        
     }
 }

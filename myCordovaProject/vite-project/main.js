@@ -235,8 +235,3 @@ const Key = {
 };
 
 animate();
-
-
-
-
-

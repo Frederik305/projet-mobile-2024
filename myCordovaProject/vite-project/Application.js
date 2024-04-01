@@ -17,8 +17,9 @@ class Application{
         let hash = window.location.hash;
 
         if(!hash){
+            this.vueHomePage.initializeHomePage(this.carDAO.getAllCars());
             this.vueHomePage.afficher();
-        }else if(hash.match(/^#Game/)){
+        }else if(hash.match(/^#Game\/([0-9]+)/)){
             this.vueGame.afficher();
 
             // Setup and initialize VueGame asynchronously

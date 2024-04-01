@@ -3,7 +3,6 @@ class Application{
         this.window = window;
 
         this.carDAO = carDAO;
-        this.carDAO.getAllCars()
 
         this.vueHomePage = vueHomePage;
         this.vueGame = vueGame;
@@ -17,9 +16,13 @@ class Application{
         let hash = window.location.hash;
 
         if(!hash){
-            this.vueHomePage.initializeHomePage(this.carDAO.getAllCars());
+            this.vueHomePage.initializeHomePage(this.carDAO.getCars());
             this.vueHomePage.afficher();
         }else if(hash.match(/^#Game\/([0-9]+)/)){
+            let navigation = hash.match(/^#Game\/([0-9]+)/)
+            let idItem = navigation[1];
+
+            this.vueGame.initialiserCar(this.carDAO.getCars()[idItem]);
             this.vueGame.afficher();
 
             // Setup and initialize VueGame asynchronously

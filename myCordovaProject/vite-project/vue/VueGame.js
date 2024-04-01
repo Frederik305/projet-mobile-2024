@@ -7,6 +7,8 @@ class VueGame {
         this.GLTFLoader = null;
         this.TWEEN = null;
 
+        this.car;
+
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
 
@@ -17,6 +19,10 @@ class VueGame {
         // Remove all existing elements from the body
         document.body.innerHTML = '';
 
+    }
+
+    initialiserCar(car){
+        this.car = car;
     }
 
     async setup() {
@@ -107,10 +113,11 @@ class VueGame {
     }
 
     loadCar() {
-        const cameraDistance = 700;
-        const cameraOffset = new this.THREE.Vector3(0, 400, cameraDistance);
+        const cameraDistance = this.car.cameraDistance;
+
+        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, cameraDistance);
         const loader = new this.GLTFLoader();
-        loader.load('public/Muscle.glb', (gltf) => {
+        loader.load(this.car.model, (gltf) => {
             const car = gltf.scene;
             car.position.set(0, 1, 0); // Positionnement
             car.rotateY(Math.PI);

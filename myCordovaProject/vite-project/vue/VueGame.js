@@ -9,8 +9,9 @@ class VueGame {
 
         this.car;
 
-        this.setup = this.setup.bind(this); // Bind the setup method to the current instance
+        this.carPosition;
 
+        this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
         window.addEventListener('resize', () => this.onWindowResize(), false);
     }
@@ -56,16 +57,15 @@ class VueGame {
     }
 
     addRoad() {
-        const textureLoader = new this.THREE.TextureLoader();
-        const roadTexture = textureLoader.load('public/test2.jpg');
+        const loader = new this.GLTFLoader();
+        loader.load("public/Road.glb", (gltf) => {
+            const road = gltf.scene;
 
-        const roadGeometry = new this.THREE.PlaneGeometry(2000, 10000); // Adjust the size as needed
-        const roadMaterial = new this.THREE.MeshStandardMaterial({ map: roadTexture });
-        const road = new this.THREE.Mesh(roadGeometry, roadMaterial);
-        road.rotation.x = -Math.PI / 2; // Rotate the ground to be flat
-        this.scene.add(road);
+            this.scene.add(road);
 
-        return road;
+        }, undefined, (error) => {
+            console.error(error);
+        });
     }
 
     addGround() {
@@ -79,15 +79,8 @@ class VueGame {
         return ground;
     }
 
-    addRoadAndGroundInstances(road, ground) {
-        for (let i = -10; i <= 600; i++) { // Nombre d'instances du terrain
-            const roadInstance = road.clone(); // Clonage du terrain
-            roadInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
-            const groundInstance = ground.clone(); // Clonage
-            groundInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
-            this.scene.add(groundInstance); // Ajout de l'instance au scène
-            this.scene.add(roadInstance); // Ajout de l'instance au scène
-        }
+    addRoadAndGroundInstances() {
+
     }
 
     // Ajout de lumières à la scène
@@ -106,16 +99,12 @@ class VueGame {
 
     init() {
         this.setupScene();
-        const road = this.addRoad();
-        const ground = this.addGround();
-        this.addRoadAndGroundInstances(road, ground);
+        this.addRoad();
         this.addLights();
     }
 
     loadCar() {
-        const cameraDistance = this.car.cameraDistance;
-
-        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, cameraDistance);
+        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, this.car.cameraDistance);
         const loader = new this.GLTFLoader();
         loader.load(this.car.model, (gltf) => {
             const car = gltf.scene;

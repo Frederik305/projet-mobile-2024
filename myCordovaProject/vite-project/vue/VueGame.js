@@ -132,7 +132,45 @@ class VueGame {
     
     mouvements() {
         const rotationSpeed=this.car.rotation;
-        console.log(rotationSpeed);
+        const currentSpeed=this.car.currentSpeed;
+        
+        const Key = {
+            LEFT_ARROW: 37,
+            UP_ARROW: 38,
+            RIGHT_ARROW: 39,
+            DOWN_ARROW: 40,
+            pressedKeys: {},
+    
+            isDown: function(keyCode) {
+                return this.pressedKeys[keyCode];
+            },
+    
+            onKeyDown: function(event) {
+                this.pressedKeys[event.keyCode] = true;
+            },
+    
+            onKeyUp: function(event) {
+                delete this.pressedKeys[event.keyCode];
+            }
+        };
+    
+        // Écouteurs d'événements pour les touches de direction
+        document.addEventListener('keydown', (event) => {
+            Key.onKeyDown(event);
+            if (event.code === 'ArrowLeft') {
+                // Déplacer la voiture vers la gauche et ajuster la rotation
+                this.carModel.position.x -= currentSpeed / 1.1;
+                if (this.carModel.rotation.y > -0.30) {
+                    this.carModel.rotation.y -= rotationSpeed;
+                }
+            } else if (event.code === 'ArrowRight') {
+                // Déplacer la voiture vers la droite et ajuster la rotation
+                this.carModel.position.x += currentSpeed / 1.1;
+                if (this.carModel.rotation.y < 0.30) {
+                    this.carModel.rotation.y += rotationSpeed;
+                }
+            }
+        });
         // Écouteurs d'événements pour les touches de direction
         document.addEventListener('keydown', function(event) {
         	Key.onKeyDown(event);
@@ -148,19 +186,15 @@ class VueGame {
         document.addEventListener('keydown', (event) => {
             if (event.code === 'ArrowLeft') {
                 isLeftArrowPressed = true;
-                this.carModel.position.x-=this.car.currentSpeed/1.1;
-                if (this.carModel.rotation.y > -0.30)
-                {this.carModel.rotation.y -= rotationSpeed;}
+               
                 
 
             } else if (event.code === 'ArrowRight') {
                 isRightArrowPressed = true;
-                this.carModel.position.x+=this.car.currentSpeed/1.1;
-                if (this.carModel.rotation.y < 0.30)
-                {this.carModel.rotation.y += rotationSpeed;}
+                
             }
         });
-        
+     
         // Gestionnaire d'événement pour le relâchement des touches
         document.addEventListener('keyup', (event) => {
             if (event.code === 'ArrowLeft') {
@@ -173,25 +207,7 @@ class VueGame {
             }
         });
 
-        const Key = {
-            LEFT_ARROW: 37,
-            UP_ARROW: 38,
-            RIGHT_ARROW: 39,
-            DOWN_ARROW: 40,
-            pressedKeys: {},
         
-            isDown: function(keyCode) {
-                return this.pressedKeys[keyCode];
-            },
-        
-            onKeyDown: function(event) {
-                this.pressedKeys[event.keyCode] = true;
-            },
-        
-            onKeyUp: function(event) {
-                delete this.pressedKeys[event.keyCode];
-            }
-        };
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle

@@ -8,7 +8,7 @@ class VueGame {
         this.TWEEN = null;
 
         this.car;
-
+        this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
 
@@ -73,7 +73,7 @@ class VueGame {
         const groundMaterial = new this.THREE.MeshStandardMaterial({ color: 0x099605 });
         const ground = new this.THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2; // Rotate the ground to be flat
-        ground.position.y = -7;
+        ground.position.y = -10;
         this.scene.add(ground);
 
         return ground;
@@ -113,31 +113,26 @@ class VueGame {
     }
 
     loadCar() {
-        const cameraDistance = this.car.cameraDistance;
+        
 
-        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, cameraDistance);
-        const loader = new this.GLTFLoader();
+                const loader = new this.GLTFLoader();
         loader.load(this.car.model, (gltf) => {
-            const car = gltf.scene;
-            car.position.set(0, 1, 0); // Positionnement
-            car.rotateY(Math.PI);
+            this.carModel = gltf.scene;
+            this.carModel.position.set(0, 1, 0); // Positionnement
+            this.carModel.rotateY(Math.PI);
             //resizeModel(0.8);
 
-            this.scene.add(car);
+            this.scene.add(this.carModel);
 
-            const cameraPosition = new this.THREE.Vector3();
-            cameraPosition.copy(car.position).add(cameraOffset);
-            this.camera.position.copy(cameraPosition);
-
-            // Look at the car
-            this.camera.lookAt(car.position);
-            this.camera.rotation.x -= -0.2;
+            
         }, undefined, (error) => {
             console.error(error);
         });
     }
     
     mouvements() {
+        const rotationSpeed=this.car.rotation;
+        console.log(rotationSpeed);
         // Écouteurs d'événements pour les touches de direction
         document.addEventListener('keydown', function(event) {
         	Key.onKeyDown(event);
@@ -153,8 +148,16 @@ class VueGame {
         document.addEventListener('keydown', (event) => {
             if (event.code === 'ArrowLeft') {
                 isLeftArrowPressed = true;
+                this.carModel.position.x-=this.car.currentSpeed/1.1;
+                if (this.carModel.rotation.y > -0.30)
+                {this.carModel.rotation.y -= rotationSpeed;}
+                
+
             } else if (event.code === 'ArrowRight') {
                 isRightArrowPressed = true;
+                this.carModel.position.x+=this.car.currentSpeed/1.1;
+                if (this.carModel.rotation.y < 0.30)
+                {this.carModel.rotation.y += rotationSpeed;}
             }
         });
         
@@ -162,10 +165,11 @@ class VueGame {
         document.addEventListener('keyup', (event) => {
             if (event.code === 'ArrowLeft') {
                 isLeftArrowPressed = false;
-                this.resetCarRotationSmooth();
+                
+                //this.resetCarRotationSmooth();
             } else if (event.code === 'ArrowRight') {
                 isRightArrowPressed = false;
-                this.resetCarRotationSmooth();
+                //this.resetCarRotationSmooth();
             }
         });
 
@@ -189,22 +193,48 @@ class VueGame {
             }
         };
     }
+    moveCarForward() {
+        // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
+        const speed = this.car.currentSpeed; // Vous pouvez ajuster la vitesse selon vos besoins
+        this.carModel.position.z -= speed;
+    
+        // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
+        
+    }
 
-    resetCarRotationSmooth() {
+    /*resetCarRotationSmooth() {
         // Création d'une nouvelle animation Tween pour la rotation de la voiture
-        new this.TWEEN.Tween(this.voiture.rotation)
+        new this.TWEEN.Tween(this.car.rotation)
             .to({ y: 0 }, 100) // Animation sur 500 millisecondes jusqu'à la rotation de base
             .easing(TWEEN.Easing.Quadratic.InOut) // Type d'animation fluide
             .start();
-        }
+        }*/
 
+
+    cameraFollowCar(){
+        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, this.car.cameraDistance);
+        const cameraPosition = new this.THREE.Vector3();
+            cameraPosition.copy(this.carModel.position).add(cameraOffset);
+            this.camera.position.copy(cameraPosition);
+
+            // Look at the car
+            this.camera.lookAt(this.carModel.position);
+            this.camera.rotation.x -= -0.2;
+    }    
     animate() {
+        
         requestAnimationFrame(() => this.animate());
+        
         this.TWEEN.update();
+        this.cameraFollowCar();
+        this.moveCarForward();
         this.renderer.render(this.scene, this.camera);
+
+        
     }
 
     startAnimation() {
         this.animate();
+       
     }
 }

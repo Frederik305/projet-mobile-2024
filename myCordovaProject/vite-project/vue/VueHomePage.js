@@ -64,12 +64,10 @@ class VueHomePage{
 
 
     setupScene() {
-        const widthPercentage = 50;
-        const width = window.innerWidth * (widthPercentage / 100);
-        const heightPercentage = 50;
-        const height = window.innerHeight * (heightPercentage / 100);
-        
+        const width = window.innerWidth;
+        const height = window.innerHeight;
         this.camera.aspect = width / height;
+        
         this.renderer.setSize(width, height);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
@@ -93,13 +91,10 @@ class VueHomePage{
 
     onWindowResize() {
         if (this.camera && this.renderer) {
-            const widthPercentage = 50;
-            const width = window.innerWidth * (widthPercentage / 100);
-
-            const heightPercentage = 50;
-            const height = window.innerHeight * (heightPercentage / 100);
-            
+            const width = window.innerWidth;
+            const height = window.innerHeight;
             this.camera.aspect = width / height;
+
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(width, height);
         }
@@ -158,6 +153,11 @@ class VueHomePage{
         });
     }
 
+    setCameraPosition() {
+        this.camera.position.set(350, 400, -800);
+        this.camera.lookAt(0, 0, -100);
+    }
+
     animate() {
         requestAnimationFrame(() => this.animate());
         
@@ -167,7 +167,6 @@ class VueHomePage{
 
     startAnimation() {
         this.animate();
-       
     }
 
     init() {
@@ -175,5 +174,6 @@ class VueHomePage{
         this.addLights();
         this.startAnimation();
         this.setLinkSelectedCar()
+        this.setCameraPosition()
     }
 }

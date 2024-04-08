@@ -126,8 +126,8 @@ class VueGame {
 
     // Ajout de lumières à la scène
     addLights() {
-        const ambientLight = new this.THREE.AmbientLight(0xffffff, 5); // Lumière ambiante
-        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 5); // Lumière directionnelle
+        const ambientLight = new this.THREE.AmbientLight(0xffffff,3); // Lumière ambiante
+        const directionalLight = new this.THREE.DirectionalLight(0xffffff,5); // Lumière directionnelle
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
 
@@ -215,9 +215,9 @@ class VueGame {
                     if (Math.abs(this.carModel.rotation.y) > 0.01) {
                         // Réduisez la rotation progressivement
                         if (this.carModel.rotation.y > 0) {
-                            this.carModel.rotation.y -= rotationSpeed * 0.1;
+                            this.carModel.rotation.y -= rotationSpeed;
                         } else if (this.carModel.rotation.y < 0) {
-                            this.carModel.rotation.y += rotationSpeed * 0.1;
+                            this.carModel.rotation.y += rotationSpeed;
                         }
                         requestAnimationFrame(reduceRotation);
                     } else {
@@ -231,7 +231,55 @@ class VueGame {
             }
 
         });
+
         
+        document.getElementById('button-left').addEventListener('mousedown', () => {
+            const intervalId = setInterval(() => {
+                if (this.carModel.rotation.y > -0.30) {
+                    this.carModel.rotation.y -= rotationSpeed;
+                }
+            }, 10);
+    
+            document.addEventListener('mouseup', () => {
+                clearInterval(intervalId);
+                this.reduceRotation();
+            });
+        });
+    
+        document.getElementById('button-right').addEventListener('mousedown', () => {
+            const intervalId = setInterval(() => {
+                if (this.carModel.rotation.y < 0.30) {
+                    this.carModel.rotation.y += rotationSpeed;
+                }
+            }, 10);
+    
+            document.addEventListener('mouseup', () => {
+                clearInterval(intervalId);
+                this.reduceRotation();
+            });
+        });
+        this.reduceRotation = () => {
+            const reduceRotation = () => {
+                
+                if (Math.abs(this.carModel.rotation.y) > 0.01) {
+                    
+                    if (this.carModel.rotation.y > 0) {
+                        this.carModel.rotation.y -= rotationSpeed;
+
+                    } else if (this.carModel.rotation.y < 0) {
+                        this.carModel.rotation.y += rotationSpeed;
+                    }
+                    requestAnimationFrame(reduceRotation);
+                } else {
+                    this.carModel.rotation.y = 0;
+                }
+            };
+            reduceRotation();
+        };
+
+        
+
+
        
         
     }

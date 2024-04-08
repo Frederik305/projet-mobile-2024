@@ -3,6 +3,8 @@ class VueHomePage{
         this.html = document.getElementById('html-vue-home-page').innerHTML;
         this.displayHomePage = null;
 
+        this.selectedCar = 0;
+
         this.onWindowResize = this.onWindowResize.bind(this);
 
         window.addEventListener('resize', this.onWindowResize, false);
@@ -13,102 +15,41 @@ class VueHomePage{
     }
 
     clear() {
-        // Remove all existing elements from the body
-        document.body.innerHTML = '';
+        document.getElementsByTagName("body")[0].innerHTML = this.html;
 
     }
 
-    afficher() {
-        document.getElementsByTagName("body")[0].innerHTML = this.html;
+    setLinkSelectedCar(){
+        const selectedCar = this.selectedCar;
 
-        let listeCar = document.getElementById("liste-item");
-        const listeItemItemHTML = listeCar.innerHTML;
-        let listeCarHTMLRemplacement = "";
-
-        for (let numeroCar in this.displayHomePage) {
-            let listeItemCarHTMLRemplacement = listeItemItemHTML;
-            listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace("{Car.id}", this.displayHomePage[numeroCar].id);
-            listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace("{Car.name}", this.displayHomePage[numeroCar].name);
-            listeCarHTMLRemplacement += listeItemCarHTMLRemplacement;
-        }
-
-        listeCar.innerHTML = listeCarHTMLRemplacement;
+        this.updateLinkSelectedCar(selectedCar);
     }
 
-    /*afficher() {
-        document.getElementsByTagName("body")[0].innerHTML = this.html;
+    updateLinkSelectedCar(selectedCar) {
+        var regex = /#Game\/[^"]*/;
+    
+        var listeItemCarHTMLRemplacement = '<a href="#Game/{Car.id}" class="liste-item-item" id="test">{Car.name}</a>';
+    
+        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
+    
+        // Set the innerHTML of the appropriate element to the updated HTML content
+        document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
+    }
 
-        let listeCar = document.getElementById("liste-item");
-        const listeItemItemHTML = listeCar.innerHTML;
-        let listeCarHTMLRemplacement = "";
-
-        for (let numeroCar in this.displayHomePage) {
-            let listeItemCarHTMLRemplacement = listeItemItemHTML;
-            listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace("{Car.id}", this.displayHomePage[numeroCar].id);
-            listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace("{Car.id}", this.displayHomePage[numeroCar].id);
-            listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace("{Car.name}", this.displayHomePage[numeroCar].name);
-            listeCarHTMLRemplacement += listeItemCarHTMLRemplacement;
-
-            this.loadCar(this.displayHomePage[numeroCar].model, `threejs-container-${numeroCar}`);
-        }
-
-        listeCar.innerHTML = listeCarHTMLRemplacement;
-    }*/
-
-    /*loadCar(modelPath, containerId) {
-        const loader = new this.GLTFLoader();
-    
-        loader.load(modelPath, (gltf) => {
-            const carModel = gltf.scene;
-            carModel.position.set(0, 1, 0); // Positionnement
-            carModel.rotateY(Math.PI);
-    
-            // Create a new scene if it's not already initialized
-            if (!this.scene) {
-                this.scene = new this.THREE.Scene();
-            }
-    
-            // Create a new camera if it's not already initialized
-            if (!this.camera) {
-                this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
-            }
-    
-            // Create a new renderer if it's not already initialized
-            if (!this.renderer) {
-                this.renderer = new this.THREE.WebGLRenderer();
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                document.body.appendChild(this.renderer.domElement);
-            }
-    
-            // Add the car model to the scene
-            this.scene.add(carModel);
-    
-            // Append the renderer's canvas element to the specified container
-            let container = document.getElementById(containerId);
-            if (container) {
-                container.appendChild(this.renderer.domElement);
-            } else {
-                console.error(`Container with ID ${containerId} not found`);
-            }
-    
-            // Render the scene
-            this.renderer.render(this.scene, this.camera);
-        }, undefined, (error) => {
-            console.error(error);
-        });
-    }*/
-
+    'liste-item'
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN }] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN }, ZingTouch] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
-                import('@tweenjs/tween.js')
+                import('@tweenjs/tween.js'),
+                import('zingtouch')
             ]);
     
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
+            this.ZingTouch = ZingTouch;
     
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
@@ -121,63 +62,15 @@ class VueHomePage{
         }
     }
 
-    /*setupScene(){
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
-        this.scene.background = new this.THREE.Color(0xbfe3dd);
-
-
-        const loader = new this.GLTFLoader();
-    
-        loader.load("public/Muscle.glb", (gltf) => {
-            const carModel = gltf.scene;
-            carModel.position.set(0, 0, 0); // Positionnement
-            carModel.rotateY(Math.PI);
-    
-            // Create a new scene if it's not already initialized
-            if (!this.scene) {
-                this.scene = new this.THREE.Scene();
-            }
-    
-            // Create a new camera if it's not already initialized
-            if (!this.camera) {
-                this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
-            }
-    
-            // Create a new renderer if it's not already initialized
-            if (!this.renderer) {
-                this.renderer = new this.THREE.WebGLRenderer();
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
-                document.body.appendChild(this.renderer.domElement);
-            }
-    
-            // Add the car model to the scene
-            this.scene.add(carModel);
-    
-            // Append the renderer's canvas element to the specified container
-            let container = document.getElementById("threejs-container");
-            if (container) {
-                container.appendChild(this.renderer.domElement);
-            } else {
-                console.error('Container not found');
-            }
-    
-            // Render the scene
-            this.renderer.render(this.scene, this.camera);
-        }, undefined, (error) => {
-            console.error(error);
-        });
-    }*/
 
     setupScene() {
         const widthPercentage = 50;
-            const width = window.innerWidth * (widthPercentage / 100);
-
-            const heightPercentage = 50;
-            const height = window.innerHeight * (heightPercentage / 100);
-            
-            this.camera.aspect = width / height;
-            this.renderer.setSize(width, height);
+        const width = window.innerWidth * (widthPercentage / 100);
+        const heightPercentage = 50;
+        const height = window.innerHeight * (heightPercentage / 100);
+        
+        this.camera.aspect = width / height;
+        this.renderer.setSize(width, height);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
     }
@@ -193,8 +86,6 @@ class VueHomePage{
             // Add the car model to the scene
             this.scene.add(carModel);
     
-            // Render the scene
-            this.renderer.render(this.scene, this.camera);
         }, undefined, (error) => {
             console.error(error);
         });
@@ -230,8 +121,59 @@ class VueHomePage{
         }   
     }
 
+    catchSwipeEvent() {
+        var touchArea = document.getElementById('threejs-container');
+        var myRegion = new this.ZingTouch.Region(touchArea);
+    
+        let selectedCar = this.selectedCar;
+    
+        myRegion.bind(touchArea, 'swipe', (e) => {
+            console.log(e.detail);
+            console.log(e.detail.data[0].currentDirection);
+    
+            // check for left swipes
+            if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
+                console.log("left")
+    
+                if (selectedCar <= 0){
+                    console.log("premiere voiture")
+                    return
+                }
+                else{
+                    selectedCar--;
+                    console.log(selectedCar);
+
+                    this.updateLinkSelectedCar(selectedCar);
+                }
+            }
+    
+            else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
+                console.log("right")
+    
+                selectedCar++;
+                console.log(selectedCar);
+    
+                this.updateLinkSelectedCar(selectedCar);
+            }
+        });
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        
+        this.TWEEN.update();
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    startAnimation() {
+        this.animate();
+       
+    }
+
     init() {
         this.setupScene();
         this.addLights();
+        this.startAnimation();
+        this.setLinkSelectedCar()
     }
 }

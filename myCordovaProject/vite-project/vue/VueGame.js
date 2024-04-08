@@ -11,8 +11,9 @@ class VueGame {
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
+        this.onWindowResize = this.onWindowResize.bind(this);
 
-        window.addEventListener('resize', () => this.onWindowResize(), false);
+        window.addEventListener('resize', this.onWindowResize, false);
     }
 
     afficher() {
@@ -98,9 +99,13 @@ class VueGame {
     }
 
     onWindowResize() {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        if (this.camera && this.renderer) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        }
     }
 
     init() {
@@ -239,8 +244,6 @@ class VueGame {
         this.cameraFollowCar();
         this.moveCarForward();
         this.renderer.render(this.scene, this.camera);
-
-        
     }
 
     startAnimation() {

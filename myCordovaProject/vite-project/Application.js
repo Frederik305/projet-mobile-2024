@@ -18,7 +18,17 @@ class Application{
 
         if(!hash){
             this.vueHomePage.initializeHomePage(this.carDAO.getCars());
-            this.vueHomePage.afficher();
+
+            this.vueHomePage.clear();
+
+            this.vueHomePage.setup()
+                .then(() => {
+                    this.vueHomePage.init();
+                    this.vueHomePage.loader();
+                    this.vueHomePage.afficher();
+                    this.vueHomePage.appendSceneToDiv();
+                })
+                .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
             let navigation = hash.match(/^#Game\/([0-9]+)/)
             let idItem = navigation[1];

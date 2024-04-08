@@ -56,16 +56,15 @@ class VueGame {
     }
 
     addRoad() {
-        const textureLoader = new this.THREE.TextureLoader();
-        const roadTexture = textureLoader.load('public/test2.jpg');
+        const loader = new this.GLTFLoader();
+        loader.load("public/Road.glb", (gltf) => {
+            const road = gltf.scene;
 
-        const roadGeometry = new this.THREE.PlaneGeometry(2000, 10000); // Adjust the size as needed
-        const roadMaterial = new this.THREE.MeshStandardMaterial({ map: roadTexture });
-        const road = new this.THREE.Mesh(roadGeometry, roadMaterial);
-        road.rotation.x = -Math.PI / 2; // Rotate the ground to be flat
-        this.scene.add(road);
+            this.scene.add(road);
 
-        return road;
+        }, undefined, (error) => {
+            console.error(error);
+        });
     }
 
     addGround() {
@@ -106,16 +105,12 @@ class VueGame {
 
     init() {
         this.setupScene();
-        const road = this.addRoad();
-        const ground = this.addGround();
-        this.addRoadAndGroundInstances(road, ground);
+        this.addRoad();
         this.addLights();
     }
 
     loadCar() {
-        
-
-                const loader = new this.GLTFLoader();
+        const loader = new this.GLTFLoader();
         loader.load(this.car.model, (gltf) => {
             this.carModel = gltf.scene;
             this.carModel.position.set(0, 1, 0); // Positionnement
@@ -123,7 +118,6 @@ class VueGame {
             //resizeModel(0.8);
 
             this.scene.add(this.carModel);
-
             
         }, undefined, (error) => {
             console.error(error);

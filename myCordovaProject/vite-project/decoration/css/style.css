@@ -1,5 +1,11 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 body { 
-  margin: 0; 
+
   background: rgb(50,50,50);
 }
 
@@ -60,3 +66,37 @@ body {
   }
 
 }
+
+#bottom-buttons-container {
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  
+  z-index: 1; /* Assurez-vous que les boutons sont au-dessus du contenu Three.js */
+  justify-content: space-between;
+}
+
+.button {
+  padding: 10px;
+  background-color: #333;
+  width: 200px;
+  height: 175px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin: 20px;
+  border-radius: 15px;
+  
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;
+}
+#button-left{
+  background-image: url('../img/fleche.png');
+}
+
+#button-right{
+  background-image: url('../img/fleche2.png');
+}
+

@@ -1,5 +1,7 @@
 class VueGame {
     constructor() {
+
+        this.html = document.getElementById("html-vue-game").innerHTML;
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -21,8 +23,10 @@ class VueGame {
     }
 
     afficher() {
-        // Remove all existing elements from the body
-        document.body.innerHTML = '';
+
+        document.getElementsByTagName("body")[0].innerHTML = this.html;
+
+        
 
     }
 
@@ -60,7 +64,7 @@ class VueGame {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
-        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00015);
+        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00012);
         
     }
 
@@ -83,7 +87,7 @@ class VueGame {
         loader.load("Road.glb", (gltf) => {
             const road = gltf.scene;
             road.position.z = this.nextRoadPosition;//+this.distanceAhead;
-            road.scale.set(2,1,10);
+            road.scale.set(2,1,12);
             this.scene.add(road);
             this.roadInstances.push(road);
 

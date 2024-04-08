@@ -1,3 +1,4 @@
+
 class Application{
     constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen){
         this.window = window;

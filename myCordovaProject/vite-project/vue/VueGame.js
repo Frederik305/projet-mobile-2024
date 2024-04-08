@@ -11,6 +11,11 @@ class VueGame {
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
+        this.roadInstances = [];
+        this.maxRoadInstances = 5;
+        this.distanceBetweenRoads = 100; // Adjust this value based on your scene scale
+        this.nextRoadPosition = 0;
+        this.distanceAhead = -1000;
 
         window.addEventListener('resize', () => this.onWindowResize(), false);
     }
@@ -53,21 +58,41 @@ class VueGame {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
+        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00015);
     }
 
-    addRoad() {
+    /*addRoad() {
         const loader = new this.GLTFLoader();
         loader.load("public/Road.glb", (gltf) => {
             const road = gltf.scene;
-
+            road.scale.set(2,2,2);
             this.scene.add(road);
 
         }, undefined, (error) => {
             console.error(error);
         });
-    }
+    }*/
+    addRoad() {
+        const loader = new this.GLTFLoader();
+        loader.load("public/Road.glb", (gltf) => {
+            const road = gltf.scene;
+            road.position.z = this.nextRoadPosition+this.distanceAhead;
+            road.scale.set(2,1,10);
+            this.scene.add(road);
+            this.roadInstances.push(road);
 
-    addGround() {
+            // Remove excess road instances if necessary
+            if (this.roadInstances.length > this.maxRoadInstances) {
+                const removedRoad = this.roadInstances.shift();
+                this.scene.remove(removedRoad);
+            }
+
+            this.nextRoadPosition -= this.distanceBetweenRoads;
+        }, undefined, (error) => {
+            console.error(error);
+        });
+    }
+    /*addGround() {
         const groundGeometry = new this.THREE.PlaneGeometry(10000, 10000); // Adjust the size as needed
         const groundMaterial = new this.THREE.MeshStandardMaterial({ color: 0x099605 });
         const ground = new this.THREE.Mesh(groundGeometry, groundMaterial);
@@ -87,7 +112,7 @@ class VueGame {
             this.scene.add(groundInstance); // Ajout de l'instance au scène
             this.scene.add(roadInstance); // Ajout de l'instance au scène
         }
-    }
+    }*/
 
     // Ajout de lumières à la scène
     addLights() {
@@ -95,6 +120,9 @@ class VueGame {
         const directionalLight = new this.THREE.DirectionalLight(0xffffff, 5); // Lumière directionnelle
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
+
+       
+        
     }
 
     onWindowResize() {
@@ -105,7 +133,7 @@ class VueGame {
 
     init() {
         this.setupScene();
-        this.addRoad();
+        //this.addRoad();
         this.addLights();
     }
 
@@ -145,6 +173,7 @@ class VueGame {
     
             onKeyUp: function(event) {
                 delete this.pressedKeys[event.keyCode];
+                this.carModel.rotation.y == 0;
             }
         };
     
@@ -153,13 +182,13 @@ class VueGame {
             Key.onKeyDown(event);
             if (event.code === 'ArrowLeft') {
                 // Déplacer la voiture vers la gauche et ajuster la rotation
-                this.carModel.position.x -= currentSpeed / 1.1;
+                //this.carModel.position.x -= currentSpeed / 1.1;
                 if (this.carModel.rotation.y > -0.30) {
                     this.carModel.rotation.y -= rotationSpeed;
                 }
             } else if (event.code === 'ArrowRight') {
                 // Déplacer la voiture vers la droite et ajuster la rotation
-                this.carModel.position.x += currentSpeed / 1.1;
+                //this.carModel.position.x += currentSpeed / 1.1;
                 if (this.carModel.rotation.y < 0.30) {
                     this.carModel.rotation.y += rotationSpeed;
                 }
@@ -171,9 +200,20 @@ class VueGame {
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.currentSpeed; // Vous pouvez ajuster la vitesse selon vos besoins
-        this.carModel.position.z -= speed;
+        const speed = this.car.currentSpeed; // Obtenez la vitesse actuelle de la voiture
+        const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
+        console.log(angle)
+        // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
+        const dx = Math.sin(angle) * speed;
+        const dz = -Math.cos(angle) * speed;
     
+        // Déplacez la voiture en fonction des composantes de direction calculées
+        this.carModel.position.x += dx;
+        this.carModel.position.z += dz;
+    
+        if (this.carModel.position.z <= this.nextRoadPosition + this.distanceBetweenRoads) {
+            this.addRoad();
+        }
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
         
     }

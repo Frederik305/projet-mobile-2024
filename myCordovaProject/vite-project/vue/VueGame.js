@@ -55,10 +55,13 @@ class VueGame {
 
 
     setupScene() {
+
+        
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00015);
+        
     }
 
     /*addRoad() {
@@ -72,11 +75,14 @@ class VueGame {
             console.error(error);
         });
     }*/
+    
+    
+
     addRoad() {
         const loader = new this.GLTFLoader();
-        loader.load("public/Road.glb", (gltf) => {
+        loader.load("Road.glb", (gltf) => {
             const road = gltf.scene;
-            road.position.z = this.nextRoadPosition+this.distanceAhead;
+            road.position.z = this.nextRoadPosition;//+this.distanceAhead;
             road.scale.set(2,1,10);
             this.scene.add(road);
             this.roadInstances.push(road);
@@ -143,7 +149,7 @@ class VueGame {
             this.carModel = gltf.scene;
             this.carModel.position.set(0, 1, 0); // Positionnement
             this.carModel.rotateY(Math.PI);
-            //resizeModel(0.8);
+            this.carModel.scale.set(0.8, 0.8, 0.8);
 
             this.scene.add(this.carModel);
             
@@ -154,7 +160,7 @@ class VueGame {
     
     mouvements() {
         const rotationSpeed=this.car.rotation;
-        const currentSpeed=this.car.currentSpeed;
+        
         
         const Key = {
             LEFT_ARROW: 37,
@@ -173,7 +179,8 @@ class VueGame {
     
             onKeyUp: function(event) {
                 delete this.pressedKeys[event.keyCode];
-                this.carModel.rotation.y == 0;
+
+                
             }
         };
     
@@ -194,6 +201,32 @@ class VueGame {
                 }
             }
         });
+
+        document.addEventListener('keyup', (event) => {
+            Key.onKeyUp(event);
+
+            if (!Key.isDown(Key.LEFT_ARROW) && !Key.isDown(Key.RIGHT_ARROW)) {
+                // Progressivement, ramenez la rotation à 0
+                const reduceRotation = () => {
+                    if (Math.abs(this.carModel.rotation.y) > 0.01) {
+                        // Réduisez la rotation progressivement
+                        if (this.carModel.rotation.y > 0) {
+                            this.carModel.rotation.y -= rotationSpeed * 0.1;
+                        } else if (this.carModel.rotation.y < 0) {
+                            this.carModel.rotation.y += rotationSpeed * 0.1;
+                        }
+                        requestAnimationFrame(reduceRotation);
+                    } else {
+                        // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
+                        this.carModel.rotation.y = 0;
+                    }
+                };
+        
+                // Lancez la réduction progressive de la rotation
+                reduceRotation();
+            }
+
+        });
         
        
         
@@ -202,7 +235,7 @@ class VueGame {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
         const speed = this.car.currentSpeed; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
-        console.log(angle)
+        
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
         const dx = Math.sin(angle) * speed;
         const dz = -Math.cos(angle) * speed;

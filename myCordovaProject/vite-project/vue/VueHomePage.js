@@ -170,7 +170,14 @@ class VueHomePage{
     }*/
 
     setupScene() {
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        const widthPercentage = 50;
+            const width = window.innerWidth * (widthPercentage / 100);
+
+            const heightPercentage = 50;
+            const height = window.innerHeight * (heightPercentage / 100);
+            
+            this.camera.aspect = width / height;
+            this.renderer.setSize(width, height);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xbfe3dd);
     }
@@ -178,7 +185,7 @@ class VueHomePage{
     loader() {
         const loader = new this.GLTFLoader();
     
-        loader.load("public/Muscle.glb", (gltf) => {
+        loader.load("Muscle.glb", (gltf) => {
             const carModel = gltf.scene;
             carModel.position.set(0, 0, 0); // Positioning
             carModel.rotateY(Math.PI);

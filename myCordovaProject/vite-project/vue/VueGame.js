@@ -171,42 +171,8 @@ class VueGame {
                 }
             }
         });
-        // Écouteurs d'événements pour les touches de direction
-        document.addEventListener('keydown', function(event) {
-        	Key.onKeyDown(event);
-        });
-        document.addEventListener('keyup', function(event) {
-        	Key.onKeyUp(event);
-        });
-        // Variables pour stocker l'état des touches de rotation
-        let isLeftArrowPressed = false;
-        let isRightArrowPressed = false;
         
-        // Gestionnaire d'événement pour la pression des touches
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'ArrowLeft') {
-                isLeftArrowPressed = true;
-               
-                
-
-            } else if (event.code === 'ArrowRight') {
-                isRightArrowPressed = true;
-                
-            }
-        });
-     
-        // Gestionnaire d'événement pour le relâchement des touches
-        document.addEventListener('keyup', (event) => {
-            if (event.code === 'ArrowLeft') {
-                isLeftArrowPressed = false;
-                
-                //this.resetCarRotationSmooth();
-            } else if (event.code === 'ArrowRight') {
-                isRightArrowPressed = false;
-                //this.resetCarRotationSmooth();
-            }
-        });
-
+       
         
     }
     moveCarForward() {

@@ -64,7 +64,7 @@ class VueGame {
         
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
-        this.scene.background = new this.THREE.Color(0xbfe3dd);
+        this.scene.background = new this.THREE.Color(0xa8d0ff);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00012);
         
     }

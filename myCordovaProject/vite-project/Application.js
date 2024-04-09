@@ -25,8 +25,8 @@ class Application{
                 .then(() => {
                     this.vueHomePage.init();
                     this.vueHomePage.loader();
-                    this.vueHomePage.afficher();
                     this.vueHomePage.appendSceneToDiv();
+                    this.vueHomePage.catchSwipeEvent();
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){

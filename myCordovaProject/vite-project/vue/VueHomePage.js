@@ -26,17 +26,18 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar(selectedCar) {
-        var regex = /#Game\/[^"]*/;
+        var regex = /#Game\/{Car\.id}[^"]*/;
     
         var listeItemCarHTMLRemplacement = '<a href="#Game/{Car.id}" class="liste-item-item" id="test">{Car.name}</a>';
     
         listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
     
-        // Set the innerHTML of the appropriate element to the updated HTML content
+        var carName = this.displayHomePage[selectedCar].name;
+        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, carName);
+    
         document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
     }
 
-    'liste-item'
     async setup() {
         try {
             const [THREE, { GLTFLoader }, { default: TWEEN }, ZingTouch] = await Promise.all([

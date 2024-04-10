@@ -77,7 +77,7 @@ class VueHomePage{
     loader() {
         const loader = new this.GLTFLoader();
     
-        loader.load("Muscle.glb", (gltf) => {
+        loader.load("HomeView.glb", (gltf) => {
             const carModel = gltf.scene;
             carModel.position.set(0, 0, 0); // Positioning
             carModel.rotateY(Math.PI);
@@ -102,9 +102,9 @@ class VueHomePage{
     }
     
     addLights() {
-        const ambientLight = new this.THREE.AmbientLight(0xffffff, 5); // Lumière ambiante
-        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 5); // Lumière directionnelle
-        directionalLight.position.set(1, 1, 1);
+        const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
+        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 7); // Lumière directionnelle
+        directionalLight.position.set(10, 20, -10);
         this.scene.add(ambientLight, directionalLight);
     }
 
@@ -155,8 +155,8 @@ class VueHomePage{
     }
 
     setCameraPosition() {
-        this.camera.position.set(350, 400, -800);
-        this.camera.lookAt(0, 0, -100);
+        this.camera.position.set(400, 400, -800);
+        this.camera.lookAt(0, -100, 100);
     }
 
     animate() {

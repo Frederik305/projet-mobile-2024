@@ -71,7 +71,7 @@ class VueHomePage{
         
         this.renderer.setSize(width, height);
         document.body.appendChild(this.renderer.domElement);
-        this.scene.background = new this.THREE.Color(0xbfe3dd);
+        this.scene.background = new this.THREE.Color(0x94d4ff);
     }
     
     loader() {

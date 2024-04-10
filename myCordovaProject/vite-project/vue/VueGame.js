@@ -16,8 +16,7 @@ class VueGame {
         this.onWindowResize = this.onWindowResize.bind(this);
         this.roadInstances = [];
         this.maxRoadInstances = 5;
-        this.distanceBetweenRoads = 100; // Adjust this value based on your scene scale
-        this.nextRoadPosition = 0;
+        this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
 
         window.addEventListener('resize', this.onWindowResize, false);
@@ -80,15 +79,37 @@ class VueGame {
             console.error(error);
         });
     }*/
+
+
+    addStart(){
+        const loader = new this.GLTFLoader();
+        loader.load("rooad.glb", (gltf) => {
+            const road = gltf.scene;
+            this.scene.add(road);
+        }, undefined, (error) => {
+            console.error(error);
+        });
+            
+    }
     
     
 
     addRoad() {
+        /*
+        x: 3200
+        y: 30
+        z: 10000
+        */
+
         const loader = new this.GLTFLoader();
-        loader.load("Road.glb", (gltf) => {
+        loader.load("rooad.glb", (gltf) => {
             const road = gltf.scene;
-            road.position.z = this.nextRoadPosition;//+this.distanceAhead;
-            road.scale.set(2,1,12);
+
+            this.nextRoadPositionCounter++;
+            let nextRoadPosition = this.nextRoadPositionCounter * -10000;
+
+            road.position.z = nextRoadPosition;
+
             this.scene.add(road);
             this.roadInstances.push(road);
 
@@ -98,7 +119,11 @@ class VueGame {
                 this.scene.remove(removedRoad);
             }
 
-            this.nextRoadPosition -= this.distanceBetweenRoads;
+            let bbox = new this.THREE.Box3().setFromObject(road);
+            let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
+            let size = bbox.getSize(new this.THREE.Vector3()); // HEREyou get the size
+            this.scene.add(helper);
+            //console.log(size);
         }, undefined, (error) => {
             console.error(error);
         });
@@ -148,7 +173,8 @@ class VueGame {
 
     init() {
         this.setupScene();
-        //this.addRoad();
+        this.addStart();
+        this.addRoad();
         this.addLights();
     }
 
@@ -281,12 +307,6 @@ class VueGame {
             };
             reduceRotation();
         };
-
-        
-
-
-       
-        
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
@@ -300,11 +320,19 @@ class VueGame {
         // Déplacez la voiture en fonction des composantes de direction calculées
         this.carModel.position.x += dx;
         this.carModel.position.z += dz;
-    
-        if (this.carModel.position.z <= this.nextRoadPosition + this.distanceBetweenRoads) {
+
+        // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
+
+        //console.log(this.carModel.position.z);
+
+        let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000
+
+        if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger) <=10) {
             this.addRoad();
         }
-        // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
+        else{
+            console.log(nextRoadSpawnTrigger);
+        }
         
     }
 

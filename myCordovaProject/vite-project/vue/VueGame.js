@@ -22,16 +22,12 @@ class VueGame {
         window.addEventListener('resize', this.onWindowResize, false);
     }
 
-    afficher() {
-
-        document.getElementsByTagName("body")[0].innerHTML = this.html;
-
-        
-
-    }
-
     initialiserCar(car){
         this.car = car;
+    }
+
+    afficher() {
+        document.getElementsByTagName("body")[0].innerHTML = this.html;
     }
 
     async setup() {
@@ -57,17 +53,12 @@ class VueGame {
         }
     }
 
-
     setupScene() {
-
-        
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xa8d0ff);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00012);
-        
     }
-
 
     addStart(){
         const loader = new this.GLTFLoader();
@@ -77,13 +68,11 @@ class VueGame {
         }, undefined, (error) => {
             console.error(error);
         });
-            
     }
     
-    
-
     addRoad() {
         /*
+        dimensions d'une route
         x: 3200
         y: 30
         z: 10000
@@ -118,7 +107,16 @@ class VueGame {
     }
     }
     
+    callRoad(){
+        let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000
 
+        if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - (this.maxRoadInstances*10000)) <=1000) {
+            this.addRoad();
+        }
+        else{
+            //console.log(nextRoadSpawnTrigger);
+        }
+    }
 
     clearRoadBehind(){
         let test = this.roadInstances[0].position.z;
@@ -138,23 +136,6 @@ class VueGame {
         const directionalLight = new this.THREE.DirectionalLight(0xffffff,5); // Lumière directionnelle
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
-    }
-
-    onWindowResize() {
-        if (this.camera && this.renderer) {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            this.camera.aspect = width / height;
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(width, height);
-        }
-    }
-
-    init() {
-        this.setupScene();
-        this.addStart();
-        this.addRoad();
-        this.addLights();
     }
 
     loadCar() {
@@ -305,17 +286,6 @@ class VueGame {
         //console.log(this.carModel.position.z);
     }
 
-    callRoad(){
-        let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000
-
-        if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - 80000) <=1000) {
-            this.addRoad();
-        }
-        else{
-            //console.log(nextRoadSpawnTrigger);
-        }
-    }
-
     /*resetCarRotationSmooth() {
         // Création d'une nouvelle animation Tween pour la rotation de la voiture
         new this.TWEEN.Tween(this.car.rotation)
@@ -325,7 +295,7 @@ class VueGame {
         }*/
 
 
-    cameraFollowCar(){
+    setCameraPosition(){
         const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, this.car.cameraDistance);
         const cameraPosition = new this.THREE.Vector3();
             cameraPosition.copy(this.carModel.position).add(cameraOffset);
@@ -342,7 +312,7 @@ class VueGame {
         this.TWEEN.update();
         this.callRoad();
         this.clearRoadBehind();
-        this.cameraFollowCar();
+        this.setCameraPosition();
         this.moveCarForward();
         this.renderer.render(this.scene, this.camera);
     }
@@ -350,5 +320,26 @@ class VueGame {
     startAnimation() {
         this.animate();
        
+    }
+
+    onWindowResize() {
+        if (this.camera && this.renderer) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        }
+    }
+
+    init() {
+        this.setupScene();
+        this.addStart();
+        this.addRoad();
+        this.addLights();
+
+        this.loadCar();
+        this.mouvements();
+        this.startAnimation();
     }
 }

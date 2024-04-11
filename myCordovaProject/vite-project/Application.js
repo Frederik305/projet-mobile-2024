@@ -19,14 +19,11 @@ class Application{
         if(!hash){
             this.vueHomePage.initializeHomePage(this.carDAO.getCars());
 
-            this.vueHomePage.clear();
+            this.vueHomePage.afficher();
 
             this.vueHomePage.setup()
                 .then(() => {
                     this.vueHomePage.init();
-                    this.vueHomePage.loader();
-                    this.vueHomePage.appendSceneToDiv();
-                    this.vueHomePage.catchSwipeEvent();
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
@@ -40,9 +37,6 @@ class Application{
             this.vueGame.setup()
                 .then(() => {
                     this.vueGame.init();
-                    this.vueGame.loadCar();
-                    this.vueGame.mouvements();
-                    this.vueGame.startAnimation();
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){

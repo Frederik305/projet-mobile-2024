@@ -15,23 +15,19 @@ class VueGame {
 
         this.onWindowResize = this.onWindowResize.bind(this);
         this.roadInstances = [];
-        this.maxRoadInstances = 5;
+        this.maxRoadInstances = 8;
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
 
         window.addEventListener('resize', this.onWindowResize, false);
     }
 
-    afficher() {
-
-        document.getElementsByTagName("body")[0].innerHTML = this.html;
-
-        
-
-    }
-
     initialiserCar(car){
         this.car = car;
+    }
+
+    afficher() {
+        document.getElementsByTagName("body")[0].innerHTML = this.html;
     }
 
     async setup() {
@@ -57,29 +53,12 @@ class VueGame {
         }
     }
 
-
     setupScene() {
-
-        
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xa8d0ff);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00012);
-        
     }
-
-    /*addRoad() {
-        const loader = new this.GLTFLoader();
-        loader.load("public/Road.glb", (gltf) => {
-            const road = gltf.scene;
-            road.scale.set(2,2,2);
-            this.scene.add(road);
-
-        }, undefined, (error) => {
-            console.error(error);
-        });
-    }*/
-
 
     addStart(){
         const loader = new this.GLTFLoader();
@@ -89,20 +68,24 @@ class VueGame {
         }, undefined, (error) => {
             console.error(error);
         });
-            
     }
     
-    
-
     addRoad() {
         /*
+        dimensions d'une route
         x: 3200
         y: 30
         z: 10000
         */
 
         const loader = new this.GLTFLoader();
-        loader.load("rooad.glb", (gltf) => {
+        
+
+        console.log(this.maxRoadInstances, this.roadInstances.length);
+
+
+        for (let i = 0; i < this.maxRoadInstances; i++) {
+        loader.load("untitled.glb", (gltf) => {
             const road = gltf.scene;
 
             this.nextRoadPositionCounter++;
@@ -113,12 +96,6 @@ class VueGame {
             this.scene.add(road);
             this.roadInstances.push(road);
 
-            // Remove excess road instances if necessary
-            if (this.roadInstances.length > this.maxRoadInstances) {
-                const removedRoad = this.roadInstances.shift();
-                this.scene.remove(removedRoad);
-            }
-
             let bbox = new this.THREE.Box3().setFromObject(road);
             let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
             let size = bbox.getSize(new this.THREE.Vector3()); // HEREyou get the size
@@ -128,27 +105,30 @@ class VueGame {
             console.error(error);
         });
     }
-    /*addGround() {
-        const groundGeometry = new this.THREE.PlaneGeometry(10000, 10000); // Adjust the size as needed
-        const groundMaterial = new this.THREE.MeshStandardMaterial({ color: 0x099605 });
-        const ground = new this.THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2; // Rotate the ground to be flat
-        ground.position.y = -10;
-        this.scene.add(ground);
+    }
+    
+    callRoad(){
+        let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000
 
-        return ground;
+        if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - (this.maxRoadInstances*10000)) <=1000) {
+            this.addRoad();
+        }
+        else{
+            //console.log(nextRoadSpawnTrigger);
+        }
     }
 
-    addRoadAndGroundInstances(road, ground) {
-        for (let i = -10; i <= 600; i++) { // Nombre d'instances du terrain
-            const roadInstance = road.clone(); // Clonage du terrain
-            roadInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
-            const groundInstance = ground.clone(); // Clonage
-            groundInstance.position.z = i * 10000; // Espacement des instances le long de l'axe z
-            this.scene.add(groundInstance); // Ajout de l'instance au scène
-            this.scene.add(roadInstance); // Ajout de l'instance au scène
+    clearRoadBehind(){
+        let test = this.roadInstances[0].position.z;
+        console.log(test);
+        if (this.carModel.position.z +7000 < this.roadInstances[0].position.z) {
+            const removedRoad = this.roadInstances.shift();
+            this.scene.remove(removedRoad);
+            console.log(test);
         }
-    }*/
+        else{
+        }
+    }
 
     // Ajout de lumières à la scène
     addLights() {
@@ -156,26 +136,6 @@ class VueGame {
         const directionalLight = new this.THREE.DirectionalLight(0xffffff,5); // Lumière directionnelle
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
-
-       
-        
-    }
-
-    onWindowResize() {
-        if (this.camera && this.renderer) {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            this.camera.aspect = width / height;
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(width, height);
-        }
-    }
-
-    init() {
-        this.setupScene();
-        this.addStart();
-        this.addRoad();
-        this.addLights();
     }
 
     loadCar() {
@@ -324,16 +284,6 @@ class VueGame {
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
 
         //console.log(this.carModel.position.z);
-
-        let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000
-
-        if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger) <=10) {
-            this.addRoad();
-        }
-        else{
-            console.log(nextRoadSpawnTrigger);
-        }
-        
     }
 
     /*resetCarRotationSmooth() {
@@ -345,7 +295,7 @@ class VueGame {
         }*/
 
 
-    cameraFollowCar(){
+    setCameraPosition(){
         const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, this.car.cameraDistance);
         const cameraPosition = new this.THREE.Vector3();
             cameraPosition.copy(this.carModel.position).add(cameraOffset);
@@ -360,7 +310,9 @@ class VueGame {
         requestAnimationFrame(() => this.animate());
         
         this.TWEEN.update();
-        this.cameraFollowCar();
+        this.callRoad();
+        this.clearRoadBehind();
+        this.setCameraPosition();
         this.moveCarForward();
         this.renderer.render(this.scene, this.camera);
     }
@@ -368,5 +320,26 @@ class VueGame {
     startAnimation() {
         this.animate();
        
+    }
+
+    onWindowResize() {
+        if (this.camera && this.renderer) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        }
+    }
+
+    init() {
+        this.setupScene();
+        this.addStart();
+        this.addRoad();
+        this.addLights();
+
+        this.loadCar();
+        this.mouvements();
+        this.startAnimation();
     }
 }

@@ -14,28 +14,9 @@ class VueHomePage{
         this.displayHomePage = displayHomePage
     }
 
-    clear() {
+    afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
 
-    }
-
-    setLinkSelectedCar(){
-        const selectedCar = this.selectedCar;
-
-        this.updateLinkSelectedCar(selectedCar);
-    }
-
-    updateLinkSelectedCar(selectedCar) {
-        var regex = /#Game\/{Car\.id}[^"]*/;
-    
-        var listeItemCarHTMLRemplacement = '<a href="#Game/{Car.id}" class="liste-item-item" id="test">{Car.name}</a>';
-    
-        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
-    
-        var carName = this.displayHomePage[selectedCar].name;
-        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, carName);
-    
-        document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
     }
 
     async setup() {
@@ -63,7 +44,6 @@ class VueHomePage{
         }
     }
 
-
     setupScene() {
         const width = window.innerWidth;
         const height = window.innerHeight;
@@ -73,7 +53,14 @@ class VueHomePage{
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0x94d4ff);
     }
-    
+
+    addLights() {
+        const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
+        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 7); // Lumière directionnelle
+        directionalLight.position.set(10, 20, -10);
+        this.scene.add(ambientLight, directionalLight);
+    }
+
     loader() {
         const loader = new this.GLTFLoader();
     
@@ -90,22 +77,23 @@ class VueHomePage{
         });
     }
 
-    onWindowResize() {
-        if (this.camera && this.renderer) {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            this.camera.aspect = width / height;
+    setLinkSelectedCar(){
+        const selectedCar = this.selectedCar;
 
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(width, height);
-        }
+        this.updateLinkSelectedCar(selectedCar);
     }
+
+    updateLinkSelectedCar(selectedCar) {
+        var regex = /#Game\/{Car\.id}[^"]*/;
     
-    addLights() {
-        const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
-        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 7); // Lumière directionnelle
-        directionalLight.position.set(10, 20, -10);
-        this.scene.add(ambientLight, directionalLight);
+        var listeItemCarHTMLRemplacement = '<a href="#Game/{Car.id}" class="liste-item-item" id="test">{Car.name}</a>';
+    
+        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
+    
+        var carName = this.displayHomePage[selectedCar].name;
+        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, carName);
+    
+        document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
     }
 
     appendSceneToDiv(){
@@ -170,11 +158,26 @@ class VueHomePage{
         this.animate();
     }
 
+    onWindowResize() {
+        if (this.camera && this.renderer) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            this.camera.aspect = width / height;
+
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        }
+    }
+
     init() {
         this.setupScene();
         this.addLights();
         this.startAnimation();
         this.setLinkSelectedCar()
         this.setCameraPosition()
+
+        this.loader();
+        this.appendSceneToDiv();
+        this.catchSwipeEvent();
     }
 }

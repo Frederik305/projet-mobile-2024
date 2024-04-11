@@ -1,11 +1,22 @@
+@font-face {
+  font-family: 'Honk';
+  src: url('../font/Honk.ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('../font/Roboto-Regular.ttf');
+}
+
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: 'Roboto';
 }
 
 body { 
-  background: rgb(50,50,50);
+  background: rgb(195,192,34);
+background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%, rgba(249,45,253,1) 100%);
 }
 
 .center {
@@ -122,4 +133,92 @@ a {
   width: 100%;
   z-index: 1;
   justify-content: space-between;
+}
+.page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  height: 100vh;
+}
+.container-info-player {  
+  display: flex;
+  background-color: #2623b9c2;
+  width: 80%;
+  
+  flex-direction: column;
+  align-items: center;
+  height: 400px;
+  padding-top:40px;
+  border-radius: 50px;
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+}
+.photo-player{
+  background-color: rgb(63, 63, 63);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background-image: url('../img/default.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  margin-bottom: 60px;
+  position: relative;
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+}
+.info-player{
+  display: flex;
+  flex-direction: column;        
+  width: 75%;
+  color: aliceblue;
+  
+}
+.username-player{
+  border: none;
+  height: 35px;
+  border-radius: 20px;
+  padding:0 10px;
+  margin-top: 5px;
+  background-color: rgb(214, 214, 214);
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+  
+}
+
+.apply-btn{
+  background-color: #d867c9;
+  border: 2px #a933c0 solid;
+
+  width: 75%;
+  border-radius: 20px;
+  height: 40px;
+  margin-top: 15px;
+  cursor: pointer;
+  color:rgb(240, 240, 240);
+  font-weight: bold;
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+}
+.title{
+  font-family:'Honk';
+  font-size: 38px;
+  line-height: 0.55;
+  justify-content: center;
+  text-align: center;
+}
+.edit{
+  position: absolute;
+  cursor: pointer;
+  right: 5px;
+  height: 20px;
+  width: 20px;
+  border: none;
+  background-color: rgb(255, 191, 73);
+  border-radius: 50%;
+  background-image: url('../img/edit.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
 }

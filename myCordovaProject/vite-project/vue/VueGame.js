@@ -93,7 +93,6 @@ class VueGame {
         
 
         console.log(this.maxRoadInstances, this.roadInstances.length);
-        if (this.maxRoadInstances >= this.roadInstances.length) {
 
 
         for (let i = 0; i < this.maxRoadInstances; i++) {
@@ -116,7 +115,6 @@ class VueGame {
         }, undefined, (error) => {
             console.error(error);
         });
-    }
     }
     }
     

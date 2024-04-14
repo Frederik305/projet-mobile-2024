@@ -6,7 +6,11 @@
   font-family: 'Roboto';
   src: url('../font/Roboto-Regular.ttf');
 }
-
+@font-face {
+  font-family: 'Jersey15';
+  src: url('../font/Jersey15-Regular.ttf');
+  
+}
 body, html {
   margin: 0;
   padding: 0;
@@ -221,4 +225,69 @@ a {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60%;
+}
+
+
+.game-over-page{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex; /* Pour aligner les éléments au centre */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Pour empiler verticalement les éléments */
+  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent pour l'overlay */
+  font-family:'Jersey15';
+  padding-top: 20px;
+   
+}
+
+.game-over{
+  text-align: center; /* Centrer le texte */
+  z-index: 1;
+  justify-content: center;
+}
+.btns-container{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 80%;
+  
+}
+.game-score{
+  color: white;
+  width: 70%;
+  justify-content: center;
+  text-align: center;
+  background-color: rgba(105, 105, 105, 0.616);
+  
+  margin:auto;
+  margin-bottom: 100px;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+.restart-btn{
+  color: white;
+  background-color: rgba(128, 255, 0, 0.568);
+  border-radius: 25px;
+  border: 3px solid green;
+  margin: 10px auto;
+  margin-top: 100px;
+  width: 70%;
+  padding: 15px 0;
+  text-decoration: none;
+}
+.quit-btn{
+  color: white;
+  background-color: rgba(202, 0, 0, 0.671);
+  border-radius: 25px;
+  border: 3px solid rgb(212, 0, 0);
+  margin:  auto;
+  
+  width: 50%;
+  padding: 15px 0;
+  text-decoration: none;
 }

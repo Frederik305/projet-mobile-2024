@@ -118,7 +118,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 
 #btn-start-container{
   position: absolute;
-  bottom: 100px;
+  bottom: 65px;
   height: 100px;
   width: 100%;
   z-index: 1;

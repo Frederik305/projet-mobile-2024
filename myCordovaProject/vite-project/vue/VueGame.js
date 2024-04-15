@@ -93,25 +93,25 @@ class VueGame {
         z: 10000
         */
 
-    const loader = new this.GLTFLoader();
-    return new Promise((resolve, reject) => {
-        loader.load("untitled.glb", (gltf) => {
-            const road = gltf.scene;
+        const loader = new this.GLTFLoader();
+        return new Promise((resolve, reject) => {
+            loader.load("untitled.glb", (gltf) => {
+                const road = gltf.scene;
 
-            this.nextRoadPositionCounter++;
-            let nextRoadPosition = this.nextRoadPositionCounter * -10000;
+                this.nextRoadPositionCounter++;
+                let nextRoadPosition = this.nextRoadPositionCounter * -10000;
 
-            road.position.z = nextRoadPosition;
+                road.position.z = nextRoadPosition;
 
-            this.scene.add(road);
-            this.roadInstances.push(road);
+                this.scene.add(road);
+                this.roadInstances.push(road);
 
-            resolve();
-        }, undefined, (error) => {
-            console.error(error);
-            reject(error);
+                resolve();
+            }, undefined, (error) => {
+                console.error(error);
+                reject(error);
+            });
         });
-    });
 
             /*let bbox = new this.THREE.Box3().setFromObject(road);
             let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
@@ -361,13 +361,13 @@ class VueGame {
         }
     } 
     
-    /*animate() {
+    animate() {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.callRoad();
             this.animate(); // Recursively call animate to keep the loop running
         });
-    }*/
+    }
 
     startGameLoop() {
         let lastFrameTime = performance.now();
@@ -407,5 +407,6 @@ class VueGame {
         this.addLights();
         this.mouvements();
         this.startGameLoop();
+        
     }
 }

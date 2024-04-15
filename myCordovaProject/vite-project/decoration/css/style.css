@@ -356,12 +356,14 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 .info-player-home-page{
   position: absolute;
   top: 0;
+  right: 0;
+  
   display: flex;
   font-size: 30px;     
   width: 100%;
-  color: aliceblue;
+  color: #ffffff;
   
-  padding: 20px;
+  padding: 20px 0;
   background-color: #2623b9c2;
   
   align-items: center;
@@ -378,7 +380,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
-  margin-right: 5px;
+  margin: 0 10px 0 20px;
   position: relative;
   -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);

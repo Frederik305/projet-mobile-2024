@@ -37,6 +37,7 @@ class Application{
             this.vueGame.setup()
                 .then(() => {
                     this.vueGame.init();
+                    
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){

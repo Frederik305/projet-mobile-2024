@@ -286,7 +286,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   text-decoration: none ;
   color: white;
   font-size: 70px;
-  display: flex;
+  
   padding:  0 10px;
   justify-content: center;
   text-align: center;
@@ -325,6 +325,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   right: -10px;
   background: #ff2f2f;
   z-index: -1;
+  
 }
 
 .start-btn::after {
@@ -337,6 +338,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   right: -6px;
   background: #ff2f2f;
   z-index: -1;
+  
 }
 
 
@@ -346,7 +348,38 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   position: relative;
   background: #ff2f2f;
   width: auto;
-  z-index: 2;
+  z-index: 1;
+  
 }
 
 
+.info-player-home-page{
+  position: absolute;
+  top: 0;
+  display: flex;
+  font-size: 30px;     
+  width: 100%;
+  color: aliceblue;
+  
+  padding: 20px;
+  background-color: #2623b9c2;
+  
+  align-items: center;
+  
+  
+}
+
+.photo-player-home-page{
+  background-color: rgb(63, 63, 63);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-image: url('../img/default.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  margin-right: 5px;
+  position: relative;
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+}

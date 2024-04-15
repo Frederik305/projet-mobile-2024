@@ -107,7 +107,7 @@ class VueHomePage{
         let startBtn = document.getElementById("btn-start");
 
 // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
-        startBtn.href = `#Game/${this.selectedCar}`
+        startBtn.href = `#Game/${selectedCar}`
     }
 
     appendSceneToDiv(){

@@ -16,10 +16,14 @@ class VueHomePage{
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
-        let startBtn = document.getElementById("btn-start");
 
-// Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
-        startBtn.href = `#Game/${this.selectedCar}`
+        document.getElementById("name").innerText = this.displayHomePage[this.selectedCar].name;
+        document.getElementById("acceleration").innerText = this.displayHomePage[this.selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = this.displayHomePage[this.selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = this.displayHomePage[this.selectedCar].brakePower;
+
+        // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
+        document.getElementById("btn-start").href = `#Game/${this.selectedCar}`
     }
 
     async setup() {
@@ -102,12 +106,13 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar(selectedCar) {
-        
-    
-        let startBtn = document.getElementById("btn-start");
+        document.getElementById("name").innerText = this.displayHomePage[selectedCar].name;
+        document.getElementById("acceleration").innerText = this.displayHomePage[selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = this.displayHomePage[selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = this.displayHomePage[selectedCar].brakePower;
 
-// Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
-        startBtn.href = `#Game/${this.selectedCar}`
+        // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
+        document.getElementById("btn-start").href = `#Game/${selectedCar}`
     }
 
     appendSceneToDiv(){

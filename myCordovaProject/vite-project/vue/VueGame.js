@@ -28,11 +28,6 @@ class VueGame {
         this.lastFpsUpdate = Date.now();
 
         this.onWindowResize = this.onWindowResize.bind(this);
-        this.roadInstances = [];
-        this.maxRoadInstances = 2;
-        this.nextRoadPositionCounter = 0;
-        this.distanceAhead = -1000;
-
         window.addEventListener('resize', this.onWindowResize, false);
     }
 
@@ -43,6 +38,11 @@ class VueGame {
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         document.body.appendChild(this.fpsCounter);
+
+        this.roadInstances = [];
+        this.maxRoadInstances = 2;
+        this.nextRoadPositionCounter = 0;
+        this.distanceAhead = -1000;
     }
 
     async setup() {
@@ -290,7 +290,7 @@ class VueGame {
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.currentSpeed; // Obtenez la vitesse actuelle de la voiture
+        const speed = this.car.currentSpeed+50; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle

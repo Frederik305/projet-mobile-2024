@@ -107,7 +107,7 @@ class VueHomePage{
         listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
     
         var carName = this.displayHomePage[selectedCar].name;
-        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, carName);
+        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, "carName");
     
         document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
     }
@@ -187,7 +187,7 @@ class VueHomePage{
 
     init() {
         this.setupScene();
-        this.addLights();
+        //this.addLights();
         this.startAnimation();
         this.setLinkSelectedCar()
         this.setCameraPosition()

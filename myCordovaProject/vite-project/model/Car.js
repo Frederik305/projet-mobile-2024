@@ -18,3 +18,4 @@ class Car {
         this.cameraRotationX = cameraRotationX;
     }
 }
+export default Car;

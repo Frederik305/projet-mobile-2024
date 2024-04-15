@@ -1,4 +1,7 @@
-
+import CarDAO from './data/CarDAO.js';
+import VueHomePage from './vue/VueHomePage.js';
+import VueGame from './vue/VueGame.js';
+import VueEndScreen from './vue/VueEndScreen.js';
 class Application{
     constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen){
         this.window = window;

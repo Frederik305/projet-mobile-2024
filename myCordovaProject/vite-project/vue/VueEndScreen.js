@@ -7,3 +7,5 @@ class VueEndScreen{
         console.log("afficher");
     }
 }
+
+export default VueEndScreen;

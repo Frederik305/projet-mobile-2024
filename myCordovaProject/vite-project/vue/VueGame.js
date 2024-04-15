@@ -388,3 +388,4 @@ class VueGame {
         
     }
 }
+export default VueGame;

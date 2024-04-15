@@ -1,3 +1,4 @@
+import Car from '../model/Car.js';
 class CarDAO{
     constructor(){
         this.cars = [
@@ -30,3 +31,4 @@ class CarDAO{
         return this.cars;
     }
 }
+export default CarDAO;

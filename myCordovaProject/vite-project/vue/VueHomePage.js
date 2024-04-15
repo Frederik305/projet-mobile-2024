@@ -200,3 +200,4 @@ class VueHomePage{
         this.catchSwipeEvent();
     }
 }
+export default VueHomePage;

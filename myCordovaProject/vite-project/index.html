@@ -5,16 +5,14 @@
 		<title>Sunday Drive</title>
 		<link rel="stylesheet" href="css/style.css">
 
-		<link rel="stylesheet" href="decoration/css/style.css">
+		<script type="module" src="model/Car.js"></script>
+		<script type="module" src="data/CarDAO.js"></script>
 
-		<script src="model/Car.js"></script>
-		<script src="data/CarDAO.js"></script>
+		<script type="module" src="vue/VueHomePage.js"></script>
+		<script type="module" src="vue/VueGame.js"></script>
+		<script type="module" src="vue/VueEndScreen.js"></script>
 
-		<script src="vue/VueHomePage.js"></script>
-		<script src="vue/VueGame.js"></script>
-		<script src="vue/VueEndScreen.js"></script>
-
-		<script defer src="Application.js"></script>
+		<script type="module" defer src="Application.js"></script>
 	</head>
 	<body>
 		<div id="page-chargement-application">
@@ -39,9 +37,7 @@
 						<input type="button" class="edit">
 					</div>
 					<div class="info-player">
-						
-							<input type="text" id="username" class="username-player" placeholder="Username">
-						
+						<input type="text" id="username" class="username-player" placeholder="Username">
 					</div>
 					<input type="button" value="APPLY" class="apply-btn">
 				</div>
@@ -62,12 +58,12 @@
 
 
 			  		<div id="threejs-container"></div>
-					  <div id="Stats">
-						<p id=name>{Car.name}</p>
-						<p id=acceleration>{Car.acceleration}</p>
-						<p id=maneuverability>{Car.maneuverability}</p>
-						<p id=brakePower>{Car.brakePower}</p>
-					</div>
+						<div id="Stats">
+							<p id=name>{Car.name}</p>
+							<p id=acceleration>{Car.acceleration}</p>
+							<p id=maneuverability>{Car.maneuverability}</p>
+							<p id=brakePower>{Car.brakePower}</p>
+						</div>
 				  	<div id="btn-start-container">
 						<a href="#Game/{Car.id}" id="btn-start" class="start-btn">START</a>
 				  	</div>

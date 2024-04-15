@@ -290,7 +290,7 @@ class VueGame {
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.currentSpeed+50; // Obtenez la vitesse actuelle de la voiture
+        const speed = this.car.baseMaxSpeed+50; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle

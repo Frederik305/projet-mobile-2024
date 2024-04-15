@@ -51,8 +51,24 @@ class VueHomePage{
         
         this.renderer.setSize(width, height);
         document.body.appendChild(this.renderer.domElement);
-        this.scene.background = new this.THREE.Color(0x94d4ff);
+        const gradientTexture = this.createGradientBackground();
+        this.scene.background = gradientTexture;
+        this.addLights()
     }
+
+    createGradientBackground() {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const gradient = context.createLinearGradient(0, 0, 0, window.innerHeight);
+        
+    
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    
+        const texture = new this.THREE.CanvasTexture(canvas);
+        return texture;
+    }
+    
 
     addLights() {
         const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
@@ -144,7 +160,7 @@ class VueHomePage{
 
     setCameraPosition() {
         this.camera.position.set(400, 400, -800);
-        this.camera.lookAt(0, -100, 100);
+        this.camera.lookAt(0, 0, 0);
     }
 
     animate() {

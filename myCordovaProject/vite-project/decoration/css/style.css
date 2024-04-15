@@ -285,30 +285,68 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 .start-btn{
   text-decoration: none ;
   color: white;
-  font-size: 80px;
+  font-size: 70px;
   display: flex;
-  border-radius: 25px;
+  padding:  0 10px;
   justify-content: center;
   text-align: center;
    
 
-  width: 70%;
-  max-width: 300px;
-  background: #ff0000;
-  background:
-		linear-gradient(135deg, transparent 10px, #ff0000 0) top left,
-		linear-gradient(225deg, transparent 10px, #ff0000 0) top right,
-		linear-gradient(315deg, transparent 10px, #ff0000 0) bottom right,
-		linear-gradient(45deg,  transparent 10px, #ff0000 0) bottom left;
-	background-size: 50% 50%;
-	background-repeat: no-repeat;
-	background-image:
-		radial-gradient(circle at 0 0, rgba(204,0,0,0) 14px, #ff0000 15px),
-		radial-gradient(circle at 100% 0, rgba(204,0,0,0) 14px, #ff0000 15px),
-		radial-gradient(circle at 100% 100%, rgba(204,0,0,0) 14px, #ff0000 15px),
-		radial-gradient(circle at 0 100%, rgba(204,0,0,0) 14px, #ff0000 15px);
+  width: 80%;
+  max-width: 500px;
+
+  cursor: pointer;
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  background: #ff2f2f;
+
+  position: relative;
+  display: block;
+  margin: 10px;
+  
+  text-transform: uppercase;
+  
+  
+  
+}
+.start-btn::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: -10px;
+  right: -10px;
+  background: #ff2f2f;
+  z-index: -1;
+}
+
+.start-btn::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: -6px;
+  right: -6px;
+  background: #ff2f2f;
+  z-index: -1;
 }
 
 
+
+.start-btn {
+  
+  position: relative;
+  background: #ff2f2f;
+  width: auto;
+  z-index: 2;
+}
 
 

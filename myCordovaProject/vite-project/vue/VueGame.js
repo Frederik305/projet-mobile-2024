@@ -385,5 +385,6 @@ class VueGame {
         this.addLights();
         this.mouvements();
         this.startGameLoop();
+        
     }
 }

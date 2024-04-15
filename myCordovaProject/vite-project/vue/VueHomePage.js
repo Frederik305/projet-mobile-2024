@@ -16,7 +16,10 @@ class VueHomePage{
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
+        let startBtn = document.getElementById("btn-start");
 
+// Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
+        startBtn.href = `#Game/${this.selectedCar}`
     }
 
     async setup() {
@@ -53,14 +56,14 @@ class VueHomePage{
         document.body.appendChild(this.renderer.domElement);
         const gradientTexture = this.createGradientBackground();
         this.scene.background = gradientTexture;
-        this.addLights()
-    }
 
+        this.addLights()
+    }  
     createGradientBackground() {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         const gradient = context.createLinearGradient(0, 0, 0, window.innerHeight);
-        
+       
     
         context.fillStyle = gradient;
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -68,7 +71,6 @@ class VueHomePage{
         const texture = new this.THREE.CanvasTexture(canvas);
         return texture;
     }
-    
 
     addLights() {
         const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
@@ -100,16 +102,12 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar(selectedCar) {
-        var regex = /#Game\/{Car\.id}[^"]*/;
+        
     
-        var listeItemCarHTMLRemplacement = '<a href="#Game/{Car.id}" class="liste-item-item" id="test">{Car.name}</a>';
-    
-        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(regex, "#Game/" + selectedCar);
-    
-        var carName = this.displayHomePage[selectedCar].name;
-        listeItemCarHTMLRemplacement = listeItemCarHTMLRemplacement.replace(/{Car\.name}/g, "carName");
-    
-        document.getElementById('liste-item').innerHTML = listeItemCarHTMLRemplacement;
+        let startBtn = document.getElementById("btn-start");
+
+// Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
+        startBtn.href = `#Game/${this.selectedCar}`
     }
 
     appendSceneToDiv(){
@@ -187,7 +185,7 @@ class VueHomePage{
 
     init() {
         this.setupScene();
-        //this.addLights();
+        
         this.startAnimation();
         this.setLinkSelectedCar()
         this.setCameraPosition()

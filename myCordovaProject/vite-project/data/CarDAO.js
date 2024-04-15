@@ -1,7 +1,7 @@
 class CarDAO{
     constructor(){
         this.cars = [
-            {id: 0, name: "Muscle", model: "Muscle.glb", acceleration: 1.1, baseMaxSpeed: 50, currentSpeed: 20, weight: 1000, brakePower: 1, maneuvrability: 10, rotation: 0.03, cameraDistance: 800, cameraRotationY: 400, cameraRotationX: 0},
+            {id: 0, name: "Muscle", model: "Muscle.glb", acceleration: 1.1, baseMaxSpeed: 50, currentSpeed: 20, weight: 1000, brakePower: 1, maneuvrability: 20, rotation: 0.03, cameraDistance: 800, cameraRotationY: 400, cameraRotationX: 0},
             {id: 1, name: "Sedan", model: "Sedan.glb", acceleration: 1.1, baseMaxSpeed: 50, currentSpeed: 20, weight: 1000, brakePower: 1, maneuvrability: 10, rotation: 0.03, cameraDistance: 800, cameraRotationY: 400, cameraRotationX: 0},
             {id: 2, name: "Mazda rx7", model: "mazda_rx7_stylised.glb", acceleration: 1.1, baseMaxSpeed: 50, currentSpeed: 20, weight: 1000, brakePower: 1, maneuvrability: 10, rotation: 0.03, cameraDistance: 800, cameraRotationY: 400, cameraRotationX: 0}
         ];

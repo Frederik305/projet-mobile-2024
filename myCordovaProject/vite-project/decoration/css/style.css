@@ -385,3 +385,15 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
 }
+
+.high-score-player{
+  
+  text-align: center;
+  background-color: #4b4b4b8f;
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  color: #fff;
+  border-radius: 15px;
+  padding: 10px;
+}

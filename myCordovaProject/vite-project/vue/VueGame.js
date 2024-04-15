@@ -85,7 +85,7 @@ class VueGame {
         });
     }
     
-    addRoadSegment() {
+    addRoad() {
         /*
         dimensions d'une route
         x: 3200
@@ -94,53 +94,48 @@ class VueGame {
         */
 
         const loader = new this.GLTFLoader();
-        return new Promise((resolve, reject) => {
-            loader.load("untitled.glb", (gltf) => {
-                const road = gltf.scene;
 
-                this.nextRoadPositionCounter++;
-                let nextRoadPosition = this.nextRoadPositionCounter * -10000;
+    for (let i = 0; i < this.maxRoadInstances; i++) {
+        loader.load("untitled.glb", (gltf) => {
+            const road = gltf.scene;
 
-                road.position.z = nextRoadPosition;
+            this.nextRoadPositionCounter++;
+            let nextRoadPosition = this.nextRoadPositionCounter * -10000;
 
-                this.scene.add(road);
-                this.roadInstances.push(road);
+            road.position.z = nextRoadPosition;
 
-                resolve();
-            }, undefined, (error) => {
-                console.error(error);
-                reject(error);
-            });
-        });
+            this.scene.add(road);
+            this.roadInstances.push(road);
 
-            /*let bbox = new this.THREE.Box3().setFromObject(road);
+            let bbox = new this.THREE.Box3().setFromObject(road);
             let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
             let size = bbox.getSize(new this.THREE.Vector3());
-            this.scene.add(helper);*/
+            this.scene.add(helper);
+        }, undefined, (error) => {
+            console.error(error);
+        });
     }
-    addRoad() {
-        const promises = [];
-        for (let i = 0; i < this.maxRoadInstances; i++) {
-            promises.push(this.addRoadSegment());
-        }
-        return Promise.all(promises);
     }
-    callRoad() {
+    
+    callRoad(){
         return new Promise((resolve, reject) => {
             if (this.carModel) { // Ensure that carModel is defined
                 let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000;
-    
+                
                 if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - (this.maxRoadInstances * 10000)) <= 1000) {
-                    this.addRoad().then(resolve).catch(reject);
-                } else {
+                    this.addRoad();
+                    resolve();
+                }
+                else{
+                    //console.log(nextRoadSpawnTrigger);
                     resolve();
                 }
             } else {
                 // Car model is not loaded yet, you might want to handle this case
                 console.warn("Car model is not loaded yet.");
-                reject(new Error("Car model is not loaded yet."));
+                reject(error);
             }
-        });
+            });
     }
 
     clearRoadBehind(){
@@ -165,12 +160,11 @@ class VueGame {
             const loader = new this.GLTFLoader();
             loader.load(this.car.model, (gltf) => {
                 this.carModel = gltf.scene;
-                this.carModel.position.set(0, 0, 0); // Positioning
+                this.carModel.position.set(0, 1, 0); // Positioning
                 this.carModel.rotateY(Math.PI);
                 this.carModel.scale.set(0.8, 0.8, 0.8);
     
                 this.scene.add(this.carModel);
-
                 resolve(); // Resolve the promise once loading is complete
             }, undefined, (error) => {
                 console.error(error);
@@ -297,11 +291,10 @@ class VueGame {
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
         const speed = this.car.currentSpeed; // Obtenez la vitesse actuelle de la voiture
-        const maneuverability = this.car.maneuverability;
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
-        const dx = Math.sin(angle) * maneuverability;
+        const dx = Math.sin(angle) * speed;
         const dz = -Math.cos(angle) * speed;
     
         // Déplacez la voiture en fonction des composantes de direction calculées
@@ -338,6 +331,7 @@ class VueGame {
         const now = Date.now();
         const deltaTime = now - this.lastTick;
 
+
         const elapsedTime = now - this.lastFpsUpdate;
         if (elapsedTime >= 1000) { // Update FPS every second
             const fps = Math.round((this.frameCount * 1000) / elapsedTime);
@@ -350,12 +344,11 @@ class VueGame {
             this.TWEEN.update();
             this.callRoad();
             this.clearRoadBehind();
-            this.moveCarForward();
             this.setCameraPosition();
+            this.moveCarForward();
             this.renderer.render(this.scene, this.camera);
 
-            //console.log(this.carModel.position)
-            //console.log("Updated")
+            console.log("Updated")
 
             this.lastTick = now - (deltaTime % this.tickInterval);
         }
@@ -364,28 +357,13 @@ class VueGame {
     animate() {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
-            this.callRoad();
             this.animate(); // Recursively call animate to keep the loop running
         });
     }
 
     startGameLoop() {
-        let lastFrameTime = performance.now();
-    
-        const loop = () => {
-            const currentTime = performance.now();
-            const deltaTime = (currentTime - lastFrameTime) / 1000; // Convert to seconds
-            lastFrameTime = currentTime;
-    
-            // Update the game state with delta time
-            this.update(deltaTime);
-    
-            // Request the next frame
-            requestAnimationFrame(loop);
-        };
-    
-        // Start the game loop
-        loop();
+        // Update the game state
+        this.animate();
     }
 
     onWindowResize() {

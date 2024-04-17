@@ -40,7 +40,7 @@ class VueGame {
         document.body.appendChild(this.fpsCounter);
 
         this.roadInstances = [];
-        this.maxRoadInstances = 2;
+        this.maxRoadInstances = 8;
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
     }
@@ -96,7 +96,6 @@ class VueGame {
         });
     }
     async addRoad() {
-        //console.log(this.roadInstances.length, this.maxRoadInstances);
         while (this.roadInstances.length <= this.maxRoadInstances+1) {
             try {
                 const road = await this.loadRoad();
@@ -110,36 +109,11 @@ class VueGame {
             }
         }
     }
-    //addRoad() {
-        /*
-        dimensions d'une route
-        x: 3200
-        y: 30
-        z: 10000
-        */
-/*        const loader = new this.GLTFLoader();
 
-    for (let i = 0; i < this.maxRoadInstances; i++) {
-        loader.load("untitled.glb", (gltf) => {
-            const road = gltf.scene;
-
-            this.nextRoadPositionCounter++;
-            let nextRoadPosition = this.nextRoadPositionCounter * -10000;
-
-            road.position.z = nextRoadPosition;
-
-            this.scene.add(road);
-            this.roadInstances.push(road);
-
-            let bbox = new this.THREE.Box3().setFromObject(road);
-            let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
-            let size = bbox.getSize(new this.THREE.Vector3());
-            this.scene.add(helper);
-        }, undefined, (error) => {
-            console.error(error);
-        });
-    }
-}*/
+    /*let bbox = new this.THREE.Box3().setFromObject(road);
+    let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
+    let size = bbox.getSize(new this.THREE.Vector3());
+    this.scene.add(helper);*/
     
     async callRoad() {
         return new Promise(async (resolve, reject) => {
@@ -159,8 +133,13 @@ class VueGame {
     clearRoadBehind(){
         if (this.roadInstances.length > 0 && this.carModel) {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
-                const removedRoad = this.roadInstances.shift();
-                this.scene.remove(removedRoad);
+
+                console.log(this.maxRoadInstances);
+                this.roadInstances[0].position.z -= this.maxRoadInstances * 10000;
+
+                this.roadInstances.push(this.roadInstances.shift());
+                console.log(this.roadInstances);
+                //this.scene.remove(removedRoad);
             }
         }
     }
@@ -359,10 +338,10 @@ class VueGame {
         }
 
         if (deltaTime >= this.tickInterval) {
-            console.time('update');
+            //console.time('update');
             this.TWEEN.update();
             try {
-                this.callRoad(); // Asynchronous operation
+                //this.callRoad(); // Asynchronous operation
                 this.clearRoadBehind();
                 this.moveCarForward();
                 this.setCameraPosition();
@@ -372,7 +351,7 @@ class VueGame {
             }
 
             this.lastTick = now - (deltaTime % this.tickInterval);
-            console.timeEnd('update');
+            //console.timeEnd('update');
         }
     } 
     
@@ -405,9 +384,9 @@ class VueGame {
         this.setupScene();
         await this.loadCar();
         this.addStart();
+        this.addLights();
         await this.addRoad();
         await this.callRoad();
-        this.addLights();
         this.mouvements();
         this.startGameLoop();
         

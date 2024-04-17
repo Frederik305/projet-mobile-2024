@@ -84,16 +84,40 @@ class VueGame {
             console.error(error);
         });
     }
-    
-    addRoad() {
+    async loadRoad() {
+        return new Promise((resolve, reject) => {
+            const loader = new this.GLTFLoader();
+            loader.load("untitled.glb", (gltf) => {
+                const road = gltf.scene;
+                resolve(road);
+            }, undefined, (error) => {
+                reject(error);
+            });
+        });
+    }
+    async addRoad() {
+        //console.log(this.roadInstances.length, this.maxRoadInstances);
+        while (this.roadInstances.length <= this.maxRoadInstances+1) {
+            try {
+                const road = await this.loadRoad();
+                this.nextRoadPositionCounter++;
+                let nextRoadPosition = this.nextRoadPositionCounter * -10000;
+                road.position.z = nextRoadPosition;
+                this.scene.add(road);
+                this.roadInstances.push(road);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+    //addRoad() {
         /*
         dimensions d'une route
         x: 3200
         y: 30
         z: 10000
         */
-
-        const loader = new this.GLTFLoader();
+/*        const loader = new this.GLTFLoader();
 
     for (let i = 0; i < this.maxRoadInstances; i++) {
         loader.load("untitled.glb", (gltf) => {
@@ -115,27 +139,21 @@ class VueGame {
             console.error(error);
         });
     }
-    }
+}*/
     
-    callRoad(){
-        return new Promise((resolve, reject) => {
-            if (this.carModel) { // Ensure that carModel is defined
+    async callRoad() {
+        return new Promise(async (resolve, reject) => {
+            if (this.carModel) {
                 let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000;
-                
                 if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - (this.maxRoadInstances * 10000)) <= 1000) {
-                    this.addRoad();
-                    resolve();
+                    await this.addRoad();
                 }
-                else{
-                    //console.log(nextRoadSpawnTrigger);
-                    resolve();
-                }
+                resolve();
             } else {
-                // Car model is not loaded yet, you might want to handle this case
                 console.warn("Car model is not loaded yet.");
-                reject(error);
+                reject(new Error("Car model is not loaded yet."));
             }
-            });
+        });
     }
 
     clearRoadBehind(){
@@ -325,7 +343,7 @@ class VueGame {
         this.camera.rotation.x -= -0.2;
     }
     // Main loop to update the game state at each tick
-    update() {
+    async update() {
         this.frameCount++;
 
         const now = Date.now();
@@ -341,23 +359,29 @@ class VueGame {
         }
 
         if (deltaTime >= this.tickInterval) {
+            console.time('update');
             this.TWEEN.update();
-            this.callRoad();
-            this.clearRoadBehind();
-            this.setCameraPosition();
-            this.moveCarForward();
-            this.renderer.render(this.scene, this.camera);
-
-            console.log("Updated")
+            try {
+                this.callRoad(); // Asynchronous operation
+                this.clearRoadBehind();
+                this.moveCarForward();
+                this.setCameraPosition();
+                this.renderer.render(this.scene, this.camera);
+            } catch (error) {
+                console.error("Error in game loop:", error);
+            }
 
             this.lastTick = now - (deltaTime % this.tickInterval);
+            console.timeEnd('update');
         }
     } 
     
     animate() {
         requestAnimationFrame(() => {
+
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
+
         });
     }
 
@@ -377,10 +401,11 @@ class VueGame {
     }
 
     async init() {
+
         this.setupScene();
         await this.loadCar();
         this.addStart();
-        this.addRoad();
+        await this.addRoad();
         await this.callRoad();
         this.addLights();
         this.mouvements();
@@ -388,4 +413,4 @@ class VueGame {
         
     }
 }
-export default VueGame;
+export default VueGame

@@ -19,7 +19,7 @@ class VueHomePage{
 
         document.getElementById("name").innerText = "Name: " + this.displayHomePage[this.selectedCar].name;
         document.getElementById("acceleration").innerText = "Acceleration: " + this.displayHomePage[this.selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maneuverability: " + this.displayHomePage[this.selectedCar].maneuverability;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.displayHomePage[this.selectedCar].maneuverability;
         document.getElementById("brakePower").innerText = "Brake: " + this.displayHomePage[this.selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
@@ -106,9 +106,9 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar(selectedCar) {
-        document.getElementById("name").innerText = "Name: "+this.displayHomePage[selectedCar].name;
+        document.getElementById("name").innerText = "Name: " + this.displayHomePage[selectedCar].name;
         document.getElementById("acceleration").innerText = "Acceleration: " + this.displayHomePage[selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maneuverability: " + this.displayHomePage[selectedCar].maneuverability;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.displayHomePage[selectedCar].maneuverability;
         document.getElementById("brakePower").innerText = "Brake: " + this.displayHomePage[selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId

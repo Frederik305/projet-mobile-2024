@@ -18,13 +18,10 @@ class VueGame {
 
         this.frameCount = 0;
         this.fpsCounter = document.createElement('div');
-        this.fpsCounter.style.position = 'absolute';
-        this.fpsCounter.style.top = '10px';
-        this.fpsCounter.style.left = '10px';
-        this.fpsCounter.style.color = 'white';
-        this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
+        this.button = document.createElement('button');
 
 
+        this.isPaused = false;
         this.lastFpsUpdate = Date.now();
 
         this.onWindowResize = this.onWindowResize.bind(this);
@@ -38,11 +35,30 @@ class VueGame {
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         document.body.appendChild(this.fpsCounter);
+        document.body.appendChild(this.button);
 
         this.roadInstances = [];
         this.maxRoadInstances = 8;
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
+
+        this.fpsCounter.style.position = 'absolute';
+        this.fpsCounter.style.top = '10px';
+        this.fpsCounter.style.left = '10px';
+        this.fpsCounter.style.color = 'white';
+        this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
+
+        this.button.style.position = 'absolute';
+        this.button.style.top = '10px';
+        this.button.style.right = '10px';
+        this.button.style.color = 'white';
+        this.button.style.fontFamily = 'Arial, sans-serif';
+        this.button.style.height = '20px';
+        this.button.style.width = '20px';
+        this.button.style.backgroundColor = 'rgb(250,250,250)';
+        this.button.style.borderColor = 'rgb(250,250,250)';
+
+        this.button.id = 'Pause';
     }
 
     async setup() {
@@ -130,15 +146,15 @@ class VueGame {
         });
     }
 
-    clearRoadBehind(){
+    moveRoadBehind(){
         if (this.roadInstances.length > 0 && this.carModel) {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
 
-                console.log(this.maxRoadInstances);
+                //console.log(this.maxRoadInstances);
                 this.roadInstances[0].position.z -= this.maxRoadInstances * 10000;
 
                 this.roadInstances.push(this.roadInstances.shift());
-                console.log(this.roadInstances);
+                //console.log(this.roadInstances);
                 //this.scene.remove(removedRoad);
             }
         }
@@ -323,47 +339,59 @@ class VueGame {
     }
     // Main loop to update the game state at each tick
     async update() {
-        this.frameCount++;
+        if(!this.isPaused) {
+            this.frameCount++;
 
-        const now = Date.now();
-        const deltaTime = now - this.lastTick;
+            const now = Date.now();
+            const deltaTime = now - this.lastTick;
 
 
-        const elapsedTime = now - this.lastFpsUpdate;
-        if (elapsedTime >= 1000) { // Update FPS every second
-            const fps = Math.round((this.frameCount * 1000) / elapsedTime);
-            this.fpsCounter.textContent = `FPS: ${fps}`;
-            this.frameCount = 0; // Reset frame count
-            this.lastFpsUpdate = now; // Update last FPS update time
-        }
-
-        if (deltaTime >= this.tickInterval) {
-            //console.time('update');
-            this.TWEEN.update();
-            try {
-                //this.callRoad(); // Asynchronous operation
-                this.clearRoadBehind();
-                this.moveCarForward();
-                this.setCameraPosition();
-                this.renderer.render(this.scene, this.camera);
-            } catch (error) {
-                console.error("Error in game loop:", error);
+            const elapsedTime = now - this.lastFpsUpdate;
+            if (elapsedTime >= 1000) { // Update FPS every second
+                const fps = Math.round((this.frameCount * 1000) / elapsedTime);
+                this.fpsCounter.textContent = `FPS: ${fps}`;
+                this.frameCount = 0; // Reset frame count
+                this.lastFpsUpdate = now; // Update last FPS update time
             }
 
-            this.lastTick = now - (deltaTime % this.tickInterval);
-            //console.timeEnd('update');
+            if (deltaTime >= this.tickInterval) {
+                //console.time('update');
+                this.TWEEN.update();
+                try {
+                    //this.callRoad(); // Asynchronous operation
+                    this.moveRoadBehind();
+                    this.moveCarForward();
+                    this.setCameraPosition();
+                    this.renderer.render(this.scene, this.camera);
+                } catch (error) {
+                    console.error("Error in game loop:", error);
+                }
+
+                this.lastTick = now - (deltaTime % this.tickInterval);
+                //console.timeEnd('update');
+            }
         }
     } 
     
     animate() {
         requestAnimationFrame(() => {
-
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-
         });
     }
 
+    changePauseState(){
+        this.isPaused = !this.isPaused;
+        console.log(this.isPaused);
+    }
+    checkButtonClick(){
+        document.getElementById('Pause').addEventListener('mousedown', () => {
+            this.changePauseState();
+    
+        });
+        //this.button.addEventListener('touch', this.changePauseState());
+        //this.button.addEventListener('mousedown', this.changePauseState());
+    }
     startGameLoop() {
         // Update the game state
         this.animate();
@@ -376,6 +404,7 @@ class VueGame {
             this.camera.aspect = width / height;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(width, height);
+            this.renderer.render(this.scene, this.camera);
         }
     }
 
@@ -388,6 +417,7 @@ class VueGame {
         await this.addRoad();
         await this.callRoad();
         this.mouvements();
+        this.checkButtonClick();
         this.startGameLoop();
         
     }

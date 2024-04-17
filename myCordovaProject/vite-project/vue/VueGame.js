@@ -13,7 +13,7 @@ class VueGame {
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
-        this.tickInterval = 1000 / 60; // Tick interval (60 ticks per second)
+        this.tickInterval = 1000 / 120; // Tick interval (60 ticks per second)
         this.lastTick = 0; // Timestamp of the last tick
 
         this.frameCount = 0;
@@ -269,6 +269,19 @@ class VueGame {
                 this.reduceRotation();
             });
         });
+
+        document.getElementById('button-left').addEventListener('touchstart', () => {
+            const intervalId = setInterval(() => {
+                if (this.carModel.rotation.y > -0.30) {
+                    this.carModel.rotation.y -= rotationSpeed;
+                }
+            }, 10);
+    
+            document.addEventListener('touchend', () => {
+                clearInterval(intervalId);
+                this.reduceRotation();
+            });
+        });
     
         document.getElementById('button-right').addEventListener('mousedown', () => {
             const intervalId = setInterval(() => {
@@ -282,6 +295,20 @@ class VueGame {
                 this.reduceRotation();
             });
         });
+
+        document.getElementById('button-right').addEventListener('touchstart', () => {
+            const intervalId = setInterval(() => {
+                if (this.carModel.rotation.y < 0.30) {
+                    this.carModel.rotation.y += rotationSpeed;
+                }
+            }, 10);
+    
+            document.addEventListener('touchend', () => {
+                clearInterval(intervalId);
+                this.reduceRotation();
+            });
+        });
+
         this.reduceRotation = () => {
             const reduceRotation = () => {
                 
@@ -303,7 +330,7 @@ class VueGame {
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.baseMaxSpeed+50; // Obtenez la vitesse actuelle de la voiture
+        const speed = this.car.baseMaxSpeed; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
@@ -385,12 +412,9 @@ class VueGame {
         console.log(this.isPaused);
     }
     checkButtonClick(){
-        document.getElementById('Pause').addEventListener('mousedown', () => {
+        document.getElementById('Pause').addEventListener('pointerdown', () => {
             this.changePauseState();
-    
         });
-        //this.button.addEventListener('touch', this.changePauseState());
-        //this.button.addEventListener('mousedown', this.changePauseState());
     }
     startGameLoop() {
         // Update the game state
@@ -414,10 +438,10 @@ class VueGame {
         await this.loadCar();
         this.addStart();
         this.addLights();
-        await this.addRoad();
-        await this.callRoad();
         this.mouvements();
         this.checkButtonClick();
+        await this.addRoad();
+        await this.callRoad();
         this.startGameLoop();
         
     }

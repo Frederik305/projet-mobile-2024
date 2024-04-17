@@ -2,12 +2,13 @@ import CarDAO from './data/CarDAO.js';
 import VueHomePage from './vue/VueHomePage.js';
 import VueGame from './vue/VueGame.js';
 import VueEndScreen from './vue/VueEndScreen.js';
+import VuePlayer from './vue/VuePlayer.js';
 class Application{
-    constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen){
+    constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen,vuePlayer){
         this.window = window;
 
         this.carDAO = carDAO;
-
+        this.vuePlayer = vuePlayer;
         this.vueHomePage = vueHomePage;
         this.vueGame = vueGame;
         this.vueEndScreen = vueEndScreen;
@@ -20,6 +21,10 @@ class Application{
         let hash = window.location.hash;
 
         if(!hash){
+            this.vuePlayer.initializePlayer();
+            this.vuePlayer.afficher();
+        }
+        else if(hash.match(/^#HomePage/)){
             this.vueHomePage.initializeHomePage(this.carDAO.getCars());
 
             this.vueHomePage.afficher();
@@ -50,4 +55,4 @@ class Application{
 
 }
 
-new Application(window, new CarDAO(), new VueHomePage(), new VueGame(), new VueEndScreen());
+new Application(window, new CarDAO(), new VueHomePage(), new VueGame(), new VueEndScreen(),new VuePlayer());

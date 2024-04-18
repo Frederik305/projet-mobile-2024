@@ -38,7 +38,7 @@ class VueGame {
         document.body.appendChild(this.button);
 
         this.roadInstances = [];
-        this.maxRoadInstances = 80;
+        this.maxRoadInstances = 8;
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
 
@@ -104,7 +104,7 @@ class VueGame {
     async loadRoad() {
         return new Promise((resolve, reject) => {
             const loader = new this.GLTFLoader();
-            loader.load("Road.glb", (gltf) => {
+            loader.load("untitled.glb", (gltf) => {
                 const road = gltf.scene;
                 resolve(road);
             }, undefined, (error) => {

@@ -125,7 +125,7 @@ class VueHomePage{
     }
 
     catchSwipeEvent() {
-        var touchArea = document.getElementById('threejs-container');
+        var touchArea = document.getElementById('swipeCatcher');
         var myRegion = new this.ZingTouch.Region(touchArea);
     
         let selectedCar = this.selectedCar;

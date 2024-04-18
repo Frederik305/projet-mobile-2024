@@ -8,7 +8,7 @@ class VueGame {
         this.THREE = null;
         this.GLTFLoader = null;
         this.TWEEN = null;
-
+        
         this.car;
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
@@ -63,16 +63,17 @@ class VueGame {
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN }] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
-                import('@tweenjs/tween.js')
+                import('@tweenjs/tween.js'),
+                
             ]);
 
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
-
+            
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
@@ -202,7 +203,71 @@ class VueGame {
     }
     
     mouvements() {
+        let intervalId;
+        const nipplejs=window.nipplejs;
         const rotationSpeed=this.car.rotation;
+        const joystickContainer = document.getElementById('joystick-container');
+        const joystick = nipplejs.create({
+            zone: joystickContainer,
+            mode: 'dynamic',
+            color: 'yellow'
+    });
+    joystick.on('move', (evt, data) => {
+        // Vérifiez si data est défini et si data.direction est défini
+        if (data && data.direction) {
+            // data.direction contient la direction du joystick sous forme d'objet { x, y }
+            const directionX = data.direction.x;
+
+            // Utilisez la direction x comme vous le souhaitez
+            if (directionX === 'right') {
+                // La voiture tourne à droite
+                console.log('La voiture tourne à droite');
+        
+                    if (this.carModel.rotation.y < 0.30) {
+                        this.carModel.rotation.y += rotationSpeed;
+                    }
+        
+                // Ajoutez ici le code pour faire tourner la voiture à droite
+            } else if (directionX==='left') {
+                // La voiture tourne à gauche
+                console.log('La voiture tourne à gauche');
+                
+                    if (this.carModel.rotation.y > -0.30) {
+                        this.carModel.rotation.y -= rotationSpeed;
+                    }
+                
+                // Ajoutez ici le code pour faire tourner la voiture à gauche
+            } 
+        
+    } 
+    
+});
+joystick.on('end', () => {
+    // Arrêtez l'animation de rotation de la voiture lorsque le joystick est relâché
+    //clearInterval(intervalId); // Arrêtez l'intervalle de rotation
+
+    // Réinitialisez la rotation de la voiture à 0
+    const resetRotation = () => {
+        if (Math.abs(this.carModel.rotation.y) > 0.01) {
+            // Réduisez progressivement la rotation vers 0
+            if (this.carModel.rotation.y > 0) {
+                this.carModel.rotation.y -= rotationSpeed;
+            } else if (this.carModel.rotation.y < 0) {
+                this.carModel.rotation.y += rotationSpeed;
+            }
+            requestAnimationFrame(resetRotation);
+        } else {
+            // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
+            //this.carModel.rotation.y = 0;
+        }
+    };
+
+    // Lancez la réinitialisation progressive de la rotation
+    resetRotation();
+});
+
+
+/*
         
         
         const Key = {
@@ -341,7 +406,7 @@ class VueGame {
                 }
             };
             reduceRotation();
-        };
+        };*/
     }
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle

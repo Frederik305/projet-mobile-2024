@@ -1,6 +1,5 @@
 class VueGame {
     constructor() {
-
         this.html = document.getElementById("html-vue-game").innerHTML;
         this.scene = null;
         this.camera = null;
@@ -8,6 +7,7 @@ class VueGame {
         this.THREE = null;
         this.GLTFLoader = null;
         this.TWEEN = null;
+        this.nipplejs = null;
         
         this.car;
         this.carModel;
@@ -67,12 +67,13 @@ class VueGame {
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
-                
+                import('nipplejs/dist/nipplejs.js'),
             ]);
 
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
+            this.nipplejs = nipplejs;
             
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
@@ -163,8 +164,8 @@ class VueGame {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
 
                 const totalRoadLength = this.getTotalRoadLength();
-                console.log(this.roadInstances[0].position.z)
-                console.log(totalRoadLength);
+                //console.log(this.roadInstances[0].position.z)
+                //console.log(totalRoadLength);
                 //console.log(this.maxRoadInstances);
                 this.roadInstances[0].position.z -= totalRoadLength;
 
@@ -204,10 +205,9 @@ class VueGame {
     
     mouvements() {
         let intervalId;
-        const nipplejs=window.nipplejs;
         const rotationSpeed=this.car.rotation;
         const joystickContainer = document.getElementById('joystick-container');
-        const joystick = nipplejs.create({
+        const joystick = this.nipplejs.create({
             zone: joystickContainer,
             mode: 'dynamic',
             color: 'yellow'
@@ -526,3 +526,43 @@ joystick.on('end', () => {
     }
 }
 export default VueGame
+/*
+function randint(range) {
+    return Math.floor(Math.random() * range);
+}
+
+function randomPath(sizeX, sizeY, startX, endX) {
+    let x = startX;
+    let path = [];
+    for (let y = sizeY - 1; y >= 0; y--) {
+        let upX = y ? randint(sizeX) : endX;
+        while (x != upX) {
+            path.push([x, y]);
+            if (x < upX) x++;
+            else x--;
+        }
+        path.push([x, y]);
+    }
+    // Remove U-turns
+    for (let i = path.length - 4; i >= 0; i--) {
+        if (i+3 < path.length && path[i][1] === path[i+3][1] + 1 && path[i][0] === path[i+3][0]) {
+            path.splice(i+1, 2); // Remove U
+        }
+    }
+    return path;
+}
+
+function displayPath(sizeX, sizeY, path) {
+    let grid = Array.from({length: sizeY}, () => Array(sizeX).fill("0"));
+    for (let [x, y] of path) {
+        grid[y][x] = "1";
+    }
+    console.log(grid.map(row => row.join(" ")).join("\n"));
+}
+
+// Let's do this for a 7x7 matrix:
+let sizeX = 3, sizeY = 15;
+let path = randomPath(sizeX, sizeY, 1, 1); // Start at X=2 at bottom, end at X=4 at top
+//console.log(JSON.stringify(path));
+displayPath(sizeX, sizeY, path);
+*/

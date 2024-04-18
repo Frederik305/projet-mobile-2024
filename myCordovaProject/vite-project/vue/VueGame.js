@@ -224,7 +224,7 @@ class VueGame {
                 console.log('La voiture tourne à droite');
         
                     if (this.carModel.rotation.y < 0.30) {
-                        this.carModel.rotation.y += rotationSpeed;
+                        this.carModel.rotation.y += rotationSpeed*(data.distance/50);
                     }
         
                 // Ajoutez ici le code pour faire tourner la voiture à droite
@@ -233,10 +233,11 @@ class VueGame {
                 console.log('La voiture tourne à gauche');
                 
                     if (this.carModel.rotation.y > -0.30) {
-                        this.carModel.rotation.y -= rotationSpeed;
+                        this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
                     }
                 
-                // Ajoutez ici le code pour faire tourner la voiture à gauche
+            
+                
             } 
         
     } 
@@ -253,12 +254,13 @@ joystick.on('end', () => {
             if (this.carModel.rotation.y > 0) {
                 this.carModel.rotation.y -= rotationSpeed;
             } else if (this.carModel.rotation.y < 0) {
+                
                 this.carModel.rotation.y += rotationSpeed;
             }
             requestAnimationFrame(resetRotation);
         } else {
             // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
-            //this.carModel.rotation.y = 0;
+            this.carModel.rotation.y = 0;
         }
     };
 

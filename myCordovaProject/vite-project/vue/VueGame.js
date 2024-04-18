@@ -38,7 +38,7 @@ class VueGame {
         document.body.appendChild(this.button);
 
         this.roadInstances = [];
-        this.maxRoadInstances = 8;
+        this.maxRoadInstances = 80;
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
 
@@ -103,7 +103,7 @@ class VueGame {
     async loadRoad() {
         return new Promise((resolve, reject) => {
             const loader = new this.GLTFLoader();
-            loader.load("untitled.glb", (gltf) => {
+            loader.load("Road.glb", (gltf) => {
                 const road = gltf.scene;
                 resolve(road);
             }, undefined, (error) => {
@@ -112,11 +112,15 @@ class VueGame {
         });
     }
     async addRoad() {
-        while (this.roadInstances.length <= this.maxRoadInstances+1) {
+        while (this.roadInstances.length < this.maxRoadInstances) {
             try {
                 const road = await this.loadRoad();
+                
+                // Calculate the length of the loaded road model
+                const roadLength = this.calculateRoadLength(road);
+    
                 this.nextRoadPositionCounter++;
-                let nextRoadPosition = this.nextRoadPositionCounter * -10000;
+                let nextRoadPosition = this.nextRoadPositionCounter * -roadLength;
                 road.position.z = nextRoadPosition;
                 this.scene.add(road);
                 this.roadInstances.push(road);
@@ -125,34 +129,45 @@ class VueGame {
             }
         }
     }
+    calculateRoadLength(road) {
+        const bbox = new this.THREE.Box3().setFromObject(road);
+        const size = bbox.getSize(new this.THREE.Vector3());
+        return size.z;
+    }
+    getTotalRoadLength() {
+        let totalLength = 0;
+    
+        // Iterate over each roadInstance
+        for (const roadInstance of this.roadInstances) {
+            // Create a bounding box for the current roadInstance
+            const bbox = new this.THREE.Box3().setFromObject(roadInstance);
+            
+            // Get the size of the bounding box
+            const size = bbox.getSize(new this.THREE.Vector3());
+    
+            // Sum up the length component of the size (assuming the road extends along the z-axis)
+            totalLength += size.z;
+        }
+    
+        return totalLength;
+    }
 
     /*let bbox = new this.THREE.Box3().setFromObject(road);
     let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
     let size = bbox.getSize(new this.THREE.Vector3());
     this.scene.add(helper);*/
-    
-    async callRoad() {
-        return new Promise(async (resolve, reject) => {
-            if (this.carModel) {
-                let nextRoadSpawnTrigger = this.nextRoadPositionCounter * -10000;
-                if (Math.abs(this.carModel.position.z - nextRoadSpawnTrigger - (this.maxRoadInstances * 10000)) <= 1000) {
-                    await this.addRoad();
-                }
-                resolve();
-            } else {
-                console.warn("Car model is not loaded yet.");
-                reject(new Error("Car model is not loaded yet."));
-            }
-        });
-    }
 
     moveRoadBehind(){
         if (this.roadInstances.length > 0 && this.carModel) {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
 
+                const totalRoadLength = this.getTotalRoadLength();
+                console.log(this.roadInstances[0].position.z)
+                console.log(totalRoadLength);
                 //console.log(this.maxRoadInstances);
-                this.roadInstances[0].position.z -= this.maxRoadInstances * 10000;
+                this.roadInstances[0].position.z -= totalRoadLength;
 
+                //console.log(this.roadInstances[0].position.z)
                 this.roadInstances.push(this.roadInstances.shift());
                 //console.log(this.roadInstances);
                 //this.scene.remove(removedRoad);
@@ -441,7 +456,6 @@ class VueGame {
         this.mouvements();
         this.checkButtonClick();
         await this.addRoad();
-        await this.callRoad();
         this.startGameLoop();
         
     }

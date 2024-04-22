@@ -301,7 +301,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   justify-content: center;
   text-align: center;
 }
-.edit{
+#edit{
   position: absolute;
   cursor: pointer;
   right: 5px;
@@ -315,7 +315,9 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   background-position: center;
   background-size: 60%;
 }
-
+.img-input{
+  display: none;
+}
 
 .game-over-page{
   position: absolute;

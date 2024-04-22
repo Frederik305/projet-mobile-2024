@@ -20,6 +20,7 @@ class VueGame {
         this.fpsCounter = document.createElement('div');
         this.button = document.createElement('button');
 
+        this.i = 0;
 
         this.isPaused = false;
         this.lastFpsUpdate = Date.now();
@@ -171,10 +172,130 @@ class VueGame {
 
                 //console.log(this.roadInstances[0].position.z)
                 this.roadInstances.push(this.roadInstances.shift());
+
+                if (this.i % this.maxRoadInstances == 0){
+                    this.carsGeneration();
+                }
+
+                this.i++;
+                console.log(this.i)  
+
                 //console.log(this.roadInstances);
                 //this.scene.remove(removedRoad);
             }
         }
+    }
+
+    carsGeneration(){
+        function randint(range) {
+            return Math.floor(Math.random() * range);
+        }
+        
+        function randomPath(sizeX, sizeY, startX, endX) {
+            let x = startX;
+            let path = [];
+            for (let y = sizeY - 1; y >= 0; y--) {
+                let upX = y ? randint(sizeX) : endX;
+                while (x != upX) {
+                    path.push([x, y]);
+                    if (x < upX) x++;
+                    else x--;
+                }
+                path.push([x, y]);
+            }
+            // Remove U-turns
+            for (let i = path.length - 4; i >= 0; i--) {
+                if (i+3 < path.length && path[i][1] === path[i+3][1] + 1 && path[i][0] === path[i+3][0]) {
+                    path.splice(i+1, 2); // Remove U
+                }
+            }
+            return path;
+        }
+        
+        let roadInstances = this.roadInstances
+        const scene = this.scene;
+        const loader = new this.GLTFLoader();
+        function displayPath(sizeX, sizeY, path) {
+            let grid = Array.from({length: sizeY}, () => Array(sizeX).fill("0"));
+            for (let [x, y] of path) {
+                grid[y][x] = "1";
+            }
+            
+            for (let i = 0; i < roadInstances.length; i++) {
+                const probability = 30;
+                
+                if (grid[i][0] == 0){
+                    const randomNumber = Math.floor(Math.random() * 100);
+                    if (randomNumber < probability) {
+                        grid[i][0] = 1;
+                    }
+                }
+                
+                /*if (grid[i][1] == 1){
+                    const randomNumber = Math.floor(Math.random() * 100);
+                    if (randomNumber < probability) {
+                        grid[i][1] = 0;
+                    }
+                }*/
+
+                if (grid[i][2] == 0){
+                    const randomNumber = Math.floor(Math.random() * 100);
+                    if (randomNumber < probability) {
+                        grid[i][2] = 1;
+                    }
+                }
+                //console.log(grid[i][0] + grid[i][1] + grid[i][2]);
+                //console.log(roadInstances[i].position.z);
+                if (grid[i][0] == 0){
+                    loader.load('Sedan.glb', (gltf) => {
+                        let test = gltf.scene;
+                        console.log(roadInstances[i].position.z);
+                        test.position.set(-600, 1, roadInstances[i].position.z); // Positioning
+                        test.scale.set(1.5, 1.5, 1.5);
+
+                        scene.add(test);
+                    }, undefined, (error) => {
+                        console.error(error);
+                        reject(error); // Reject the promise if there's an error
+                    });
+                }
+
+                if (grid[i][1] == 0){
+                    loader.load('Sedan.glb', (gltf) => {
+                        let test = gltf.scene;
+                        console.log(roadInstances[i].position.z);
+                        test.position.set(0, 1, roadInstances[i].position.z); // Positioning
+                        test.scale.set(1.5, 1.5, 1.5);
+
+                        scene.add(test);
+                    }, undefined, (error) => {
+                        console.error(error);
+                        reject(error); // Reject the promise if there's an error
+                    });
+                }
+
+                if (grid[i][2] == 0){
+                    loader.load('Sedan.glb', (gltf) => {
+                        let test = gltf.scene;
+                        console.log(roadInstances[i].position.z);
+                        test.position.set(600, 1, roadInstances[i].position.z); // Positioning
+                        test.scale.set(1.5, 1.5, 1.5);
+
+                        scene.add(test);
+                    }, undefined, (error) => {
+                        console.error(error);
+                        reject(error); // Reject the promise if there's an error
+                    });
+                }
+            }
+            console.log(grid.map(row => row.join(" ")).join("\n"));
+        }
+        //console.log(this.roadInstances[0].position.z)
+        // Let's do this for a 7x7 matrix:
+        let sizeX = 3, sizeY = this.maxRoadInstances;
+        let path = randomPath(sizeX, sizeY, 1, 1); // Start at X=2 at bottom, end at X=4 at top
+        //console.log(JSON.stringify(path));
+        displayPath(sizeX, sizeY, path);
     }
 
     // Ajout de lumières à la scène
@@ -192,7 +313,7 @@ class VueGame {
                 this.carModel = gltf.scene;
                 this.carModel.position.set(0, 1, 0); // Positioning
                 this.carModel.rotateY(Math.PI);
-                this.carModel.scale.set(0.8, 0.8, 0.8);
+                this.carModel.scale.set(1, 1, 1);
     
                 this.scene.add(this.carModel);
                 resolve(); // Resolve the promise once loading is complete
@@ -202,6 +323,23 @@ class VueGame {
             });
         });
     }
+
+    /*loadCars() {
+        const loader = new this.GLTFLoader();
+        loader.load('Sedan.glb', (gltf) => {
+            let test = gltf.scene;
+            console.log(this.roadInstances[0].position.z);
+            test.position.set(0, 1, this.roadInstances[0].position.z); // Positioning
+            test.rotateY(Math.PI);
+            test.scale.set(0.8, 0.8, 0.8);
+
+            this.scene.add(test);
+            resolve(); // Resolve the promise once loading is complete
+        }, undefined, (error) => {
+            console.error(error);
+            reject(error); // Reject the promise if there's an error
+        });
+    }*/
     
     mouvements() {
         let intervalId;

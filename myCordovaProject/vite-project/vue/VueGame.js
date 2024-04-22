@@ -343,6 +343,7 @@ class VueGame {
     
     mouvements() {
         let intervalId;
+        let Distance;
         const rotationSpeed=this.car.rotation;
         const joystickContainer = document.getElementById('joystick-container');
         const joystick = this.nipplejs.create({
@@ -354,29 +355,48 @@ class VueGame {
         // Vérifiez si data est défini et si data.direction est défini
         if (data && data.direction) {
             // data.direction contient la direction du joystick sous forme d'objet { x, y }
+           // console.log(data.distance+" "+Distance)
+            
+
+            
             const directionX = data.direction.x;
 
-            // Utilisez la direction x comme vous le souhaitez
-            if (directionX === 'right') {
-                // La voiture tourne à droite
-                console.log('La voiture tourne à droite');
-        
+            
+            if (directionX === 'right') {               
+
+                if (Distance && Distance>data.distance){
+                
+                    if (this.carModel.rotation.y>0){
+                        this.carModel.rotation.y -= rotationSpeed;}
+            
+                }else{
                     if (this.carModel.rotation.y < 0.30) {
                         this.carModel.rotation.y += rotationSpeed*(data.distance/50);
+            
+                }
+                   
+                    
                     }
         
-                // Ajoutez ici le code pour faire tourner la voiture à droite
+                
             } else if (directionX==='left') {
                 // La voiture tourne à gauche
-                console.log('La voiture tourne à gauche');
-                
-                    if (this.carModel.rotation.y > -0.30) {
+                if (Distance && Distance>data.distance){
+                    
+                    if (this.carModel.rotation.y < 0) {
+                            this.carModel.rotation.y += rotationSpeed;
+                    }   
+                }       
+                else{
+                        
+                if (this.carModel.rotation.y > -0.30) {
                         this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
+                        
+                
                     }
-                
-            
-                
+                }               
             } 
+            Distance=data.distance;
         
     } 
     

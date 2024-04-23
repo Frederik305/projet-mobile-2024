@@ -209,7 +209,7 @@ class VueGame {
         const loader = new this.GLTFLoader();
         function displayPath(path) {
             const probability = 20;
-            
+        
             for (let i = 0; i < path.length; i++) {
                 if (path[i] === 0) {
                     const randomNumber = Math.floor(Math.random() * 100);
@@ -218,18 +218,24 @@ class VueGame {
                     }
                 }
             }
-            //console.log(grid[i][0] + grid[i][1] + grid[i][2]);
-            //console.log(roadInstances[i].position.z);
+        
             for (let j = 0; j < 3; j++) {
                 if (path[j] == 0) {
                     let positionX = j === 0 ? -600 : (j === 1 ? 0 : 600);
-            
+        
+                    // Add randomness to positionX
+                    const randomOffsetX = Math.random() * 300 - 150; // Generates a random number between -100 and 100
+                    positionX += randomOffsetX;
+        
+                    // Add randomness to positionZ
+                    const randomOffsetZ = Math.random() * 1600 - 800; // Generates a random number between -100 and 100
+                    const positionZ = roadInstances[3].position.z + randomOffsetZ;
+        
                     loader.load('Sedan.glb', (gltf) => {
                         let test = gltf.scene;
-                        //console.log(roadInstances[j].position.z);
-                        test.position.set(positionX, 1, roadInstances[3].position.z); // Positioning
+                        test.position.set(positionX, 1, positionZ); // Positioning
                         test.scale.set(1.5, 1.5, 1.5);
-            
+        
                         scene.add(test);
                     }, undefined, (error) => {
                         console.error(error);
@@ -238,11 +244,12 @@ class VueGame {
                 }
             }
         }
+        
         //console.log(this.roadInstances[0].position.z)
         // Let's do this for a 7x7 matrix:
         let sizeX = 3, sizeY = this.maxRoadInstances;
         let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
-        console.log(path);
+        //console.log(path);
         //console.log(JSON.stringify(path));
         displayPath(path);
     }
@@ -520,7 +527,7 @@ joystick.on('end', () => {
 
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.baseMaxSpeed+75; // Obtenez la vitesse actuelle de la voiture
+        const speed = this.car.baseMaxSpeed+50; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle

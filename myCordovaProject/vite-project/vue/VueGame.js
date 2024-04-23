@@ -20,7 +20,6 @@ class VueGame {
         this.fpsCounter = document.createElement('div');
         this.button = document.createElement('button');
 
-
         this.isPaused = false;
         this.lastFpsUpdate = Date.now();
 
@@ -90,7 +89,7 @@ class VueGame {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xa8d0ff);
-        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00012);
+        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00007);
     }
 
     addStart(){
@@ -171,10 +170,88 @@ class VueGame {
 
                 //console.log(this.roadInstances[0].position.z)
                 this.roadInstances.push(this.roadInstances.shift());
+
+                this.carsGeneration();
+                /*
+                if (this.i % this.maxRoadInstances == 0){
+                    this.carsGeneration();
+                }*/
+
+                /*this.i++;
+                console.log(this.i)*/  
+
                 //console.log(this.roadInstances);
                 //this.scene.remove(removedRoad);
             }
         }
+    }
+
+    carsGeneration(){
+        /*function randint(range) {
+            return Math.floor(Math.random() * range);
+        }*/
+        
+        function generateRandomArray() {
+            // Initialize an array with two 0s and one 1
+            let array = [0, 0, 1];
+          
+            // Shuffle the array
+            for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+          
+            return array;
+        }
+        
+        let roadInstances = this.roadInstances
+        const scene = this.scene;
+        const loader = new this.GLTFLoader();
+        function displayPath(path) {
+            const probability = 20;
+        
+            for (let i = 0; i < path.length; i++) {
+                if (path[i] === 0) {
+                    const randomNumber = Math.floor(Math.random() * 100);
+                    if (randomNumber < probability) {
+                        path[i] = 1;
+                    }
+                }
+            }
+        
+            for (let j = 0; j < 3; j++) {
+                if (path[j] == 0) {
+                    let positionX = j === 0 ? -600 : (j === 1 ? 0 : 600);
+        
+                    // Add randomness to positionX
+                    const randomOffsetX = Math.random() * 100 - 50; // Generates a random number between -100 and 100
+                    positionX += randomOffsetX;
+        
+                    // Add randomness to positionZ
+                    const randomOffsetZ = Math.random() * 2000 - 1000; // Generates a random number between -100 and 100
+                    const positionZ = roadInstances[3].position.z + randomOffsetZ;
+        
+                    loader.load('Sedan.glb', (gltf) => {
+                        let test = gltf.scene;
+                        test.position.set(positionX, 1, positionZ); // Positioning
+                        test.scale.set(1.5, 1.5, 1.5);
+        
+                        scene.add(test);
+                    }, undefined, (error) => {
+                        console.error(error);
+                        reject(error); // Reject the promise if there's an error
+                    });
+                }
+            }
+        }
+        
+        //console.log(this.roadInstances[0].position.z)
+        // Let's do this for a 7x7 matrix:
+        let sizeX = 3, sizeY = this.maxRoadInstances;
+        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
+        //console.log(path);
+        //console.log(JSON.stringify(path));
+        displayPath(path);
     }
 
     // Ajout de lumières à la scène
@@ -192,7 +269,7 @@ class VueGame {
                 this.carModel = gltf.scene;
                 this.carModel.position.set(0, 1, 0); // Positioning
                 this.carModel.rotateY(Math.PI);
-                this.carModel.scale.set(0.8, 0.8, 0.8);
+                this.carModel.scale.set(1.2, 1.2, 1.2);
     
                 this.scene.add(this.carModel);
                 resolve(); // Resolve the promise once loading is complete
@@ -202,6 +279,23 @@ class VueGame {
             });
         });
     }
+
+    /*loadCars() {
+        const loader = new this.GLTFLoader();
+        loader.load('Sedan.glb', (gltf) => {
+            let test = gltf.scene;
+            console.log(this.roadInstances[0].position.z);
+            test.position.set(0, 1, this.roadInstances[0].position.z); // Positioning
+            test.rotateY(Math.PI);
+            test.scale.set(0.8, 0.8, 0.8);
+
+            this.scene.add(test);
+            resolve(); // Resolve the promise once loading is complete
+        }, undefined, (error) => {
+            console.error(error);
+            reject(error); // Reject the promise if there's an error
+        });
+    }*/
     
     mouvements() {
         let intervalId;
@@ -430,9 +524,10 @@ joystick.on('end', () => {
             reduceRotation();
         };*/
     }
+
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.baseMaxSpeed; // Obtenez la vitesse actuelle de la voiture
+        const speed = this.car.baseMaxSpeed+50; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
@@ -454,7 +549,8 @@ joystick.on('end', () => {
             .to({ y: 0 }, 100) // Animation sur 500 millisecondes jusqu'à la rotation de base
             .easing(TWEEN.Easing.Quadratic.InOut) // Type d'animation fluide
             .start();
-        }*/
+        }
+    */
 
 
     setCameraPosition(){

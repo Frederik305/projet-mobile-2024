@@ -4,7 +4,7 @@ class VueEndScreen{
     }
 
     afficher(){
-        console.log("afficher");
+        document.getElementsByTagName("body")[0].innerHTML = this.html;
     }
 }
 

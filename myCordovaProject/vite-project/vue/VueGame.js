@@ -509,14 +509,37 @@ joystick.on('end', () => {
         });
     }
 
-    changePauseState(){
+    changePauseState() {
         this.isPaused = !this.isPaused;
         console.log(this.isPaused);
+       
+        if (this.isPaused) {
+           
+                document.getElementById('joystick-container').style.display = 'none';
+                document.getElementById('Pause').style.display = 'none';
+                document.getElementById('game-pause').style.display = 'flex';
+                
+            
+        } else {
+            
+                document.getElementById('game-pause').style.display = 'none';
+                document.getElementById('Pause').style.display= 'block';
+                document.getElementById('joystick-container').style.display = 'block';
+            
+        }
     }
+    
     checkButtonClick(){
         document.getElementById('Pause').addEventListener('pointerdown', () => {
             this.changePauseState();
         });
+        document.getElementById('resume').addEventListener('pointerdown', () => {
+            this.changePauseState();
+        });
+        
+        
+        
+        
     }
     startGameLoop() {
         // Update the game state

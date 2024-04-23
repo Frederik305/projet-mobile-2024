@@ -28,7 +28,7 @@ class VuePlayer{
       
           reader.onload = (e) => {
             const base64Image = e.target.result;
-            console.log(base64Image)
+            
             this.photoPlayer.style.backgroundImage = `url('${base64Image}')`;
           };
       

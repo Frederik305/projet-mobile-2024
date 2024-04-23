@@ -224,11 +224,11 @@ class VueGame {
                     let positionX = j === 0 ? -600 : (j === 1 ? 0 : 600);
         
                     // Add randomness to positionX
-                    const randomOffsetX = Math.random() * 300 - 150; // Generates a random number between -100 and 100
+                    const randomOffsetX = Math.random() * 100 - 50; // Generates a random number between -100 and 100
                     positionX += randomOffsetX;
         
                     // Add randomness to positionZ
-                    const randomOffsetZ = Math.random() * 1600 - 800; // Generates a random number between -100 and 100
+                    const randomOffsetZ = Math.random() * 2000 - 1000; // Generates a random number between -100 and 100
                     const positionZ = roadInstances[3].position.z + randomOffsetZ;
         
                     loader.load('Sedan.glb', (gltf) => {

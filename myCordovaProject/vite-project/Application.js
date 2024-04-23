@@ -13,9 +13,10 @@ class Application{
         this.vueHomePage = vueHomePage;
         this.vueGame = vueGame;
         this.vueEndScreen = vueEndScreen;
-
+        this.idItem;
         this.window.addEventListener("hashchange", () => this.naviger());
         this.naviger();
+        
     }
 
     naviger(){
@@ -37,9 +38,9 @@ class Application{
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
             let navigation = hash.match(/^#Game\/([0-9]+)/)
-            let idItem = navigation[1];
+            this.idItem = navigation[1];
 
-            this.vueGame.initialiserCar(this.carDAO.getCars()[idItem]);
+            this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             this.vueGame.afficher();
 
             // Setup and initialize VueGame asynchronously
@@ -50,6 +51,7 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
+            this.vueEndScreen.initialiserSelectedCar(this.carDAO.getCars()[this.idItem]);
             this.vueEndScreen.afficher();
         }
     }

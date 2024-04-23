@@ -371,7 +371,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   padding: 15px 0;
   text-decoration: none;
 }
-.quit-btn{
+#quit-btn{
   color: white;
   background-color: #ca0000;
  
@@ -614,7 +614,7 @@ h1{
   
   }
 
-.quit-btn:before {
+#quit-btn:before {
 content: "";
 display: block;
 position: absolute;
@@ -628,7 +628,7 @@ z-index: -1;
 
 }
 
-.quit-btn:after {
+#quit-btn:after {
 content: "";
 display: block;
 position: absolute;

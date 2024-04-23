@@ -627,11 +627,20 @@ joystick.on('end', () => {
     
     checkButtonClick(){
         document.getElementById('Pause').addEventListener('pointerdown', () => {
-            this.changePauseState();
+            if (!this.isPaused) {
+            this.changePauseState();}
         });
         document.getElementById('resume').addEventListener('pointerdown', () => {
-            this.changePauseState();
+            if(this.isPaused){
+                this.changePauseState();}
+                
         });
+        document.getElementById('quit-btn').addEventListener('click', () => {
+            if(this.isPaused){
+            this.changePauseState();}
+            
+        });
+
         
         
         

@@ -56,6 +56,7 @@ class VueGame {
         this.button.style.width = '20px';
         this.button.style.backgroundColor = 'rgb(250,250,250)';
         this.button.style.borderColor = 'rgb(250,250,250)';
+        this.button.style.display= 'block';
 
         this.button.id = 'Pause';
     }
@@ -663,7 +664,6 @@ joystick.on('end', () => {
     }
 
     async init() {
-
         this.setupScene();
         await this.loadCar();
         this.addStart();
@@ -672,7 +672,7 @@ joystick.on('end', () => {
         this.checkButtonClick();
         await this.addRoad();
         this.startGameLoop();
-        
+        this.isPaused = false;
     }
 }
 export default VueGame

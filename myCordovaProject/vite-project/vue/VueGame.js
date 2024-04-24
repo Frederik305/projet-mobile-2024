@@ -36,6 +36,7 @@ class VueGame {
         document.body.appendChild(this.fpsCounter);
         
 
+        this.carInstances = [];
         this.roadInstances = [];
         this.maxRoadInstances = 8;
         this.nextRoadPositionCounter = 0;
@@ -176,6 +177,25 @@ class VueGame {
         }
     }
 
+    async loadCars() {
+        while (this.carInstances.length < 12) {
+            const gltf = await this.loadModel("Sedan.glb");
+            let model = gltf.scene;
+            model.scale.set(1.5, 1.5, 1.5);
+    
+            model.position.z = 10000;
+            this.scene.add(model);
+            this.carInstances.push(model);
+        }
+    }
+    
+    loadModel(url) {
+        return new Promise((resolve, reject) => {
+            const loader = new this.GLTFLoader();
+            loader.load(url, resolve, undefined, reject);
+        });
+    }
+
     carsGeneration(){
         /*function randint(range) {
             return Math.floor(Math.random() * range);
@@ -197,8 +217,19 @@ class VueGame {
         let roadInstances = this.roadInstances
         const scene = this.scene;
         const loader = new this.GLTFLoader();
+        let carInstances = this.carInstances;
         function displayPath(path) {
-            const probability = 20;
+
+        }
+        
+        //console.log(this.roadInstances[0].position.z)
+        // Let's do this for a 7x7 matrix:
+        let sizeX = 3, sizeY = this.maxRoadInstances;
+        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
+        //console.log(path);
+        //console.log(JSON.stringify(path));
+        displayPath(path);
+                    const probability = 20;
         
             for (let i = 0; i < path.length; i++) {
                 if (path[i] === 0) {
@@ -220,8 +251,14 @@ class VueGame {
                     // Add randomness to positionZ
                     const randomOffsetZ = Math.random() * 2000 - 1000; // Generates a random number between -100 and 100
                     const positionZ = roadInstances[3].position.z + randomOffsetZ;
-        
-                    loader.load('Sedan.glb', (gltf) => {
+
+                    carInstances[0].position.x = positionX
+                    carInstances[0].position.z = positionZ
+                    
+
+                    carInstances.push(carInstances.shift());
+
+                    /*loader.load('Sedan.glb', (gltf) => {
                         let test = gltf.scene;
                         test.position.set(positionX, 1, positionZ); // Positioning
                         test.scale.set(1.5, 1.5, 1.5);
@@ -230,18 +267,9 @@ class VueGame {
                     }, undefined, (error) => {
                         console.error(error);
                         reject(error); // Reject the promise if there's an error
-                    });
+                    });*/
                 }
             }
-        }
-        
-        //console.log(this.roadInstances[0].position.z)
-        // Let's do this for a 7x7 matrix:
-        let sizeX = 3, sizeY = this.maxRoadInstances;
-        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
-        //console.log(path);
-        //console.log(JSON.stringify(path));
-        displayPath(path);
     }
 
     // Ajout de lumières à la scène
@@ -296,81 +324,80 @@ class VueGame {
             zone: joystickContainer,
             mode: 'dynamic',
             color: 'yellow'
-    });
-    joystick.on('move', (evt, data) => {
-        // Vérifiez si data est défini et si data.direction est défini
-        if (data && data.direction) {
-            // data.direction contient la direction du joystick sous forme d'objet { x, y }
-           // console.log(data.distance+" "+Distance)
-            
+        });
+        joystick.on('move', (evt, data) => {
+            // Vérifiez si data est défini et si data.direction est défini
+            if (data && data.direction) {
+                // data.direction contient la direction du joystick sous forme d'objet { x, y }
+               // console.log(data.distance+" "+Distance)
 
-            
-            const directionX = data.direction.x;
 
-            
-            if (directionX === 'right') {               
 
-                if (Distance && Distance>data.distance){
-                
-                    if (this.carModel.rotation.y>0){
-                        this.carModel.rotation.y -= rotationSpeed;}
-            
-                }else{
-                    if (this.carModel.rotation.y < 0.30) {
-                        this.carModel.rotation.y += rotationSpeed*(data.distance/50);
-            
-                }
-                   
+                const directionX = data.direction.x;
+
+
+                if (directionX === 'right') {               
+
+                    if (Distance && Distance>data.distance){
                     
+                        if (this.carModel.rotation.y>0){
+                            this.carModel.rotation.y -= rotationSpeed;}
+                        
+                    }else{
+                        if (this.carModel.rotation.y < 0.30) {
+                            this.carModel.rotation.y += rotationSpeed*(data.distance/50);
+                        
                     }
-        
-                
-            } else if (directionX==='left') {
-                // La voiture tourne à gauche
-                if (Distance && Distance>data.distance){
+
+
+                        }
                     
-                    if (this.carModel.rotation.y < 0) {
-                            this.carModel.rotation.y += rotationSpeed;
-                    }   
-                }       
-                else{
-                        
-                if (this.carModel.rotation.y > -0.30) {
-                        this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
-                        
-                
-                    }
-                }               
+                    
+                } else if (directionX==='left') {
+                    // La voiture tourne à gauche
+                    if (Distance && Distance>data.distance){
+
+                        if (this.carModel.rotation.y < 0) {
+                                this.carModel.rotation.y += rotationSpeed;
+                        }   
+                    }       
+                    else{
+
+                    if (this.carModel.rotation.y > -0.30) {
+                            this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
+
+                    
+                        }
+                    }               
+                } 
+                Distance=data.distance;
+            
             } 
-            Distance=data.distance;
+        });
+        joystick.on('end', () => {
+            // Arrêtez l'animation de rotation de la voiture lorsque le joystick est relâché
+            //clearInterval(intervalId); // Arrêtez l'intervalle de rotation
         
-    } 
-    
-});
-joystick.on('end', () => {
-    // Arrêtez l'animation de rotation de la voiture lorsque le joystick est relâché
-    //clearInterval(intervalId); // Arrêtez l'intervalle de rotation
+            // Réinitialisez la rotation de la voiture à 0
+            const resetRotation = () => {
+                if (Math.abs(this.carModel.rotation.y) > 0.01) {
+                    // Réduisez progressivement la rotation vers 0
+                    if (this.carModel.rotation.y > 0) {
+                        this.carModel.rotation.y -= rotationSpeed;
+                    } else if (this.carModel.rotation.y < 0) {
 
-    // Réinitialisez la rotation de la voiture à 0
-    const resetRotation = () => {
-        if (Math.abs(this.carModel.rotation.y) > 0.01) {
-            // Réduisez progressivement la rotation vers 0
-            if (this.carModel.rotation.y > 0) {
-                this.carModel.rotation.y -= rotationSpeed;
-            } else if (this.carModel.rotation.y < 0) {
-                
-                this.carModel.rotation.y += rotationSpeed;
-            }
-            requestAnimationFrame(resetRotation);
-        } else {
-            // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
-            this.carModel.rotation.y = 0;
-        }
-    };
-
-    // Lancez la réinitialisation progressive de la rotation
-    resetRotation();
-});
+                        this.carModel.rotation.y += rotationSpeed;
+                    }
+                    requestAnimationFrame(resetRotation);
+                } else {
+                    // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
+                    this.carModel.rotation.y = 0;
+                }
+            };
+        
+            // Lancez la réinitialisation progressive de la rotation
+            resetRotation();
+        });
 
 
 /*
@@ -605,7 +632,6 @@ joystick.on('end', () => {
                 document.getElementById('Pause').style.display = 'none';
                 document.getElementById('game-pause').style.display = 'flex';
                 
-            
         } else {
             
                 document.getElementById('game-pause').style.display = 'none';
@@ -630,12 +656,8 @@ joystick.on('end', () => {
             this.changePauseState();}
             
         });
-
-        
-        
-        
-        
     }
+
     startGameLoop() {
         // Update the game state
         this.animate();
@@ -660,8 +682,10 @@ joystick.on('end', () => {
         this.mouvements();
         this.checkButtonClick();
         await this.addRoad();
+        await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
+        console.log(this.carInstances);
     }
     clearScene() {
         cancelAnimationFrame(requestAnimationFrame(this.startGameLoop));
@@ -675,43 +699,3 @@ joystick.on('end', () => {
     }
 }
 export default VueGame
-/*
-function randint(range) {
-    return Math.floor(Math.random() * range);
-}
-
-function randomPath(sizeX, sizeY, startX, endX) {
-    let x = startX;
-    let path = [];
-    for (let y = sizeY - 1; y >= 0; y--) {
-        let upX = y ? randint(sizeX) : endX;
-        while (x != upX) {
-            path.push([x, y]);
-            if (x < upX) x++;
-            else x--;
-        }
-        path.push([x, y]);
-    }
-    // Remove U-turns
-    for (let i = path.length - 4; i >= 0; i--) {
-        if (i+3 < path.length && path[i][1] === path[i+3][1] + 1 && path[i][0] === path[i+3][0]) {
-            path.splice(i+1, 2); // Remove U
-        }
-    }
-    return path;
-}
-
-function displayPath(sizeX, sizeY, path) {
-    let grid = Array.from({length: sizeY}, () => Array(sizeX).fill("0"));
-    for (let [x, y] of path) {
-        grid[y][x] = "1";
-    }
-    console.log(grid.map(row => row.join(" ")).join("\n"));
-}
-
-// Let's do this for a 7x7 matrix:
-let sizeX = 3, sizeY = 15;
-let path = randomPath(sizeX, sizeY, 1, 1); // Start at X=2 at bottom, end at X=4 at top
-//console.log(JSON.stringify(path));
-displayPath(sizeX, sizeY, path);
-*/

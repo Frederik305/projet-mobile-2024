@@ -189,7 +189,7 @@ class VueGame {
     }
 
     async loadCars() {
-        while (this.carInstances.length < 12) {
+        while (this.carInstances.length < 8) {
             const gltf = await this.loadModel("Sedan.glb");
             let model = gltf.scene;
             model.scale.set(1.5, 1.5, 1.5);
@@ -226,21 +226,9 @@ class VueGame {
         }
         
         let roadInstances = this.roadInstances
-        const scene = this.scene;
-        const loader = new this.GLTFLoader();
         let carInstances = this.carInstances;
         function displayPath(path) {
-
-        }
-        
-        //console.log(this.roadInstances[0].position.z)
-        // Let's do this for a 7x7 matrix:
-        let sizeX = 3, sizeY = this.maxRoadInstances;
-        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
-        //console.log(path);
-        //console.log(JSON.stringify(path));
-        displayPath(path);
-                    const probability = 20;
+            const probability = 20;
         
             for (let i = 0; i < path.length; i++) {
                 if (path[i] === 0) {
@@ -256,11 +244,11 @@ class VueGame {
                     let positionX = j === 0 ? -600 : (j === 1 ? 0 : 600);
         
                     // Add randomness to positionX
-                    const randomOffsetX = Math.random() * 100 - 50; // Generates a random number between -100 and 100
+                    const randomOffsetX = Math.random() * 100 - 50; // Generates a random number between -50 and 50
                     positionX += randomOffsetX;
         
                     // Add randomness to positionZ
-                    const randomOffsetZ = Math.random() * 2000 - 1000; // Generates a random number between -100 and 100
+                    const randomOffsetZ = Math.random() * 2000 - 1000; // Generates a random number between -1000 and 1000
                     const positionZ = roadInstances[3].position.z + randomOffsetZ;
 
                     carInstances[0].position.x = positionX
@@ -268,19 +256,16 @@ class VueGame {
                     
 
                     carInstances.push(carInstances.shift());
-
-                    /*loader.load('Sedan.glb', (gltf) => {
-                        let test = gltf.scene;
-                        test.position.set(positionX, 1, positionZ); // Positioning
-                        test.scale.set(1.5, 1.5, 1.5);
-        
-                        scene.add(test);
-                    }, undefined, (error) => {
-                        console.error(error);
-                        reject(error); // Reject the promise if there's an error
-                    });*/
                 }
             }
+        }
+        
+        //console.log(this.roadInstances[0].position.z)
+        // Let's do this for a 7x7 matrix:
+        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
+        //console.log(path);
+        //console.log(JSON.stringify(path));
+        displayPath(path);    
     }
 
     // Ajout de lumières à la scène
@@ -291,7 +276,7 @@ class VueGame {
         this.scene.add(ambientLight, directionalLight);
     }
 
-    loadCar() {
+    /*loadCar() {
         return new Promise((resolve, reject) => {
             const loader = new this.GLTFLoader();
             loader.load(this.car.model, (gltf) => {
@@ -307,24 +292,27 @@ class VueGame {
                 reject(error); // Reject the promise if there's an error
             });
         });
-    }
-
-    /*loadCars() {
-        const loader = new this.GLTFLoader();
-        loader.load('Sedan.glb', (gltf) => {
-            let test = gltf.scene;
-            console.log(this.roadInstances[0].position.z);
-            test.position.set(0, 1, this.roadInstances[0].position.z); // Positioning
-            test.rotateY(Math.PI);
-            test.scale.set(0.8, 0.8, 0.8);
-
-            this.scene.add(test);
-            resolve(); // Resolve the promise once loading is complete
-        }, undefined, (error) => {
-            console.error(error);
-            reject(error); // Reject the promise if there's an error
-        });
     }*/
+
+    loadCar() {
+        return new Promise((resolve, reject) => {
+            const carModelURL = this.car.model;
+            this.loadModel(carModelURL)
+                .then(gltf => {
+                    this.carModel = gltf.scene;
+                    this.carModel.position.set(0, 1, 0); // Positioning
+                    this.carModel.rotateY(Math.PI);
+                    this.carModel.scale.set(1.2, 1.2, 1.2);
+    
+                    this.scene.add(this.carModel);
+                    resolve(); // Resolve the promise once loading is complete
+                })
+                .catch(error => {
+                    console.error(error);
+                    reject(error); // Reject the promise if there's an error
+                });
+            });
+        }
     
     mouvements() {
         let intervalId;
@@ -352,16 +340,13 @@ class VueGame {
                     if (Distance && Distance>data.distance){
                     
                         if (this.carModel.rotation.y>0){
-                            this.carModel.rotation.y -= rotationSpeed;}
-                        
+                            this.carModel.rotation.y -= rotationSpeed;
+                        }
                     }else{
                         if (this.carModel.rotation.y < 0.30) {
-                            this.carModel.rotation.y += rotationSpeed*(data.distance/50);
-                        
-                    }
-
-
+                            this.carModel.rotation.y += rotationSpeed*(data.distance/50);    
                         }
+                    }
                     
                     
                 } else if (directionX==='left') {
@@ -563,7 +548,15 @@ class VueGame {
         const dz = -Math.cos(angle) * speed;
     
         // Déplacez la voiture en fonction des composantes de direction calculées
-        this.carModel.position.x += dx;
+        if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
+            this.carModel.position.x += dx;
+            console.log(this.carModel.position.x);
+            if (this.carModel.position.x > 800) {
+                this.carModel.position.x = 800;
+            } else if (this.carModel.position.x < -800) {
+                this.carModel.position.x = -800;
+            }
+        }
         this.carModel.position.z += dz;
 
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran

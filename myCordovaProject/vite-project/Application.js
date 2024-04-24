@@ -51,8 +51,10 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
+            
             this.vueEndScreen.initialiserSelectedCar(this.carDAO.getCars()[this.idItem]);
             this.vueEndScreen.afficher();
+            this.vueGame.clearScene()
         }
     }
 

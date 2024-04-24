@@ -18,7 +18,7 @@ class VueGame {
 
         this.frameCount = 0;
         this.fpsCounter = document.createElement('div');
-        this.button = document.createElement('button');
+        
 
         this.isPaused = false;
         this.lastFpsUpdate = Date.now();
@@ -34,7 +34,7 @@ class VueGame {
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         document.body.appendChild(this.fpsCounter);
-        document.body.appendChild(this.button);
+        
 
         this.roadInstances = [];
         this.maxRoadInstances = 8;
@@ -47,18 +47,7 @@ class VueGame {
         this.fpsCounter.style.color = 'white';
         this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
 
-        this.button.style.position = 'absolute';
-        this.button.style.top = '10px';
-        this.button.style.right = '10px';
-        this.button.style.color = 'white';
-        this.button.style.fontFamily = 'Arial, sans-serif';
-        this.button.style.height = '20px';
-        this.button.style.width = '20px';
-        this.button.style.backgroundColor = 'rgb(250,250,250)';
-        this.button.style.borderColor = 'rgb(250,250,250)';
-        this.button.style.display= 'block';
-
-        this.button.id = 'Pause';
+        
     }
 
     async setup() {
@@ -673,6 +662,16 @@ joystick.on('end', () => {
         await this.addRoad();
         this.startGameLoop();
         this.isPaused = false;
+    }
+    clearScene() {
+        cancelAnimationFrame(requestAnimationFrame(this.startGameLoop));
+        while (this.scene.children.length > 0) {
+            this.scene.remove(this.scene.children[0]);
+        }
+        const rendererContainer = document.getElementById('html-vue-game');
+    if (rendererContainer && rendererContainer.contains(this.renderer.domElement)) {
+        rendererContainer.removeChild(this.renderer.domElement);
+    }
     }
 }
 export default VueGame

@@ -1,3 +1,4 @@
+
 class VuePlayer{
     constructor(){
         this.html = document.getElementById('html-vue-player').innerHTML;

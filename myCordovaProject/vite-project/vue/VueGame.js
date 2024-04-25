@@ -8,7 +8,7 @@ class VueGame {
         this.GLTFLoader = null;
         this.TWEEN = null;
         this.nipplejs = null;
-        
+        this.score = 0;
         this.car;
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
@@ -646,11 +646,22 @@ class VueGame {
             }
         }
     } 
+    updateScore(){
+        if(!this.isPaused) {
+        this.score += 1;
+        document.getElementById('Score').innerHTML='SCORE: ' + this.score;
+        console.log('Score')}
+    }
     
     animate() {
+        
+
         requestAnimationFrame(() => {
+
+            
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
+            this.updateScore();
         });
     }
 
@@ -692,6 +703,7 @@ class VueGame {
 
     startGameLoop() {
         // Update the game state
+        
         this.animate();
     }
 
@@ -712,6 +724,7 @@ class VueGame {
         this.addStart();
         this.addLights();
         this.mouvements();
+        this.updateScore()
         this.checkButtonClick();
         await this.addRoad();
         await this.loadCars();

@@ -178,15 +178,49 @@ class VueGame {
     }
 
     async loadCars() {
-        while (this.carInstances.length < 8) {
-            const gltf = await this.loadModel("Sedan.glb");
+        
+        const modelFiles = [
+            { file: 'Sedan.glb', weight: 4 },     
+            { file: 'Police Muscle.glb', weight: 2 },       
+            { file: 'Muscle 2.glb', weight: 3 },     
+            { file: 'Limousine.glb', weight: 1 },  
+            { file: 'Bus.glb', weight: 2 }, 
+            { file: 'Muscle.glb', weight: 3 }, 
+            { file: 'Firetruck.glb', weight: 1 }, 
+            { file: 'Hatchback.glb', weight: 4 }, 
+            { file: 'Ambulance.glb', weight: 2 }, 
+            { file: 'Sports.glb', weight: 2 }, 
+        ];
+    
+        const maxCars = 12; // Nombre maximum de voitures à charger
+    
+        while (this.carInstances.length < maxCars) {
+            let totalWeight = 0;
+            for (let i = 0; i < modelFiles.length; i++) {
+                totalWeight += modelFiles[i].weight;
+            }
+    
+            const randomNum = Math.random() * totalWeight;
+            let selectedModel;
+            let weightSum = 0;
+    
+            for (let i = 0; i < modelFiles.length; i++) {
+                weightSum += modelFiles[i].weight;
+                if (randomNum <= weightSum) {
+                    selectedModel = modelFiles[i].file;
+                    break;
+                }
+            }
+    
+            const gltf = await this.loadModel(selectedModel);
             let model = gltf.scene;
             model.scale.set(1.5, 1.5, 1.5);
-    
             model.position.z = 10000;
             this.scene.add(model);
             this.carInstances.push(model);
         }
+
+        
     }
     
     loadModel(url) {
@@ -216,6 +250,7 @@ class VueGame {
         
         let roadInstances = this.roadInstances
         let carInstances = this.carInstances;
+        
         function displayPath(path) {
             const probability = 20;
         
@@ -247,6 +282,8 @@ class VueGame {
                     carInstances.push(carInstances.shift());
                 }
             }
+            
+            
         }
         
         //console.log(this.roadInstances[0].position.z)
@@ -255,6 +292,8 @@ class VueGame {
         //console.log(path);
         //console.log(JSON.stringify(path));
         displayPath(path);    
+
+        
     }
 
     // Ajout de lumières à la scène

@@ -2,22 +2,24 @@
 class VuePlayer{
     constructor(){
         this.html = document.getElementById('html-vue-player').innerHTML;
-        this.displayPlayer = null;
+        this.player = null;
         
         
       
     }
     
-    initializePlayer(displayPlayer){
-        this.displayPlayer = displayPlayer;
+    initializePlayer(player){
+        this.player = player;
     }
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         this.fileInput = document.getElementById('fileInput');
         this.photoPlayer = document.getElementById('output');
-        
+        this.photoPlayer.src=this.player.picture;
         this.fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+        document.getElementById('username').value=this.player.username;
+        
     }
 
     handleFileSelect(event) {
@@ -30,7 +32,7 @@ class VuePlayer{
           reader.onload = (e) => {
             const base64Image = e.target.result;
             
-            this.photoPlayer.style.backgroundImage = `url('${base64Image}')`;
+            this.photoPlayer.src = `${base64Image}`;
           };
       
           reader.readAsDataURL(file);

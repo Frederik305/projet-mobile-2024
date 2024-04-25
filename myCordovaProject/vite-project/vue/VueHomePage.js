@@ -1,8 +1,8 @@
 class VueHomePage{
     constructor(){
         this.html = document.getElementById('html-vue-home-page').innerHTML;
-        this.displayHomePage = null;
-
+        this.carList = null;
+        this.player = null;
         this.selectedCar = 0;
 
         this.onWindowResize = this.onWindowResize.bind(this);
@@ -10,20 +10,24 @@ class VueHomePage{
         window.addEventListener('resize', this.onWindowResize, false);
     }
 
-    initializeHomePage(displayHomePage){
-        this.displayHomePage = displayHomePage
+    initializeHomePage(carList,player){
+        this.carList = carList
+        this.player = player;
     }
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
 
-        document.getElementById("name").innerText = "Name: " + this.displayHomePage[this.selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.displayHomePage[this.selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.displayHomePage[this.selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.displayHomePage[this.selectedCar].brakePower;
+        document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
+        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[this.selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[this.selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = "Brake: " + this.carList[this.selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
         document.getElementById("btn-start").href = `#Game/${this.selectedCar}`
+        document.getElementById("username-player-home-page").innerHTML = this.player.username;
+        document.getElementById('photo-player-home-page').src=this.player.picture;
+        document.getElementById("high-score-player").innerHTML += this.player.highscore;
     }
 
     async setup() {
@@ -106,10 +110,10 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar(selectedCar) {
-        document.getElementById("name").innerText = "Name: " + this.displayHomePage[selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.displayHomePage[selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.displayHomePage[selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.displayHomePage[selectedCar].brakePower;
+        document.getElementById("name").innerText = "Name: " + this.carList[selectedCar].name;
+        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = "Brake: " + this.carList[selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
         document.getElementById("btn-start").href = `#Game/${selectedCar}`
@@ -133,9 +137,18 @@ class VueHomePage{
         myRegion.bind(touchArea, 'swipe', (e) => {
             console.log(e.detail);
             console.log(e.detail.data[0].currentDirection);
-    
+            
             // check for left swipes
             if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
+                selectedCar++;
+                console.log(selectedCar);
+                console.log("right")
+                this.updateLinkSelectedCar(selectedCar);
+            }
+    
+            else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
+                
+    
                 console.log("left")
     
                 if (selectedCar <= 0){
@@ -148,15 +161,6 @@ class VueHomePage{
 
                     this.updateLinkSelectedCar(selectedCar);
                 }
-            }
-    
-            else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
-                console.log("right")
-    
-                selectedCar++;
-                console.log(selectedCar);
-    
-                this.updateLinkSelectedCar(selectedCar);
             }
         });
     }

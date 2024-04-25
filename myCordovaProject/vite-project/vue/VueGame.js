@@ -647,6 +647,8 @@ class VueGame {
                 this.lastTick = now - (deltaTime % this.tickInterval);
                 //console.timeEnd('update');
             }
+            let isCollision = this.detectCollision(this.carModel,this.carInstances)
+            if(isCollision){this.changePauseState()}
         }
     } 
     updateScore(){
@@ -757,5 +759,22 @@ class VueGame {
         rendererContainer.removeChild(this.renderer.domElement);
     }
     }
+
+    detectCollision(carModel, otherCars) {
+        const carBox = new this.THREE.Box3().setFromObject(carModel);
+    
+        for (let i = 0; i < otherCars.length; i++) {
+            const otherCarBox = new this.THREE.Box3().setFromObject(otherCars[i]);
+            if (carBox.intersectsBox(otherCarBox)) {
+                console.log('Collision detected!');
+                // Handle collision here, such as removing the collided car
+                return true; // Collision detected
+            }
+        }
+    
+        return false; // No collision detected
+    }
+
+    
 }
 export default VueGame

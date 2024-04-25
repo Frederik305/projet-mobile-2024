@@ -135,31 +135,28 @@ class VueHomePage{
         let selectedCar = this.selectedCar;
     
         myRegion.bind(touchArea, 'swipe', (e) => {
-            console.log(e.detail);
-            console.log(e.detail.data[0].currentDirection);
+            
             
             // check for left swipes
             if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
-                selectedCar++;
-                console.log(selectedCar);
-                console.log("right")
-                this.updateLinkSelectedCar(selectedCar);
+                if(selectedCar+1<this.carList.length){
+                    this.updateLinkSelectedCar(selectedCar++);}
+                
+                
+                
             }
     
             else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
                 
     
-                console.log("left")
+                
     
                 if (selectedCar <= 0){
-                    console.log("premiere voiture")
+                    
                     return
                 }
                 else{
-                    selectedCar--;
-                    console.log(selectedCar);
-
-                    this.updateLinkSelectedCar(selectedCar);
+                    this.updateLinkSelectedCar(selectedCar--);
                 }
             }
         });

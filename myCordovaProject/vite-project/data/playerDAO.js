@@ -21,17 +21,30 @@ class playerDAO{
         return this.player;
     }
 
-    modifier(player) {
+    modifierInfoPlayer(player) {
         console.log(player.id);
         if (this.player) {
             this.player.username=player.username;
             this.player.picture=player.picture;
             this.player.highscore=player.highscore;
-            
+
             localStorage['player'] = JSON.stringify(this.player);
         } else {
             console.error("Le player avec l'ID spécifié n'existe pas.");
         }
+    }
+
+    modifierHighscore(score){
+        if (this.player) {
+            this.player.highscore=score;
+            localStorage['player'] = JSON.stringify(this.player);}
+    }
+
+    isRegistered(){
+        if(localStorage['player']){
+            this.player = JSON.parse(localStorage['player']);
+            return true;
+        }else{return false;}
     }
 
     

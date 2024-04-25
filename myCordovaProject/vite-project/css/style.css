@@ -341,17 +341,22 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   width: 80%;
   
 }
-.game-score{
-  color: white;
-  width: 70%;
-  justify-content: center;
-  text-align: center;
-  background-color: rgba(105, 105, 105, 0.616);
-  
-  margin:auto;
-  margin-bottom: 100px;
-  border: 2px solid black;
+#game-score{
+  margin-top: 20px;
+  display:flex;
+  padding: 20px;
+  min-width: 150px;
+  height: 40px;
   border-radius: 20px;
+  font-size: 30px;
+  text-align: center;
+  background-color: #49494977;
+  
+  justify-content: center;
+  align-items: center;
+  
+ 
+  color: #ffffff;
 }
 
 
@@ -524,13 +529,15 @@ box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.47);
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -125px;
+  margin: -150px;
   border-radius: 25px;
   background-color: #2623b9c2;
-  width: 250px;
+  width: 300px;
+  height: 500px;
+  margin-top:-250px;
   display: flex;
   text-align: center;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
   padding-bottom: 30px;
@@ -539,7 +546,7 @@ box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.47);
 }
 h1{
   font-family: 'Honk';
-  font-size: 40px;
+  font-size: 60px;
 }
 #resume-btn{
   color: white;
@@ -700,7 +707,7 @@ background-color: inherit;
   min-width: 150px;
   height: 40px;
   border-radius: 15px;
-  font-size: 25px;
+  font-size: 30px;
   text-align: center;
   background-color: #49494977;
   
@@ -710,7 +717,7 @@ background-color: inherit;
  
   color: #ffffff;
 }
-.container-score-pause{
+#container-score-pause{
   position: absolute;
   display:flex;
   width: 100%;

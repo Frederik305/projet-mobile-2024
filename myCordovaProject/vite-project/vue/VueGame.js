@@ -30,6 +30,9 @@ class VueGame {
     initialiserCar(car){
         this.car = car;
     }
+    getGameScore(){
+        return this.score;
+    }
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
@@ -648,9 +651,15 @@ class VueGame {
     } 
     updateScore(){
         if(!this.isPaused) {
-        this.score += 1;
-        document.getElementById('Score').innerHTML='SCORE: ' + this.score;
-        console.log('Score')}
+                
+            
+            document.getElementById('Score').innerHTML='SCORE: ' + this.score++;
+        
+            
+        }
+        setTimeout(() => {
+            this.updateScore();
+        }, 250);
     }
     
     animate() {
@@ -661,26 +670,32 @@ class VueGame {
             
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            this.updateScore();
+            
         });
+        
     }
 
     changePauseState() {
         this.isPaused = !this.isPaused;
         console.log(this.isPaused);
-       
+        const scoreContainer = document.getElementById('Score');
+        const testSpan = document.getElementById('test');
+
         if (this.isPaused) {
            
                 document.getElementById('joystick-container').style.display = 'none';
                 document.getElementById('Pause').style.display = 'none';
                 document.getElementById('game-pause').style.display = 'flex';
+                testSpan.appendChild(scoreContainer);
+                scoreContainer.style.backgroundColor = '#444444d3';
                 
         } else {
             
                 document.getElementById('game-pause').style.display = 'none';
                 document.getElementById('Pause').style.display= 'block';
                 document.getElementById('joystick-container').style.display = 'block';
-            
+                document.getElementById('container-score-pause').appendChild(scoreContainer);
+                scoreContainer.style.backgroundColor = '#49494977';
         }
     }
     
@@ -695,7 +710,7 @@ class VueGame {
                 
         });
         document.getElementById('quit-btn').addEventListener('click', () => {
-            if(this.isPaused){
+            if(!this.isPaused){
             this.changePauseState();}
             
         });
@@ -703,7 +718,7 @@ class VueGame {
 
     startGameLoop() {
         // Update the game state
-        
+        this.updateScore()
         this.animate();
     }
 

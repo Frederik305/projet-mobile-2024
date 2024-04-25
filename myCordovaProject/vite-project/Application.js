@@ -44,24 +44,30 @@ class Application{
             this.idItem = navigation[1];
 
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
+            
             this.vueGame.afficher();
 
             // Setup and initialize VueGame asynchronously
             this.vueGame.setup()
                 .then(() => {
+                    
                     this.vueGame.init();
                     
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
             
-            this.vueEndScreen.initialiserSelectedCar(this.carDAO.getCars()[this.idItem]);
+            this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();
+            
+            if(this.vueGame.getGameScore()>this.playerDAO.getPlayer().highscore){
+                this.playerDAO.modifierHighscore(this.vueGame.getGameScore());
+            }
             this.vueGame.clearScene()
         }
     }
     actionModifierPlayer(player){
-        this.playerDAO.modifier(player)
+        this.playerDAO.modifierInfoPlayer(player)
         this.window.location.hash="#";
     }
 

@@ -15,8 +15,10 @@ class Application{
         this.vueGame = vueGame;
         this.vueEndScreen = vueEndScreen;
         this.idItem;
+        this.vuePlayer.initializeActionModifierPlayer(player=>this.actionModifierPlayer(player))
         this.window.addEventListener("hashchange", () => this.naviger());
         this.naviger();
+        
         
     }
 
@@ -24,8 +26,8 @@ class Application{
         let hash = window.location.hash;
 
         if(!hash){
-            this.vuePlayer.initializePlayer(this.playerDAO.getPlayer());
-            this.vuePlayer.afficher();
+            
+            this.vuePlayer.afficher(this.playerDAO.getPlayer());
         }
         else if(hash.match(/^#HomePage/)){
             this.vueHomePage.initializeHomePage(this.carDAO.getCars(),this.playerDAO.getPlayer());
@@ -57,6 +59,10 @@ class Application{
             this.vueEndScreen.afficher();
             this.vueGame.clearScene()
         }
+    }
+    actionModifierPlayer(player){
+        this.playerDAO.modifier(player)
+        this.window.location.hash="#";
     }
 
 }

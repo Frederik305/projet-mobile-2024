@@ -204,7 +204,9 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   z-index: -1;
   
 }
-
+.link-vue-player{
+  display: flex;
+}
 .info-player::after {
   content: "";
   display: block;

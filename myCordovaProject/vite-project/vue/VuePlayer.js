@@ -1,24 +1,27 @@
-
+import Player from '../model/Player.js';
 class VuePlayer{
     constructor(){
         this.html = document.getElementById('html-vue-player').innerHTML;
-        this.player = null;
         
+        this.actionModifierPlayer=null;
         
       
     }
     
-    initializePlayer(player){
-        this.player = player;
-    }
+    initializeActionModifierPlayer(actionModifierPlayer) {
 
-    afficher() {
+        this.actionModifierPlayer = actionModifierPlayer;
+    }
+    
+
+    afficher(player) {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         this.fileInput = document.getElementById('fileInput');
         this.photoPlayer = document.getElementById('output');
-        this.photoPlayer.src=this.player.picture;
+        this.photoPlayer.src=player.picture;
         this.fileInput.addEventListener('change', this.handleFileSelect.bind(this));
-        document.getElementById('username').value=this.player.username;
+        document.getElementById('username').value=player.username;
+        document.getElementById('modifier-player').addEventListener('click', event =>{this.enregistrer(player);});
         
     }
 
@@ -38,7 +41,16 @@ class VuePlayer{
           reader.readAsDataURL(file);
         }
       }
+      enregistrer(player){
+      
+      let username=document.getElementById("username").value;
+      let picture=document.getElementById("output").src;
+      this.actionModifierPlayer(new Player(player.id,username,player.highscore,picture));
+
     }
+    }
+
+    
 
 
 

@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<title>Sunday Drive</title>
 
-		<script type="module" crossorigin src="/assets/index-BZv452w6.js"></script>
-		<link rel="stylesheet" crossorigin href="/assets/index-C6sm3_GM.css">
+		<script type="module" crossorigin src="/assets/index-DpBaC2Ao.js"></script>
+		<link rel="stylesheet" crossorigin href="/assets/index-B9lysopl.css">
 	</head>
 	<body>
 		<div id="page-chargement-application">
@@ -26,9 +26,11 @@
 			<div class="page">
 				<div class="container-info-player">
 					<h1 class="title">SUNDAY <br>DRIVER</h1>
-					<div id="output" class="photo-player">
-						<label for="fileInput" id="edit"></label>
-						<input type="file" id="fileInput" class="img-input" accept="image/*">
+					<div class="container-photo-player">
+						
+						<img id="output" class="photo-player">
+							<label for="fileInput" id="edit"></label>
+							<input type="file" id="fileInput" class="img-input" accept="image/*">
 						
 						
 					</div>
@@ -36,7 +38,7 @@
 						<input type="text" id="username" class="username-player" placeholder="Username">
 					</div>
 					
-					<a href="#HomePage/"class="apply-btn">APPLY</a>
+					<a href="#HomePage/"class="apply-btn" id="modifier-player">APPLY</a>
 				</div>
 			</div>
 
@@ -46,14 +48,15 @@
 			<div class="page">
 				<div class="max-page-size">
 					<div class="info-player-home-page">
-						<div class="photo-player-home-page">
+						<a href="" class="link-vue-player">
+							<img id="photo-player-home-page">
 
-						</div>
-						{Player.username}
+						
+							<span id="username-player-home-page"></span></a>
 
 					</div>
-					<div class="high-score-player">
-						HIGH <br> SCORE <br> {Player.highscore}
+					<div id="high-score-player">
+						HIGH <br> SCORE <br> 
 
 					</div>
 
@@ -76,6 +79,10 @@
 				
 				
 				
+			</div>
+			<div class="container-score-pause">
+				<div id=Score></div>
+				<button id="Pause"></button>
 			</div>
 			<div id="game-pause">
 				<h1>Pause</h1>
@@ -100,7 +107,7 @@
 				</div>
 				<div class="btns-container">
 					
-					<a href="" class="restart-btn">RESTART</a>
+					<a href="#Game/{Car.id}" id="restart-btn">RESTART</a>
 					
 					<a href="#HomePage" id="quit-btn">QUIT</a>
 		

@@ -38,7 +38,8 @@ class VueGame {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         document.body.appendChild(this.fpsCounter);
         
-
+        
+        this.score = 0;
         this.carInstances = [];
         this.roadInstances = [];
         this.maxRoadInstances = 8;
@@ -577,7 +578,8 @@ class VueGame {
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
         const dx = Math.sin(angle) * speed;
         const dz = -Math.cos(angle) * speed;
-    
+        
+        
         // Déplacez la voiture en fonction des composantes de direction calculées
         if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
             this.carModel.position.x += dx;
@@ -591,7 +593,7 @@ class VueGame {
         this.carModel.position.z += dz;
 
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
-
+        
         //console.log(this.carModel.position.z);
     }
 
@@ -651,7 +653,7 @@ class VueGame {
             if(isCollision){
                 window.location.hash='EndScreen';
                 this.isPaused=true;
-                this.score=0;
+                
             }
         }
     } 

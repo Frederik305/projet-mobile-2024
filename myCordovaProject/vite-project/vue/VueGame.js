@@ -670,7 +670,10 @@ class VueGame {
     } 
     updateScore(){
         if(!this.isPaused) {
-            document.getElementById('Score').innerHTML='SCORE: ' + this.score++;
+            this.score++
+            let realScore = (Math.abs(this.carModel.position.z) * this.score) / 1000;
+            document.getElementById('Score').innerHTML='SCORE: ' + realScore.toFixed(0);
+            
         }
     }
 

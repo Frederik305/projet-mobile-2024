@@ -31,7 +31,9 @@ class VueGame {
         this.car = car;
     }
     getGameScore(){
-        return this.score;
+        this.score++
+        let realScore = (Math.abs(this.carModel.position.z) * this.score) / 10000;
+        return realScore.toFixed(0);
     }
 
     afficher() {
@@ -52,7 +54,7 @@ class VueGame {
         this.fpsCounter.style.color = 'white';
         this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
 
-        
+        this.speed = this.car.baseMaxSpeed;
     }
 
     async setup() {
@@ -572,14 +574,12 @@ class VueGame {
 
     moveCarForward() {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const speed = this.car.baseMaxSpeed+50; // Obtenez la vitesse actuelle de la voiture
         const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
-        const dx = Math.sin(angle) * speed;
-        const dz = -Math.cos(angle) * speed;
-        
-        
+        const dx = Math.sin(angle) * this.speed;
+        const dz = -Math.cos(angle) * this.speed;
+    
         // Déplacez la voiture en fonction des composantes de direction calculées
         if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
             this.carModel.position.x += dx;
@@ -632,6 +632,19 @@ class VueGame {
                 this.frameCount = 0; // Reset frame count
                 this.lastFpsUpdate = now; // Update last FPS update time
             }
+                
+            if (deltaTime >= this.tickInterval) {
+                // Call your method here
+                // For example:
+                if (this.frameCount % 5 === 0) {
+                    this.updateScore();
+                }
+                if (this.frameCount % 100 === 0) {
+                    this.speedIncrease();
+                }
+                // Subtract the interval from the accumulated time
+                this.lastTick = now - (deltaTime % this.tickInterval);
+            }
 
             if (deltaTime >= this.tickInterval) {
                 //console.time('update');
@@ -659,26 +672,23 @@ class VueGame {
     } 
     updateScore(){
         if(!this.isPaused) {
-                
-            
-            document.getElementById('Score').innerHTML='SCORE: ' + this.score++;
-        
-            
+            let realScore = this.getGameScore();
+            document.getElementById('Score').innerHTML='SCORE: ' + realScore;
         }
-        setTimeout(() => {
-            this.updateScore();
-        }, 250);
+    }
+
+    speedIncrease(){
+        if(!this.isPaused) {
+            this.speed += this.car.acceleration;
+        }
     }
     
     animate() {
         
 
         requestAnimationFrame(() => {
-
-            
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            
         });
         
     }
@@ -729,7 +739,6 @@ class VueGame {
 
     startGameLoop() {
         // Update the game state
-        this.updateScore()
         this.animate();
     }
 
@@ -750,7 +759,6 @@ class VueGame {
         this.addStart();
         this.addLights();
         this.mouvements();
-        this.updateScore()
         this.checkButtonClick();
         await this.addRoad();
         await this.loadCars();

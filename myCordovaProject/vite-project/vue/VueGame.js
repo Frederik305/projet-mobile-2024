@@ -58,21 +58,26 @@ class VueGame {
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs,cannonjs] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
                 import('nipplejs/dist/nipplejs.js'),
+                import('cannon-es/dist/cannon-es.js'),
             ]);
 
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
             this.nipplejs = nipplejs;
+            this.cannonjs = cannonjs;
             
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
+
+            this.world = new this.cannonjs.World();
+            this.world.gravity.set(0, -9.81, 0);
 
             this.setupScene();
         } catch (error) {
@@ -344,8 +349,8 @@ class VueGame {
                     console.error(error);
                     reject(error); // Reject the promise if there's an error
                 });
-            });
-        }
+        });
+    }
     
     mouvements() {
         let intervalId;
@@ -582,7 +587,6 @@ class VueGame {
         // Déplacez la voiture en fonction des composantes de direction calculées
         if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
             this.carModel.position.x += dx;
-            console.log(this.carModel.position.x);
             if (this.carModel.position.x > 800) {
                 this.carModel.position.x = 800;
             } else if (this.carModel.position.x < -800) {
@@ -764,7 +768,7 @@ class VueGame {
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
-        console.log(this.carInstances);
+
     }
     clearScene() {
         cancelAnimationFrame(requestAnimationFrame(this.startGameLoop));

@@ -36,7 +36,7 @@ class VueHomePage{
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
-                import('zingtouch')
+                import('zingtouch'),
             ]);
     
             this.THREE = THREE;

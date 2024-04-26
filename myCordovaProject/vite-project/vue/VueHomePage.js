@@ -104,19 +104,17 @@ class VueHomePage{
     }
 
     setLinkSelectedCar(){
-        const selectedCar = this.selectedCar;
-
-        this.updateLinkSelectedCar(selectedCar);
+        this.updateLinkSelectedCar();
     }
 
-    updateLinkSelectedCar(selectedCar) {
-        document.getElementById("name").innerText = "Name: " + this.carList[selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.carList[selectedCar].brakePower;
+    updateLinkSelectedCar() {
+        document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
+        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[this.selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[this.selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = "Brake: " + this.carList[this.selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
-        document.getElementById("btn-start").href = `#Game/${selectedCar}`
+        document.getElementById("btn-start").href = `#Game/${this.selectedCar}`
     }
 
     appendSceneToDiv(){
@@ -132,35 +130,28 @@ class VueHomePage{
         var touchArea = document.getElementById('swipeCatcher');
         var myRegion = new this.ZingTouch.Region(touchArea);
     
-        let selectedCar = this.selectedCar;
-    
         myRegion.bind(touchArea, 'swipe', (e) => {
             
             
             // check for left swipes
             if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
-                if(selectedCar+1<this.carList.length){
-                    this.updateLinkSelectedCar(selectedCar++);}
-                
-                
-                
+                if(this.selectedCar+1<this.carList.length){
+                this.selectedCar++
+                this.updateLinkSelectedCar();
+                }
             }
     
-            else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
-                
-    
-                
-    
-                if (selectedCar <= 0){
-                    
+            if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
+                if (this.selectedCar <= 0){
                     return
                 }
                 else{
-                    this.updateLinkSelectedCar(selectedCar--);
+                    this.selectedCar--
+                    this.updateLinkSelectedCar();
                 }
             }
         });
-    }
+    }   
 
     setCameraPosition() {
         this.camera.position.set(400, 400, -800);

@@ -8,7 +8,8 @@ class VueEndScreen{
     }
 
     afficher(){
-        document.getElementsByTagName("body")[0].innerHTML = this.html;
+        
+        document.getElementById("game-over-container").innerHTML+=this.html;
         document.getElementById("restart-btn").href = `#Game/${this.car.id}`
         document.getElementById("game-score").innerHTML = "SCORE: " + this.score;
         

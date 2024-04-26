@@ -648,7 +648,11 @@ class VueGame {
                 //console.timeEnd('update');
             }
             let isCollision = this.detectCollision(this.carModel,this.carInstances)
-            if(isCollision){this.changePauseState()}
+            if(isCollision){
+                window.location.hash='EndScreen';
+                this.isPaused=true;
+                this.score=0;
+            }
         }
     } 
     updateScore(){
@@ -714,8 +718,11 @@ class VueGame {
         document.getElementById('quit-btn').addEventListener('click', () => {
             if(!this.isPaused){
             this.changePauseState();}
+            document.getElementById('game-pause').style.display = 'none';
+            
             
         });
+        
     }
 
     startGameLoop() {

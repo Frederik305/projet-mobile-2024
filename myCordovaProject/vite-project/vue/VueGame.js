@@ -676,7 +676,7 @@ class VueGame {
 
     speedIncrease(){
         if(!this.isPaused) {
-            this.speed++;
+            this.speed += this.car.acceleration;
         }
     }
     

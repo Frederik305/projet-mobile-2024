@@ -38,7 +38,8 @@ class VueGame {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         document.body.appendChild(this.fpsCounter);
         
-
+        
+        this.score = 0;
         this.carInstances = [];
         this.roadInstances = [];
         this.maxRoadInstances = 8;
@@ -590,7 +591,7 @@ class VueGame {
         this.carModel.position.z += dz;
 
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
-
+        
         //console.log(this.carModel.position.z);
     }
 
@@ -663,7 +664,7 @@ class VueGame {
             if(isCollision){
                 window.location.hash='EndScreen';
                 this.isPaused=true;
-                this.score=0;
+                
             }
         }
     } 

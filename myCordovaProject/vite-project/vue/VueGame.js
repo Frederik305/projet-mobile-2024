@@ -31,7 +31,6 @@ class VueGame {
         this.car = car;
     }
     getGameScore(){
-        this.score++
         let realScore = (Math.abs(this.carModel.position.z) * this.score) / 10000;
         return realScore.toFixed(0);
     }
@@ -672,6 +671,7 @@ class VueGame {
     } 
     updateScore(){
         if(!this.isPaused) {
+            this.score++
             let realScore = this.getGameScore();
             document.getElementById('Score').innerHTML='SCORE: ' + realScore;
         }

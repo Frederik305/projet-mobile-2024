@@ -4,6 +4,7 @@ class VueHomePage{
         this.carList = null;
         this.player = null;
         this.selectedCar = 0;
+        this.carPositions = [];
 
         this.onWindowResize = this.onWindowResize.bind(this);
 
@@ -87,20 +88,26 @@ class VueHomePage{
         this.scene.add(ambientLight, directionalLight);
     }
 
-    loader() {
+    async loader() {
         const loader = new this.GLTFLoader();
+        
+        for (let i = 0; i < this.carList.length; i++) {
+            try {
+                const gltf = await new Promise((resolve, reject) => {
+                    loader.load(this.carList[i].model, resolve, undefined, reject);
+                });
+                const carModel = gltf.scene;
+                carModel.position.set(i * -400, 0, 0); // Positioning
+                carModel.rotateY(Math.PI);
     
-        loader.load("HomeView.glb", (gltf) => {
-            const carModel = gltf.scene;
-            carModel.position.set(0, 0, 0); // Positioning
-            carModel.rotateY(Math.PI);
-    
-            // Add the car model to the scene
-            this.scene.add(carModel);
-    
-        }, undefined, (error) => {
-            console.error(error);
-        });
+                this.carPositions.push(carModel.position); // Store position of loaded car model
+                
+                // Add the car model to the scene
+                this.scene.add(carModel);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     setLinkSelectedCar(){
@@ -138,6 +145,8 @@ class VueHomePage{
                 if(this.selectedCar+1<this.carList.length){
                 this.selectedCar++
                 this.updateLinkSelectedCar();
+                //this.setCameraPosition();
+                this.moveCameraPositionRight()
                 }
             }
     
@@ -148,15 +157,43 @@ class VueHomePage{
                 else{
                     this.selectedCar--
                     this.updateLinkSelectedCar();
+                    //this.setCameraPosition();
+                    this.moveCameraPositionLeft()
                 }
             }
         });
     }   
 
     setCameraPosition() {
-        this.camera.position.set(400, 400, -800);
-        this.camera.lookAt(0, 0, 0);
+        this.camera.position.set(this.carPositions[this.selectedCar].x + 500, 400, -800);
+        console.log(this.carPositions[this.selectedCar].x);
+        this.camera.lookAt(this.carPositions[this.selectedCar]);
     }
+
+    moveCameraPositionLeft() {
+        this.camera.position.x += 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos <= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionLeft();
+            }
+        }, 0.1);
+    }
+
+    moveCameraPositionRight() {
+        this.camera.position.x -= 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos >= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionRight();
+            }
+        }, 0.1);
+    }
+
 
     animate() {
         requestAnimationFrame(() => this.animate());
@@ -180,14 +217,12 @@ class VueHomePage{
         }
     }
 
-    init() {
-        this.setupScene();
-        
+    async init() {
         this.startAnimation();
-        this.setLinkSelectedCar()
-        this.setCameraPosition()
+        this.setLinkSelectedCar();
 
-        this.loader();
+        await this.loader();
+        this.setCameraPosition();
         this.appendSceneToDiv();
         this.catchSwipeEvent();
     }

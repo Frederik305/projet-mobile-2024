@@ -8,7 +8,6 @@ class VueGame {
         this.GLTFLoader = null;
         this.TWEEN = null;
         this.nipplejs = null;
-        this.score = 0;
         this.car;
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
@@ -164,25 +163,10 @@ class VueGame {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
 
                 const totalRoadLength = this.getTotalRoadLength();
-                //console.log(this.roadInstances[0].position.z)
-                //console.log(totalRoadLength);
-                //console.log(this.maxRoadInstances);
                 this.roadInstances[0].position.z -= totalRoadLength;
-
-                //console.log(this.roadInstances[0].position.z)
                 this.roadInstances.push(this.roadInstances.shift());
 
                 this.carsGeneration();
-                /*
-                if (this.i % this.maxRoadInstances == 0){
-                    this.carsGeneration();
-                }*/
-
-                /*this.i++;
-                console.log(this.i)*/  
-
-                //console.log(this.roadInstances);
-                //this.scene.remove(removedRoad);
             }
         }
     }
@@ -313,24 +297,6 @@ class VueGame {
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
     }
-
-    /*loadCar() {
-        return new Promise((resolve, reject) => {
-            const loader = new this.GLTFLoader();
-            loader.load(this.car.model, (gltf) => {
-                this.carModel = gltf.scene;
-                this.carModel.position.set(0, 1, 0); // Positioning
-                this.carModel.rotateY(Math.PI);
-                this.carModel.scale.set(1.2, 1.2, 1.2);
-    
-                this.scene.add(this.carModel);
-                resolve(); // Resolve the promise once loading is complete
-            }, undefined, (error) => {
-                console.error(error);
-                reject(error); // Reject the promise if there's an error
-            });
-        });
-    }*/
 
     loadCar() {
         return new Promise((resolve, reject) => {

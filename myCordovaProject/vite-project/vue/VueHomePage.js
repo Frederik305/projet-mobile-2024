@@ -108,7 +108,7 @@ class VueHomePage{
 
                 const parkingModel = gltf2.scene;
 
-                parkingModel.position.set(i * -420, 0, 0); // Positioning
+                parkingModel.position.set(i * -400, 0, 0); // Positioning
                 parkingModel.rotateY(Math.PI);
                 
                 // Add the car model to the scene

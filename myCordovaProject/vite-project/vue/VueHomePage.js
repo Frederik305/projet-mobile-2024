@@ -96,14 +96,24 @@ class VueHomePage{
                 const gltf = await new Promise((resolve, reject) => {
                     loader.load(this.carList[i].model, resolve, undefined, reject);
                 });
+
+                const gltf2 = await new Promise((resolve, reject) => {
+                    loader.load("Parking.glb", resolve, undefined, reject);
+                });
                 const carModel = gltf.scene;
                 carModel.position.set(i * -400, 0, 0); // Positioning
                 carModel.rotateY(Math.PI);
     
                 this.carPositions.push(carModel.position); // Store position of loaded car model
+
+                const parkingModel = gltf2.scene;
+
+                parkingModel.position.set(i * -420, 0, 0); // Positioning
+                parkingModel.rotateY(Math.PI);
                 
                 // Add the car model to the scene
                 this.scene.add(carModel);
+                this.scene.add(parkingModel);
             } catch (error) {
                 console.error(error);
             }
@@ -179,7 +189,7 @@ class VueHomePage{
                 console.log(cameraPos);
                 this.moveCameraPositionLeft();
             }
-        }, 0.1);
+        }, 1);
     }
 
     moveCameraPositionRight() {
@@ -191,7 +201,7 @@ class VueHomePage{
                 console.log(cameraPos);
                 this.moveCameraPositionRight();
             }
-        }, 0.1);
+        }, 1);
     }
 
 

@@ -87,6 +87,9 @@ class VueGame {
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xa8d0ff);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00007);
+
+
+        
     }
 
     addStart(){
@@ -779,11 +782,14 @@ class VueGame {
 
     detectCollision(carModel, otherCars) {
         const carBox = new this.THREE.Box3().setFromObject(carModel);
-    
+        const scaleFactor = 0.6;
+        const carBoxSize=carBox.getSize(new this.THREE.Vector3());
+        carBoxSize.multiplyScalar(scaleFactor);
+
         for (let i = 0; i < otherCars.length; i++) {
             
 
-            const scaleFactor = 0.7; // Facteur d'échelle pour réduire la taille de la boîte
+             // Facteur d'échelle pour réduire la taille de la boîte
             const otherCarBox = new this.THREE.Box3().setFromObject(otherCars[i]);
 
             const size = otherCarBox.getSize(new this.THREE.Vector3());

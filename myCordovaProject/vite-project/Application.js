@@ -78,7 +78,6 @@ class Application{
             this.playerDAO.modifierLevel(this.vueGame.getGameScore());
 
             console.log(this.playerDAO.getPlayer().level)
-            this.vueGame.clearScene()
         }
     }
     actionModifierPlayer(player){

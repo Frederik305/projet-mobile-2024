@@ -33,17 +33,19 @@ class VueHomePage{
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN }, ZingTouch] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN }, ZingTouch, CANNON] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
                 import('zingtouch'),
+                import('cannon-es/dist/cannon-es.js'),
             ]);
     
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
             this.ZingTouch = ZingTouch;
+            this.CANNON = CANNON;
     
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);

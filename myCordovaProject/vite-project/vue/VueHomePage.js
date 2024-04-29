@@ -4,6 +4,7 @@ class VueHomePage{
         this.carList = null;
         this.player = null;
         this.selectedCar = 0;
+        this.carPositions = [];
 
         this.onWindowResize = this.onWindowResize.bind(this);
 
@@ -36,7 +37,7 @@ class VueHomePage{
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
-                import('zingtouch')
+                import('zingtouch'),
             ]);
     
             this.THREE = THREE;
@@ -87,36 +88,50 @@ class VueHomePage{
         this.scene.add(ambientLight, directionalLight);
     }
 
-    loader() {
+    async loader() {
         const loader = new this.GLTFLoader();
+        
+        for (let i = 0; i < this.carList.length; i++) {
+            try {
+                const gltf = await new Promise((resolve, reject) => {
+                    loader.load(this.carList[i].model, resolve, undefined, reject);
+                });
+
+                const gltf2 = await new Promise((resolve, reject) => {
+                    loader.load("Parking.glb", resolve, undefined, reject);
+                });
+                const carModel = gltf.scene;
+                carModel.position.set(i * -400, 0, 0); // Positioning
+                carModel.rotateY(Math.PI);
     
-        loader.load("HomeView.glb", (gltf) => {
-            const carModel = gltf.scene;
-            carModel.position.set(0, 0, 0); // Positioning
-            carModel.rotateY(Math.PI);
-    
-            // Add the car model to the scene
-            this.scene.add(carModel);
-    
-        }, undefined, (error) => {
-            console.error(error);
-        });
+                this.carPositions.push(carModel.position); // Store position of loaded car model
+
+                const parkingModel = gltf2.scene;
+
+                parkingModel.position.set(i * -400, 0, 0); // Positioning
+                parkingModel.rotateY(Math.PI);
+                
+                // Add the car model to the scene
+                this.scene.add(carModel);
+                this.scene.add(parkingModel);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     setLinkSelectedCar(){
-        const selectedCar = this.selectedCar;
-
-        this.updateLinkSelectedCar(selectedCar);
+        this.updateLinkSelectedCar();
     }
 
-    updateLinkSelectedCar(selectedCar) {
-        document.getElementById("name").innerText = "Name: " + this.carList[selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.carList[selectedCar].brakePower;
+    updateLinkSelectedCar() {
+        document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
+        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[this.selectedCar].acceleration;
+        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[this.selectedCar].maneuverability;
+        document.getElementById("brakePower").innerText = "Brake: " + this.carList[this.selectedCar].brakePower;
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
-        document.getElementById("btn-start").href = `#Game/${selectedCar}`
+        document.getElementById("btn-start").href = `#Game/${this.selectedCar}`
     }
 
     appendSceneToDiv(){
@@ -132,40 +147,63 @@ class VueHomePage{
         var touchArea = document.getElementById('swipeCatcher');
         var myRegion = new this.ZingTouch.Region(touchArea);
     
-        let selectedCar = this.selectedCar;
-    
         myRegion.bind(touchArea, 'swipe', (e) => {
             
             
             // check for left swipes
             if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
-                if(selectedCar+1<this.carList.length){
-                    this.updateLinkSelectedCar(selectedCar++);}
-                
-                
-                
+                if(this.selectedCar+1<this.carList.length){
+                this.selectedCar++
+                this.updateLinkSelectedCar();
+                //this.setCameraPosition();
+                this.moveCameraPositionRight()
+                }
             }
     
-            else if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
-                
-    
-                
-    
-                if (selectedCar <= 0){
-                    
+            if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
+                if (this.selectedCar <= 0){
                     return
                 }
                 else{
-                    this.updateLinkSelectedCar(selectedCar--);
+                    this.selectedCar--
+                    this.updateLinkSelectedCar();
+                    //this.setCameraPosition();
+                    this.moveCameraPositionLeft()
                 }
             }
         });
-    }
+    }   
 
     setCameraPosition() {
-        this.camera.position.set(400, 400, -800);
-        this.camera.lookAt(0, 0, 0);
+        this.camera.position.set(this.carPositions[this.selectedCar].x + 500, 400, -800);
+        console.log(this.carPositions[this.selectedCar].x);
+        this.camera.lookAt(this.carPositions[this.selectedCar]);
     }
+
+    moveCameraPositionLeft() {
+        this.camera.position.x += 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos <= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionLeft();
+            }
+        }, 1);
+    }
+
+    moveCameraPositionRight() {
+        this.camera.position.x -= 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos >= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionRight();
+            }
+        }, 1);
+    }
+
 
     animate() {
         requestAnimationFrame(() => this.animate());
@@ -189,14 +227,12 @@ class VueHomePage{
         }
     }
 
-    init() {
-        this.setupScene();
-        
+    async init() {
         this.startAnimation();
-        this.setLinkSelectedCar()
-        this.setCameraPosition()
+        this.setLinkSelectedCar();
 
-        this.loader();
+        await this.loader();
+        this.setCameraPosition();
         this.appendSceneToDiv();
         this.catchSwipeEvent();
     }

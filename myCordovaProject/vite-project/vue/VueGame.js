@@ -8,7 +8,6 @@ class VueGame {
         this.GLTFLoader = null;
         this.TWEEN = null;
         this.nipplejs = null;
-        this.score = 0;
         this.car;
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
@@ -31,7 +30,6 @@ class VueGame {
         this.car = car;
     }
     getGameScore(){
-        this.score++
         let realScore = (Math.abs(this.carModel.position.z) * this.score) / 10000;
         return realScore.toFixed(0);
     }
@@ -59,21 +57,26 @@ class VueGame {
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs,cannonjs] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
                 import('nipplejs/dist/nipplejs.js'),
+                import('cannon-es/dist/cannon-es.js'),
             ]);
 
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
             this.nipplejs = nipplejs;
+            this.cannonjs = cannonjs;
             
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
+
+            this.world = new this.cannonjs.World();
+            this.world.gravity.set(0, -9.81, 0);
 
             this.setupScene();
         } catch (error) {
@@ -163,25 +166,10 @@ class VueGame {
             if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
 
                 const totalRoadLength = this.getTotalRoadLength();
-                //console.log(this.roadInstances[0].position.z)
-                //console.log(totalRoadLength);
-                //console.log(this.maxRoadInstances);
                 this.roadInstances[0].position.z -= totalRoadLength;
-
-                //console.log(this.roadInstances[0].position.z)
                 this.roadInstances.push(this.roadInstances.shift());
 
                 this.carsGeneration();
-                /*
-                if (this.i % this.maxRoadInstances == 0){
-                    this.carsGeneration();
-                }*/
-
-                /*this.i++;
-                console.log(this.i)*/  
-
-                //console.log(this.roadInstances);
-                //this.scene.remove(removedRoad);
             }
         }
     }
@@ -313,24 +301,6 @@ class VueGame {
         this.scene.add(ambientLight, directionalLight);
     }
 
-    /*loadCar() {
-        return new Promise((resolve, reject) => {
-            const loader = new this.GLTFLoader();
-            loader.load(this.car.model, (gltf) => {
-                this.carModel = gltf.scene;
-                this.carModel.position.set(0, 1, 0); // Positioning
-                this.carModel.rotateY(Math.PI);
-                this.carModel.scale.set(1.2, 1.2, 1.2);
-    
-                this.scene.add(this.carModel);
-                resolve(); // Resolve the promise once loading is complete
-            }, undefined, (error) => {
-                console.error(error);
-                reject(error); // Reject the promise if there's an error
-            });
-        });
-    }*/
-
     loadCar() {
         return new Promise((resolve, reject) => {
             const carModelURL = this.car.model;
@@ -348,8 +318,8 @@ class VueGame {
                     console.error(error);
                     reject(error); // Reject the promise if there's an error
                 });
-            });
-        }
+        });
+    }
     
     mouvements() {
         let intervalId;
@@ -586,7 +556,6 @@ class VueGame {
         // Déplacez la voiture en fonction des composantes de direction calculées
         if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
             this.carModel.position.x += dx;
-            console.log(this.carModel.position.x);
             if (this.carModel.position.x > 800) {
                 this.carModel.position.x = 800;
             } else if (this.carModel.position.x < -800) {
@@ -675,6 +644,7 @@ class VueGame {
     } 
     updateScore(){
         if(!this.isPaused) {
+            this.score++
             let realScore = this.getGameScore();
             document.getElementById('Score').innerHTML='SCORE: ' + realScore;
         }
@@ -767,7 +737,7 @@ class VueGame {
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
-        console.log(this.carInstances);
+
     }
     clearScene() {
         cancelAnimationFrame(requestAnimationFrame(this.startGameLoop));

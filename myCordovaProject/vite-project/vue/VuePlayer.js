@@ -4,8 +4,6 @@ class VuePlayer{
         this.html = document.getElementById('html-vue-player').innerHTML;
         
         this.actionModifierPlayer=null;
-        
-      
     }
     
     initializeActionModifierPlayer(actionModifierPlayer) {
@@ -42,11 +40,9 @@ class VuePlayer{
         }
       }
       enregistrer(player){
-      
       let username=document.getElementById("username").value;
       let picture=document.getElementById("output").src;
-      this.actionModifierPlayer(new Player(player.id,username,player.highscore,picture));
-
+      this.actionModifierPlayer(new Player(player.id, username, player.highscore, picture, player.level, player.cash, player.carsUnlocked));
     }
     }
 

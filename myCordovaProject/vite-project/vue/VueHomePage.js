@@ -31,6 +31,36 @@ class VueHomePage{
         document.getElementById("high-score-player").innerHTML += this.player.highscore;
     }
 
+    checkCarsOwned(){
+        if(this.player.carsUnlocked.includes(this.selectedCar)){
+            console.log("car already owned", this.selectedCar);
+        }
+        else{
+            console.log("car not owned", this.selectedCar);
+        }
+    }
+
+    loadTexture(){
+        if(this.player.carsUnlocked.includes(this.selectedCar)){
+            console.log(this.carModel);
+            const textureLoader = new this.THREE.TextureLoader();
+            textureLoader.load('NotOwned.png', loadedTexture => {
+                this.carModel.traverse(child => {
+                    if (child.isMesh) {
+                        child.material.map = loadedTexture;
+                        child.material.side = this.THREE.FrontSide;
+                        
+                        child.material.transparent = true;
+                        child.material.opacity = 0.5;
+                        
+                        child.material.alphaTest = 0.5;
+                        child.material.needsUpdate = true;
+                    }
+                });
+            });
+        }
+    }
+
     async setup() {
         try {
             const [THREE, { GLTFLoader }, { default: TWEEN }, ZingTouch, CANNON] = await Promise.all([
@@ -102,11 +132,11 @@ class VueHomePage{
                 const gltf2 = await new Promise((resolve, reject) => {
                     loader.load("Parking.glb", resolve, undefined, reject);
                 });
-                const carModel = gltf.scene;
-                carModel.position.set(i * -400, 0, 0); // Positioning
-                carModel.rotateY(Math.PI);
+                this.carModel = gltf.scene;
+                this.carModel.position.set(i * -400, 0, 0); // Positioning
+                this.carModel.rotateY(Math.PI);
     
-                this.carPositions.push(carModel.position); // Store position of loaded car model
+                this.carPositions.push(this.carModel.position); // Store position of loaded car model
 
                 const parkingModel = gltf2.scene;
 
@@ -114,8 +144,9 @@ class VueHomePage{
                 parkingModel.rotateY(Math.PI);
                 
                 // Add the car model to the scene
-                this.scene.add(carModel);
+                this.scene.add(this.carModel);
                 this.scene.add(parkingModel);
+                //this.loadTexture();
             } catch (error) {
                 console.error(error);
             }
@@ -153,16 +184,17 @@ class VueHomePage{
             
             
             // check for left swipes
-            if ((e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) && !this.isAnimating) {
+            if ((e.detail.data[0].currentDirection <= 270 && e.detail.data[0].currentDirection >= 90) && !this.isAnimating) {
                 if(this.selectedCar+1<this.carList.length){
                 this.selectedCar++
                 this.updateLinkSelectedCar();
                 //this.setCameraPosition();
                 this.moveCameraPositionRight()
+                this.checkCarsOwned();
                 }
             }
     
-            if ((e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) && !this.isAnimating) {
+            if ((e.detail.data[0].currentDirection >= 270 || e.detail.data[0].currentDirection <= 90) && !this.isAnimating) {
                 if (this.selectedCar <= 0){
                     return
                 }
@@ -171,6 +203,7 @@ class VueHomePage{
                     this.updateLinkSelectedCar();
                     //this.setCameraPosition();
                     this.moveCameraPositionLeft()
+                    this.checkCarsOwned();
                 }
             }
         });
@@ -196,7 +229,7 @@ class VueHomePage{
                 
             })
             .onComplete(() => {
-                console.log('Animation completed'); // Optional: Log completion
+                //console.log('Animation completed'); // Optional: Log completion
                 this.isAnimating = false;
             })
             .start(); // Start the tween
@@ -217,7 +250,7 @@ class VueHomePage{
                 
             })
             .onComplete(() => {
-                console.log('Animation completed'); // Optional: Log completion
+                //console.log('Animation completed'); // Optional: Log completion
                 this.isAnimating = false;
                 
             })
@@ -255,6 +288,8 @@ class VueHomePage{
         this.setCameraPosition();
         this.appendSceneToDiv();
         this.catchSwipeEvent();
+
+        this.checkCarsOwned();
     }
 }
 export default VueHomePage;

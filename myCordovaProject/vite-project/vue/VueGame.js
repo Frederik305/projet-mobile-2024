@@ -14,10 +14,9 @@ class VueGame {
 
         this.tickInterval = 1000 / 120; // Tick interval (60 ticks per second)
         this.lastTick = 0; // Timestamp of the last tick
-
+        
         this.frameCount = 0;
         this.fpsCounter = document.createElement('div');
-        
 
         this.isPaused = false;
         this.lastFpsUpdate = Date.now();
@@ -74,9 +73,10 @@ class VueGame {
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-            this.world = new this.cannonjs.World();
-            this.world.gravity.set(0, -9.81, 0);
+            /*this.world = new this.cannonjs.World();
+            this.world.gravity.set(0, -9.81, 0);*/
 
             this.setupScene();
         } catch (error) {
@@ -86,13 +86,9 @@ class VueGame {
     }
 
     setupScene() {
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this.renderer.domElement);
         this.scene.background = new this.THREE.Color(0xa8d0ff);
         this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00007);
-
-
-        
     }
 
     addStart(){
@@ -657,11 +653,10 @@ class VueGame {
     }
     
     animate() {
-        
-
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
+            //window.setTimeout(() => this.animate(), 0);
         });
         
     }
@@ -673,20 +668,18 @@ class VueGame {
         const testSpan = document.getElementById('test');
 
         if (this.isPaused) {
-           
-                document.getElementById('joystick-container').style.display = 'none';
-                document.getElementById('Pause').style.display = 'none';
-                document.getElementById('game-pause').style.display = 'flex';
-                testSpan.appendChild(scoreContainer);
-                scoreContainer.style.backgroundColor = '#444444d3';
+            document.getElementById('joystick-container').style.display = 'none';
+            document.getElementById('Pause').style.display = 'none';
+            document.getElementById('game-pause').style.display = 'flex';
+            testSpan.appendChild(scoreContainer);
+            scoreContainer.style.backgroundColor = '#444444d3';
                 
         } else {
-            
-                document.getElementById('game-pause').style.display = 'none';
-                document.getElementById('Pause').style.display= 'block';
-                document.getElementById('joystick-container').style.display = 'block';
-                document.getElementById('container-score-pause').appendChild(scoreContainer);
-                scoreContainer.style.backgroundColor = '#49494977';
+            document.getElementById('game-pause').style.display = 'none';
+            document.getElementById('Pause').style.display= 'block';
+            document.getElementById('joystick-container').style.display = 'block';
+            document.getElementById('container-score-pause').appendChild(scoreContainer);
+            scoreContainer.style.backgroundColor = '#49494977';
         }
     }
     
@@ -727,7 +720,7 @@ class VueGame {
     }
 
     async init() {
-        this.setupScene();
+        //this.setupScene();
         await this.loadCar();
         this.addStart();
         this.addLights();
@@ -737,17 +730,6 @@ class VueGame {
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
-
-    }
-    clearScene() {
-        cancelAnimationFrame(requestAnimationFrame(this.startGameLoop));
-        while (this.scene.children.length > 0) {
-            this.scene.remove(this.scene.children[0]);
-        }
-        const rendererContainer = document.getElementById('html-vue-game');
-    if (rendererContainer && rendererContainer.contains(this.renderer.domElement)) {
-        rendererContainer.removeChild(this.renderer.domElement);
-    }
     }
 
     detectCollision(carModel, otherCars) {

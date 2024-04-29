@@ -1,8 +1,10 @@
 class Car {
-    constructor(id , name, model, acceleration, baseMaxSpeed, weight, brakePower, maneuverability, rotation, cameraDistance, cameraRotationY, cameraRotationX) {
+    constructor(id , name, model, level, price, acceleration, baseMaxSpeed, weight, brakePower, maneuverability, rotation, cameraDistance, cameraRotationY, cameraRotationX) {
         this.id = id;
         this.name = name;
         this.model = model;
+        this.level = level;
+        this.price = price;
         
         this.acceleration = acceleration;
         this.baseMaxSpeed = baseMaxSpeed;

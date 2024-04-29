@@ -19,7 +19,8 @@ class Application{
         this.window.addEventListener("hashchange", () => this.naviger());
         this.naviger();
         
-        
+        this.hasInitGame = false;
+        this.hasInitHomePage = false;
     }
 
     naviger(){
@@ -30,13 +31,19 @@ class Application{
             this.vuePlayer.afficher(this.playerDAO.getPlayer());
         }
         else if(hash.match(/^#HomePage/)){
+            //console.log(this.playerDAO.getPlayer().highscore);
             this.vueHomePage.initializeHomePage(this.carDAO.getCars(),this.playerDAO.getPlayer());
 
             this.vueHomePage.afficher();
 
             this.vueHomePage.setup()
                 .then(() => {
-                    this.vueHomePage.init();
+                    if(this.hasInitHomePage == false){
+                        this.vueHomePage.init();
+                        this.hasInitHomePage = true;
+                    }else{
+                        location.reload();
+                    }
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
@@ -50,8 +57,12 @@ class Application{
             // Setup and initialize VueGame asynchronously
             this.vueGame.setup()
                 .then(() => {
-                    
-                    this.vueGame.init();
+                    if(this.hasInitGame == false){
+                        this.vueGame.init();
+                        this.hasInitGame = true;
+                    }else{
+                        location.reload();
+                    }
                     
                 })
                 .catch(error => console.error(error));
@@ -59,10 +70,14 @@ class Application{
             
             this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();
-            
-            if(this.vueGame.getGameScore()>this.playerDAO.getPlayer().highscore){
+
+            if(parseInt(this.vueGame.getGameScore())>parseInt(this.playerDAO.getPlayer().highscore)){
                 this.playerDAO.modifierHighscore(this.vueGame.getGameScore());
             }
+            console.log(this.playerDAO.getPlayer().level)
+            this.playerDAO.modifierLevel(this.vueGame.getGameScore());
+
+            console.log(this.playerDAO.getPlayer().level)
             this.vueGame.clearScene()
         }
     }

@@ -5,7 +5,7 @@ class VueHomePage{
         this.player = null;
         this.selectedCar = 0;
         this.carPositions = [];
-
+        this.isAnimating = false;
         this.onWindowResize = this.onWindowResize.bind(this);
 
         window.addEventListener('resize', this.onWindowResize, false);
@@ -153,7 +153,7 @@ class VueHomePage{
             
             
             // check for left swipes
-            if (e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) {
+            if ((e.detail.data[0].currentDirection <= 225 && e.detail.data[0].currentDirection >= 135) && !this.isAnimating) {
                 if(this.selectedCar+1<this.carList.length){
                 this.selectedCar++
                 this.updateLinkSelectedCar();
@@ -162,7 +162,7 @@ class VueHomePage{
                 }
             }
     
-            if (e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) {
+            if ((e.detail.data[0].currentDirection >= 315 || e.detail.data[0].currentDirection <= 45) && !this.isAnimating) {
                 if (this.selectedCar <= 0){
                     return
                 }
@@ -177,33 +177,51 @@ class VueHomePage{
     }   
 
     setCameraPosition() {
-        this.camera.position.set(this.carPositions[this.selectedCar].x + 500, 400, -800);
+        this.camera.position.set(this.carPositions[this.selectedCar].x + 400, 300, -800);
         console.log(this.carPositions[this.selectedCar].x);
-        this.camera.lookAt(this.carPositions[this.selectedCar]);
+        this.camera.lookAt(this.carPositions[this.selectedCar].clone().add(new this.THREE.Vector3(0, 0, -100)));
     }
 
     moveCameraPositionLeft() {
-        this.camera.position.x += 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos <= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionLeft();
-            }
-        }, 1);
+        this.isAnimating = true;
+        let targetX = this.camera.position.x + 400; // Calculate target position
+        let cameraPos = { x: this.camera.position.x }; // Initial camera position object
+    
+        // Create a new tween for camera position
+        new this.TWEEN.Tween(cameraPos)
+            .to({ x: targetX },500) // Duration of the tween (e.g., 1000 ms)
+            .easing(this.TWEEN.Easing.Quartic.Out) // Easing function for smooth motion
+            .onUpdate(() => {
+                this.camera.position.x = cameraPos.x; // Update camera position
+                
+            })
+            .onComplete(() => {
+                console.log('Animation completed'); // Optional: Log completion
+                this.isAnimating = false;
+            })
+            .start(); // Start the tween
     }
-
+    
     moveCameraPositionRight() {
-        this.camera.position.x -= 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos >= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionRight();
-            }
-        }, 1);
+        this.isAnimating = true;
+        let targetX = this.camera.position.x - 400; // Calculate target position
+        let cameraPos = { x: this.camera.position.x }; // Initial camera position object
+    
+        // Create a new tween for camera position
+        new this.TWEEN.Tween(cameraPos)
+            .to({ x: targetX }, 500) // Duration of the tween (e.g., 1000 ms)
+            .easing(this.TWEEN.Easing.Quartic.Out) // Easing function for smooth motion
+            .onUpdate(() => {
+                 // Update camera position
+                this.camera.position.x = cameraPos.x;
+                
+            })
+            .onComplete(() => {
+                console.log('Animation completed'); // Optional: Log completion
+                this.isAnimating = false;
+                
+            })
+            .start(); // Start the tween
     }
 
 

@@ -152,10 +152,7 @@ class VueGame {
         return totalLength;
     }
 
-    /*let bbox = new this.THREE.Box3().setFromObject(road);
-    let helper = new this.THREE.Box3Helper(bbox, new this.THREE.Color(0, 255, 0));
-    let size = bbox.getSize(new this.THREE.Vector3());
-    this.scene.add(helper);*/
+  
 
     moveRoadBehind(){
         if (this.roadInstances.length > 0 && this.carModel) {
@@ -375,7 +372,7 @@ class VueGame {
         });
         joystick.on('end', () => {
             // Arrêtez l'animation de rotation de la voiture lorsque le joystick est relâché
-            //clearInterval(intervalId); // Arrêtez l'intervalle de rotation
+            
         
             // Réinitialisez la rotation de la voiture à 0
             const resetRotation = () => {
@@ -399,146 +396,7 @@ class VueGame {
         });
 
 
-/*
-        
-        
-        const Key = {
-            LEFT_ARROW: 37,
-            UP_ARROW: 38,
-            RIGHT_ARROW: 39,
-            DOWN_ARROW: 40,
-            pressedKeys: {},
-    
-            isDown: function(keyCode) {
-                return this.pressedKeys[keyCode];
-            },
-    
-            onKeyDown: function(event) {
-                this.pressedKeys[event.keyCode] = true;
-            },
-    
-            onKeyUp: function(event) {
-                delete this.pressedKeys[event.keyCode];
 
-                
-            }
-        };
-    
-        // Écouteurs d'événements pour les touches de direction
-        document.addEventListener('keydown', (event) => {
-            Key.onKeyDown(event);
-            if (event.code === 'ArrowLeft') {
-                // Déplacer la voiture vers la gauche et ajuster la rotation
-                //this.carModel.position.x -= currentSpeed / 1.1;
-                if (this.carModel.rotation.y > -0.30) {
-                    this.carModel.rotation.y -= rotationSpeed;
-                }
-            } else if (event.code === 'ArrowRight') {
-                // Déplacer la voiture vers la droite et ajuster la rotation
-                //this.carModel.position.x += currentSpeed / 1.1;
-                if (this.carModel.rotation.y < 0.30) {
-                    this.carModel.rotation.y += rotationSpeed;
-                }
-            }
-        });
-
-        document.addEventListener('keyup', (event) => {
-            Key.onKeyUp(event);
-
-            if (!Key.isDown(Key.LEFT_ARROW) && !Key.isDown(Key.RIGHT_ARROW)) {
-                // Progressivement, ramenez la rotation à 0
-                const reduceRotation = () => {
-                    if (Math.abs(this.carModel.rotation.y) > 0.01) {
-                        // Réduisez la rotation progressivement
-                        if (this.carModel.rotation.y > 0) {
-                            this.carModel.rotation.y -= rotationSpeed;
-                        } else if (this.carModel.rotation.y < 0) {
-                            this.carModel.rotation.y += rotationSpeed;
-                        }
-                        requestAnimationFrame(reduceRotation);
-                    } else {
-                        // La rotation est suffisamment proche de 0, réinitialisez-la exactement à 0
-                        this.carModel.rotation.y = 0;
-                    }
-                };
-        
-                // Lancez la réduction progressive de la rotation
-                reduceRotation();
-            }
-
-        });
-
-        
-        document.getElementById('button-left').addEventListener('mousedown', () => {
-            const intervalId = setInterval(() => {
-                if (this.carModel.rotation.y > -0.30) {
-                    this.carModel.rotation.y -= rotationSpeed;
-                }
-            }, 10);
-    
-            document.addEventListener('mouseup', () => {
-                clearInterval(intervalId);
-                this.reduceRotation();
-            });
-        });
-
-        document.getElementById('button-left').addEventListener('touchstart', () => {
-            const intervalId = setInterval(() => {
-                if (this.carModel.rotation.y > -0.30) {
-                    this.carModel.rotation.y -= rotationSpeed;
-                }
-            }, 10);
-    
-            document.addEventListener('touchend', () => {
-                clearInterval(intervalId);
-                this.reduceRotation();
-            });
-        });
-    
-        document.getElementById('button-right').addEventListener('mousedown', () => {
-            const intervalId = setInterval(() => {
-                if (this.carModel.rotation.y < 0.30) {
-                    this.carModel.rotation.y += rotationSpeed;
-                }
-            }, 10);
-    
-            document.addEventListener('mouseup', () => {
-                clearInterval(intervalId);
-                this.reduceRotation();
-            });
-        });
-
-        document.getElementById('button-right').addEventListener('touchstart', () => {
-            const intervalId = setInterval(() => {
-                if (this.carModel.rotation.y < 0.30) {
-                    this.carModel.rotation.y += rotationSpeed;
-                }
-            }, 10);
-    
-            document.addEventListener('touchend', () => {
-                clearInterval(intervalId);
-                this.reduceRotation();
-            });
-        });
-
-        this.reduceRotation = () => {
-            const reduceRotation = () => {
-                
-                if (Math.abs(this.carModel.rotation.y) > 0.01) {
-                    
-                    if (this.carModel.rotation.y > 0) {
-                        this.carModel.rotation.y -= rotationSpeed;
-
-                    } else if (this.carModel.rotation.y < 0) {
-                        this.carModel.rotation.y += rotationSpeed;
-                    }
-                    requestAnimationFrame(reduceRotation);
-                } else {
-                    this.carModel.rotation.y = 0;
-                }
-            };
-            reduceRotation();
-        };*/
     }
 
     moveCarForward() {

@@ -68,7 +68,7 @@ class VueGame {
                 import('nipplejs/dist/nipplejs.js'),
                 import('cannon-es/dist/cannon-es.js'),
             ]);
-
+            this.backgroundMusic;
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
@@ -90,26 +90,58 @@ class VueGame {
         }
     }
 
+    addMusic(){
+        // Créez un élément audio
+        this.backgroundMusic = new Audio('../music/GameMusic.mp3');
+
+        // Configurez les propriétés de l'élément audio
+        this.backgroundMusic.loop = true; // Pour répéter la musique en boucle
+        this.backgroundMusic.volume = 0.05; // Réglez le volume de la musique (0.0 à 1.0)
+
+        // Chargez et jouez la musique
+        this.backgroundMusic.load();
+        this.backgroundMusic.play();
+    }
+    removeMusic(){
+        this.backgroundMusic.pause();
+        this.backgroundMusic.currentTime = 0;
+    }
+    pauseMusic(){
+       {this.backgroundMusic.pause();}
+        
+    }
+    playMusic(){this.backgroundMusic.play()}
+
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
 
         const textureLoader = new this.THREE.TextureLoader();
 
 // Chemin d'accès à l'image panoramique de la skybox
-        const textureUrl = '../img/test.jpg';
-
-        // Chargez la texture
-        const texture = textureLoader.load(textureUrl);
-
-        // Configurez le filtrage pour améliorer la qualité de la texture
-        texture.magFilter = this.THREE.LinearFilter;
-        texture.minFilter = this.THREE.LinearFilter;
-
-        // Utilisez la texture comme skybox
-        this.scene.background = texture;
+        const gradientTexture = this.createGradientBackground();
+        this.scene.background = gradientTexture;
 
         //this.scene.background = new this.THREE.Color(0xb88cff);
-        this.scene.fog = new this.THREE.FogExp2(0xb88cff, 0.00007);
+        this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
+    }
+    createGradientBackground() {
+        const canvas = document.createElement('canvas');
+        canvas.width = window.innerWidth; // Définissez la largeur du canvas sur la largeur de la fenêtre
+        canvas.height = window.innerHeight; // Définissez la hauteur du canvas sur la hauteur de la fenêtre
+        const context = canvas.getContext('2d');
+        const gradient = context.createLinearGradient(0, 0, 0, window.innerHeight);
+       
+    
+        gradient.addColorStop(0, '#983275'); // Couleur du dégradé au début
+        gradient.addColorStop(0.1, '#983275'); // Couleur du dégradé à la fin
+        gradient.addColorStop(0.5, '#FED800');
+        gradient.addColorStop(1, '#FED800');
+
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        const texture = new this.THREE.CanvasTexture(canvas);
+        return texture;
     }
 
     addStart(){
@@ -568,6 +600,7 @@ class VueGame {
                 }
                  }       
         }
+        
     } 
     updateScore(){
         if(!this.isPaused) {
@@ -592,6 +625,7 @@ class VueGame {
         
     }
 
+
     changePauseState() {
         this.isPaused = !this.isPaused;
         console.log(this.isPaused);
@@ -599,6 +633,7 @@ class VueGame {
         const gamepause = document.getElementById('game-score-pause');
 
         if (this.isPaused) {
+            this.pauseMusic();
             document.getElementById('joystick-container').style.display = 'none';
             document.getElementById('Pause').style.display = 'none';
             document.getElementById('game-pause').style.display = 'flex';
@@ -606,6 +641,7 @@ class VueGame {
             scoreContainer.style.backgroundColor = '#444444d3';
                 
         } else {
+            this.playMusic();
             document.getElementById('game-pause').style.display = 'none';
             document.getElementById('Pause').style.display= 'block';
             document.getElementById('joystick-container').style.display = 'block';
@@ -661,6 +697,7 @@ class VueGame {
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
+        this.addMusic();
     }
 
     detectCollision(carModel, otherCars) {

@@ -35,7 +35,7 @@ class Application{
             this.vueHomePage.initializeHomePage(this.carDAO.getCars(),this.playerDAO.getPlayer());
 
             this.vueHomePage.afficher();
-
+            this.vueHomePage.addMusic();
             this.vueHomePage.setup()
                 .then(() => {
                     if(this.hasInitHomePage == false){
@@ -44,12 +44,13 @@ class Application{
                     }else{
                         location.reload();
                     }
+                    
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
             let navigation = hash.match(/^#Game\/([0-9]+)/)
             this.idItem = navigation[1];
-
+            
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             
             this.vueGame.afficher();
@@ -60,6 +61,7 @@ class Application{
                     if(this.hasInitGame == false){
                         this.vueGame.init();
                         this.hasInitGame = true;
+                        this.vueHomePage.removeMusic();
                     }else{
                         location.reload();
                     }
@@ -67,7 +69,7 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
-            
+            this.vueGame.removeMusic();
             this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();
 

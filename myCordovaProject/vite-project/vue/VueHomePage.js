@@ -7,7 +7,7 @@ class VueHomePage{
         this.carPositions = [];
         this.isAnimating = false;
         this.onWindowResize = this.onWindowResize.bind(this);
-
+        this.backgroundMusic= new Audio('../music/HomePageMusic.mp3');;
         window.addEventListener('resize', this.onWindowResize, false);
     }
 
@@ -42,15 +42,18 @@ class VueHomePage{
 
     addMusic(){
         // Créez un élément audio
-        const backgroundMusic = new Audio('../music/HomePageMusic.mp3');
+        
 
         // Configurez les propriétés de l'élément audio
-        backgroundMusic.loop = true; // Pour répéter la musique en boucle
-        backgroundMusic.volume = 0.05; // Réglez le volume de la musique (0.0 à 1.0)
-
+        this.backgroundMusic.loop = true; // Pour répéter la musique en boucle
+        this.backgroundMusic.volume = 0.05; // Réglez le volume de la musique (0.0 à 1.0)
         // Chargez et jouez la musique
-        backgroundMusic.load();
-        backgroundMusic.play();
+        this.backgroundMusic.load();
+        this.backgroundMusic.play();
+    }
+    removeMusic(){
+        this.backgroundMusic.pause();
+        this.backgroundMusic.currentTime = 0;
     }
 
     loadTexture(){
@@ -296,7 +299,7 @@ class VueHomePage{
     async init() {
         this.startAnimation();
         this.setLinkSelectedCar();
-        this.addMusic()
+        
         await this.loader();
         this.setCameraPosition();
         this.appendSceneToDiv();

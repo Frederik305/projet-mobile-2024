@@ -308,10 +308,10 @@ class VueGame {
         
             for (let j = 0; j < 3; j++) {
                 if (path[j] == 0) {
-                    let positionX = j === 0 ? -700 : (j === 1 ? 0 : 700);
+                    let positionX = j === 0 ? -600 : (j === 1 ? 0 : 600);
         
                     // Add randomness to positionX
-                    const randomOffsetX = Math.random() * 200 - 100; // Generates a random number between -50 and 50
+                    const randomOffsetX = Math.random() * 100 - 50; // Generates a random number between -50 and 50
                     positionX += randomOffsetX;
         
                     // Add randomness to positionZ

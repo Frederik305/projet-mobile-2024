@@ -12,6 +12,11 @@ class VueGame {
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
 
+        this.gotoleft=false;
+        this.gotoright=false;
+        this.isLeft=false;
+        this.isRight=false;
+
         this.tickInterval = 1000 / 120; // Tick interval (60 ticks per second)
         this.lastTick = 0; // Timestamp of the last tick
         
@@ -50,7 +55,7 @@ class VueGame {
         this.fpsCounter.style.left = '10px';
         this.fpsCounter.style.color = 'white';
         this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
-
+        this.data=null
         this.speed = this.car.baseMaxSpeed;
     }
 
@@ -87,8 +92,8 @@ class VueGame {
 
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
-        this.scene.background = new this.THREE.Color(0xa8d0ff);
-        this.scene.fog = new this.THREE.FogExp2(0xbfe3dd, 0.00007);
+        this.scene.background = new this.THREE.Color(0xb88cff);
+        this.scene.fog = new this.THREE.FogExp2(0xb88cff, 0.00007);
     }
 
     addStart(){
@@ -315,8 +320,8 @@ class VueGame {
     }
     
     mouvements() {
-        let intervalId;
-        let Distance;
+        
+        let Distance=0;
         const rotationSpeed=this.car.rotation;
         const joystickContainer = document.getElementById('joystick-container');
         const joystick = this.nipplejs.create({
@@ -331,40 +336,54 @@ class VueGame {
                // console.log(data.distance+" "+Distance)
 
 
-
+                this.data = data;
                 const directionX = data.direction.x;
 
 
                 if (directionX === 'right') {               
-
+                    this.isRight=true;
+                    this.isLeft=false;
                     if (Distance && Distance>data.distance){
-                    
+                        
+                        /*
                         if (this.carModel.rotation.y>0){
                             this.carModel.rotation.y -= rotationSpeed;
-                        }
+                            */
+                           
+                           this.gotoright=false;
+                           
+                        
                     }else{
+                        this.gotoright=true;
+                        
+                        /*
                         if (this.carModel.rotation.y < 0.30) {
                             this.carModel.rotation.y += rotationSpeed*(data.distance/50);    
-                        }
+                        }*/
                     }
                     
-                    
-                } else if (directionX==='left') {
+                }  
+                  else if (directionX==='left') {
+                    this.isRight=false;
+                    this.isLeft=true;
                     // La voiture tourne à gauche
                     if (Distance && Distance>data.distance){
-
+/*
                         if (this.carModel.rotation.y < 0) {
                                 this.carModel.rotation.y += rotationSpeed;
-                        }   
+                        }   */
+                        this.gotoleft=false;
                     }       
                     else{
-
+/*
                     if (this.carModel.rotation.y > -0.30) {
                             this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
+                            
 
                     
-                        }
-                    }               
+                        }*/
+                        this.gotoleft=true;  
+                    }             
                 } 
                 Distance=data.distance;
             
@@ -376,6 +395,10 @@ class VueGame {
         
             // Réinitialisez la rotation de la voiture à 0
             const resetRotation = () => {
+                this.gotoleft=false;
+                this.gotoright=false
+                this.isLeft=false;
+                this.isRight=false;
                 if (Math.abs(this.carModel.rotation.y) > 0.01) {
                     // Réduisez progressivement la rotation vers 0
                     if (this.carModel.rotation.y > 0) {
@@ -446,7 +469,8 @@ class VueGame {
     async update() {
         if(!this.isPaused) {
             this.frameCount++;
-
+            const rotationSpeed=this.car.rotation;
+            document.getElementById('Score').style.display = 'flex';
             const now = Date.now();
             const deltaTime = now - this.lastTick;
 
@@ -490,10 +514,42 @@ class VueGame {
             }
             let isCollision = this.detectCollision(this.carModel,this.carInstances)
             if(isCollision){
-                window.location.hash='EndScreen';
+                this.shakeCamera();
+                this.renderer.render(this.scene, this.camera);
                 this.isPaused=true;
+                document.getElementById('joystick-container').style.display = 'none';
+                document.getElementById('Pause').style.display = 'none';
+                document.getElementById('Score').style.display = 'none';
                 
+                window.location.hash='EndScreen';
             }
+            if(this.data){
+                if(this.isRight && !this.gotoright ){
+
+                    if (this.carModel.rotation.y>rotationSpeed*(this.data.distance/50)){
+                        this.carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
+
+                    }
+
+                }else if(this.isRight && this.gotoright){
+
+                    if (this.carModel.rotation.y < 0.30*(this.data.distance/50)) {
+                        this.carModel.rotation.y += rotationSpeed//*(this.data.distance/50);    
+                    }
+
+                }else if(this.isLeft && !this.gotoleft){
+                    if (this.carModel.rotation.y < rotationSpeed*(this.data.distance/50 )) {
+                        this.carModel.rotation.y += rotationSpeed//*(this.data.distance/50);
+                    }   
+                
+                }else if(this.isLeft && this.gotoleft){
+                    if (this.carModel.rotation.y > -0.30*(this.data.distance/50)) {
+                        this.carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
+                    }
+
+
+                }
+                 }       
         }
     } 
     updateScore(){
@@ -523,13 +579,13 @@ class VueGame {
         this.isPaused = !this.isPaused;
         console.log(this.isPaused);
         const scoreContainer = document.getElementById('Score');
-        const testSpan = document.getElementById('test');
+        const gamepause = document.getElementById('game-score-pause');
 
         if (this.isPaused) {
             document.getElementById('joystick-container').style.display = 'none';
             document.getElementById('Pause').style.display = 'none';
             document.getElementById('game-pause').style.display = 'flex';
-            testSpan.appendChild(scoreContainer);
+            gamepause.appendChild(scoreContainer);
             scoreContainer.style.backgroundColor = '#444444d3';
                 
         } else {
@@ -609,12 +665,34 @@ class VueGame {
 
             if (carBox.intersectsBox(otherCarBox)) {
                 console.log('Collision detected!');
+                
                 // Handle collision here, such as removing the collided car
                 return true; // Collision detected
             }
         }
     
         return false; // No collision detected
+    }
+    shakeCamera() {
+        const duration = 0.5; // Durée de l'animation en secondes
+        const strength = 0.1; // Amplitude de la secousse
+    
+        const startPosition = this.camera.position.clone(); // Position initiale de la caméra
+    
+        // Créer l'animation de secousse avec Tween.js
+        new this.TWEEN.Tween(this.camera.position)
+            .to({
+                x: startPosition.x + Math.random() * strength * 2 - strength,
+                y: startPosition.y + Math.random() * strength * 2 - strength,
+                z: startPosition.z + Math.random() * strength * 2 - strength,
+            }, duration * 1000) // Convertir la durée en millisecondes
+            .easing(this.TWEEN.Easing.Quadratic.InOut) // Type d'interpolation
+            .onComplete(() => {
+                // Réinitialiser la position de la caméra à sa position initiale à la fin de l'animation
+                //this.camera.position.copy(startPosition);
+                //this.renderer.render(this.camera);
+            })
+            .start(); // Démarrer l'animation
     }
 
     

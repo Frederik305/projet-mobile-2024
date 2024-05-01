@@ -37,56 +37,197 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   justify-content: center;
   align-items: center;
 }
-.wave {
-  width: 5px;
-  height: 100px;
-  background: linear-gradient(45deg, cyan, magenta);
-  margin: 10px;
-  animation: wave 1s linear infinite;
-  border-radius: 20px;
+
+#page-chargement-application{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  padding-top: 100px;
+
+  
 }
-.wave:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.wave:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.wave:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.wave:nth-child(5) {
-  animation-delay: 0.4s;
-}
-.wave:nth-child(6) {
-  animation-delay: 0.5s;
-}
-.wave:nth-child(7) {
-  animation-delay: 0.6s;
-}
-.wave:nth-child(8) {
-  animation-delay: 0.7s;
-}
-.wave:nth-child(9) {
-  animation-delay: 0.8s;
-}
-.wave:nth-child(10) {
-  animation-delay: 0.9s;
+.holder {
+	width: 800px;
+	height: 200px;
+	overflow: hidden;
+	border-bottom: 4px solid white;
+	
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
-@keyframes wave {
-  0% {
-    transform: scale(0.5);
-    background: linear-gradient(45deg, magenta, cyan);
-  }
-  50% {
-    transform: scale(1.5);
-    background: linear-gradient(45deg, rgb(109, 0, 109), rgb(177, 1, 177), cyan, cyan, white);
-  }
-  100% {
-    transform: scale(0.5);
-    background: linear-gradient(45deg, magenta, cyan);
-  }
+.car {
+	background-image: url('../img/car.svg');
+	background-repeat: no-repeat;
+	width: 150px;
+	height: 65px;
+	
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	
+	animation: car 1s ease infinite alternate;
+	transform-origin: 50% 50%;
+}
 
+.wheels {
+	background-image: url('../img/wheels.svg');
+	background-repeat: no-repeat;
+	width: 118px;
+	height: 30px;
+	
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.wind-holder {
+	width: 50px;
+	height: 30px;
+	overflow: hidden;
+	
+	position: absolute;
+	bottom: 10px;
+	left: 36%;
+	transform: translateX(-50%);
+	
+	
+	
+	.wind, .wind2 {
+		height: 3px;
+		width: 100%;
+		background-color: white;
+		border-radius: 10px;
+		
+		position: absolute;
+		top: 50%;
+		
+		transform: translateY(-50%) translateX(100%);
+		
+		animation: wind-move 1s ease-in-out infinite;
+	}
+	
+	.wind2 {
+		top: 20%;
+		animation-delay: 0.3s;
+	}
+}
+
+.tree {
+	background-repeat: no-repeat;
+	width: 48px;
+	height: 100px;
+	
+	position: absolute;
+	bottom: -2px;
+	right: 0;
+	z-index: -1;
+	
+	transform: translateX(100%);
+	animation: move 5s linear infinite;
+	
+	&.tree1 {
+		background-image: url('../img/tree1.svg');
+		z-index: 1;
+	}
+
+	&.tree2 {
+		background-image: url('../img/tree2.svg');
+		animation: move 8s linear infinite;
+		height: 75px;
+	}
+
+	&.tree3 {
+		background-image: url('../img/tree3.svg');
+		animation: move 11s linear infinite;
+		height: 50px;
+	}
+}
+
+.hill {
+	width: 200%;
+	height: 25%;
+	background-position: 0 40%;
+	background-repeat: repeat-x;
+	background-size: 50% 100px;
+	
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: -2;
+	
+	&.hill1 {
+		background-image: url(https://www.dropbox.com/s/s9nph2wch4r2f8e/hills1.svg?raw=1);
+		animation: land-move 12s linear infinite;
+	}
+	
+	&.hill2 {
+		background-image: url(https://www.dropbox.com/s/0rsj8j62qe69f22/hills2.svg?raw=1);
+		animation: land-move 17s linear infinite;
+	}
+}
+
+
+
+
+@keyframes wind-move {
+	0% {
+		transform: translateY(-50%) translateX(100%);
+	}
+	100% {
+		transform: translateY(-50%) translateX(-100%);
+	}
+}
+
+@keyframes wind-bob {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes car {
+	0% {
+		transform: translateX(-50%) translateY(0);
+	}
+	50% {
+		transform: translateX(-50%) translateY(-1px);
+	}
+	100% {
+		transform: translateX(-50%) translateY(0);
+	}
+}
+
+
+@keyframes move {
+	0% {
+		transform: translateX(100%);
+	}
+
+	100% {
+		transform: translateX(-2000%);
+	}
+}
+
+@keyframes land-move {
+	0% {
+		transform: translateX(0)
+	}
+	
+	100% {
+		transform: translateX(-800px)
+	}
 }
 
 #joystick-container {
@@ -131,8 +272,8 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   max-width: 600px;
   flex-direction: column;
   align-items: center;
-  height: 400px;
-  padding-top:40px;
+  
+  padding:40px 0;
   border-radius: 50px;
   -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
@@ -289,7 +430,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 
 .title{
   font-family:'Honk';
-  font-size: 38px;
+  font-size: 65Dpx;
   line-height: 0.55;
   justify-content: center;
   text-align: center;
@@ -322,12 +463,25 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   justify-content: center;
   align-items: center;
   flex-direction: column; 
-  
+  background-color: rgba(0, 0, 0, 0);
   font-family:'Jersey15';
-  
+  backdrop-filter: blur(0px);
   z-index: 0;
+  animation: fadeIn 1s forwards; /* Utiliser une animation de fondu pour augmenter la transparence */
+
    
 }
+@keyframes fadeIn {
+  from {
+    background-color: rgba(0, 0, 0, 0); /* Début avec une transparence de 0 */
+    backdrop-filter: blur(0px); /* Début avec un flou de 0px */
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.274); /* Transparence finale */
+    backdrop-filter: blur(5px); /* Flou final */
+  }
+}
+
 
 .game-over{
   text-align: center; 
@@ -350,7 +504,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   border-radius: 20px;
   font-size: 30px;
   text-align: center;
-  background-color: #49494977;
+  background-color: #292929ce;
   
   justify-content: center;
   align-items: center;
@@ -363,7 +517,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 #quit-btn{
   color: white;
   background-color: #ca0000;
- 
+  max-width:300px;
   border: none;
   margin:  auto;
   font-size: 25px;
@@ -553,7 +707,7 @@ h1{
   color: white;
   background-color: rgb(98, 196, 0);
   border: none;
-  
+  max-width:300px;
   margin: 10px auto;
   margin-top: 100px;
   width: 70%;
@@ -646,7 +800,7 @@ z-index: -1;
   width: 70%;
   padding: 5px 0;
   text-decoration: none;
-  
+  max-width:300px;
 
   position: relative;
   display: block;
@@ -703,7 +857,7 @@ background-color: inherit;
 }  
 #Score{
   margin-top: 20px;
-  display:flex;
+  display:none;
   padding: 20px;
   min-width: 150px;
   height: 40px;

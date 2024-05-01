@@ -40,6 +40,19 @@ class VueHomePage{
         }
     }
 
+    addMusic(){
+        // Créez un élément audio
+        const backgroundMusic = new Audio('../music/HomePageMusic.mp3');
+
+        // Configurez les propriétés de l'élément audio
+        backgroundMusic.loop = true; // Pour répéter la musique en boucle
+        backgroundMusic.volume = 0.05; // Réglez le volume de la musique (0.0 à 1.0)
+
+        // Chargez et jouez la musique
+        backgroundMusic.load();
+        backgroundMusic.play();
+    }
+
     loadTexture(){
         if(this.player.carsUnlocked.includes(this.selectedCar)){
             console.log(this.carModel);
@@ -283,7 +296,7 @@ class VueHomePage{
     async init() {
         this.startAnimation();
         this.setLinkSelectedCar();
-
+        this.addMusic()
         await this.loader();
         this.setCameraPosition();
         this.appendSceneToDiv();

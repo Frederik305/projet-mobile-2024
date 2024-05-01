@@ -487,6 +487,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   text-align: center; 
   z-index: 1;
   justify-content: center;
+  line-height: 0.3;
 }
 .btns-container{
   display: flex;
@@ -846,7 +847,7 @@ width : 30px;
 background-image: url('../img/pause.png');
 background-size: cover;
 background-repeat: no-repeat;
-display: block;
+display: none;
 font-size: 16px;
 text-align: center;
 text-decoration: none;

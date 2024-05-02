@@ -598,7 +598,7 @@ class VueGame {
 
 
                 }
-                 }       
+            }
         }
         
     } 
@@ -619,8 +619,8 @@ class VueGame {
     animate() {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
-            this.animate(); // Recursively call animate to keep the loop running
-            //window.setTimeout(() => this.animate(), 0);
+            //this.animate(); // Recursively call animate to keep the loop running
+            window.setTimeout(() => this.animate(), 0);
         });
         
     }

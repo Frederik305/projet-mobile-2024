@@ -19,11 +19,6 @@ class VueHomePage{
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
 
-        document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[this.selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[this.selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.carList[this.selectedCar].brakePower;
-
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
         document.getElementById("btn-start").href = `#Game/${this.selectedCar}`
         document.getElementById("username-player-home-page").innerHTML = this.player.username;
@@ -174,10 +169,19 @@ class VueHomePage{
     }
 
     updateLinkSelectedCar() {
+        let displayBaseSpeed = document.getElementById("displayBaseSpeed");
+        let displayAcceleration = document.getElementById("displayAcceleration");
+        let displayManeuverability = document.getElementById("displayManeuverability");
+
+        displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed + "px";
+        displayAcceleration.style.width = this.carList[this.selectedCar].acceleration * 100 + "px";
+        displayManeuverability.style.width = this.carList[this.selectedCar].rotation * 5000 + "px";
+        
+        //displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed;
         document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
-        document.getElementById("acceleration").innerText = "Acceleration: " + this.carList[this.selectedCar].acceleration;
-        document.getElementById("maneuverability").innerText = "Maniability: " + this.carList[this.selectedCar].maneuverability;
-        document.getElementById("brakePower").innerText = "Brake: " + this.carList[this.selectedCar].brakePower;
+        document.getElementById("baseSpeed").innerText = "Car Speed: " ;
+        document.getElementById("acceleration").innerText = "Acceleration: ";
+        document.getElementById("maneuverability").innerText = "Maniability: ";
 
         // Modifiez l'attribut href en remplaçant {Car.id} par la valeur de carId
         document.getElementById("btn-start").href = `#Game/${this.selectedCar}`

@@ -2,16 +2,16 @@ import Car from '../model/Car.js';
 class CarDAO{
     constructor(){
         this.cars = [
-            {id: 0, name: "Muscle", model: "Muscle.glb", level: 0, price: 5000, acceleration: 1, baseMaxSpeed: 50, weight: 1000, brakePower: 1, maneuverability: 20, rotation: 0.01, cameraDistance: 900, cameraRotationY: 500, cameraRotationX: 0},
-            {id: 1, name: "Sedan", model: "Sedan.glb", level: 5, price: 5000, acceleration: 0.75, baseMaxSpeed: 50, weight: 1000, brakePower: 1, maneuverability: 10, rotation: 0.01, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
-            {id: 2, name: "Police car", model: "Police Muscle.glb", price: 5000, level: 10, acceleration: 1.1, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.009, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
-            {id: 3, name: "Gino", model: "Muscle 2.glb", level: 15, price: 5000, acceleration: 1.1, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.009, cameraDistance: 1000, cameraRotationY: 400, cameraRotationX: 0},
+            {id: 0, name: "Muscle", model: "Muscle.glb", level: 0, price: 5000, acceleration: 0.8, baseMaxSpeed: 40, weight: 1000, brakePower: 1, maneuverability: 20, rotation: 0.01, cameraDistance: 900, cameraRotationY: 500, cameraRotationX: 0},
+            {id: 1, name: "Sedan", model: "Sedan.glb", level: 5, price: 5000, acceleration: 0.6, baseMaxSpeed: 50, weight: 1000, brakePower: 1, maneuverability: 10, rotation: 0.01, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
+            {id: 2, name: "Police car", model: "Police Muscle.glb", price: 5000, level: 10, acceleration: 0.9, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.009, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
+            {id: 3, name: "Gino", model: "Muscle 2.glb", level: 15, price: 5000, acceleration: 0.9, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.008, cameraDistance: 1000, cameraRotationY: 400, cameraRotationX: 0},
             {id: 4, name: "Hatchback", model: "Hatchback.glb", level: 0, price: 5000, acceleration: 0.9, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.009, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
-            {id: 5, name: "Sport", model: "Sports.glb", level: 0, price: 5000, acceleration: 1, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.01, cameraDistance: 900, cameraRotationY: 400, cameraRotationX: 0},
-            {id: 6, name: "Pickup", model: "Pickup.glb", level: 0, price: 5000, acceleration: 0.9, baseMaxSpeed: 50, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.0075, cameraDistance: 1100, cameraRotationY: 550, cameraRotationX: 0},
-            {id: 7, name: "Taxi", model: "Taxi.glb", level: 0, price: 5000, acceleration: 1.5, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.01, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
-            {id: 8, name: "Van", model: "Van.glb", level: 0, price: 5000, acceleration: 0.8, baseMaxSpeed: 60, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.008, cameraDistance: 1100, cameraRotationY: 550, cameraRotationX: 0},
-            {id: 9, name: "SUV", model: "SUV.glb", level: 0, price: 5000, acceleration: 1.5, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.01, cameraDistance: 1000, cameraRotationY: 400, cameraRotationX: 0}
+            {id: 5, name: "Sport", model: "Sports.glb", level: 0, price: 5000, acceleration: 1, baseMaxSpeed: 100, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.01, cameraDistance: 900, cameraRotationY: 400, cameraRotationX: 0},
+            {id: 6, name: "Pickup", model: "Pickup.glb", level: 0, price: 5000, acceleration: 0.8, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.007, cameraDistance: 1100, cameraRotationY: 550, cameraRotationX: 0},
+            {id: 7, name: "Taxi", model: "Taxi.glb", level: 0, price: 5000, acceleration: 1, baseMaxSpeed: 30, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.0095, cameraDistance: 1000, cameraRotationY: 500, cameraRotationX: 0},
+            {id: 8, name: "Van", model: "Van.glb", level: 0, price: 5000, acceleration: 0.5, baseMaxSpeed: 60, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.006, cameraDistance: 1100, cameraRotationY: 550, cameraRotationX: 0},
+            {id: 9, name: "SUV", model: "SUV.glb", level: 0, price: 5000, acceleration: 0.6, baseMaxSpeed: 80, weight: 1000, brakePower: 1, maneuverability: 0.02, rotation: 0.005, cameraDistance: 1000, cameraRotationY: 400, cameraRotationX: 0}
        
         ];
     }

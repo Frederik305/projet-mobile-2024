@@ -7,7 +7,7 @@ class VueHomePage{
         this.carPositions = [];
         this.isAnimating = false;
         this.onWindowResize = this.onWindowResize.bind(this);
-        this.backgroundMusic= new Audio('../music/HomePageMusic.mp3');;
+        this.backgroundMusic= new Audio('music/HomePageMusic.mp3');;
         window.addEventListener('resize', this.onWindowResize, false);
     }
 

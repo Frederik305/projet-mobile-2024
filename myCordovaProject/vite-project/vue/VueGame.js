@@ -21,10 +21,21 @@ class VueGame {
         this.lastTick = 0; // Timestamp of the last tick
         
         this.frameCount = 0;
-        this.fpsCounter = document.createElement('div');
 
         this.isPaused = false;
         this.lastFpsUpdate = Date.now();
+
+        this.totalLength = 0;
+
+        
+        this.moveCarWorker = new Worker('vue/moveCarWorker.js');
+        // Set up the onmessage event handler for the worker
+        this.moveCarWorker.onmessage = (event) => {
+        const { positionX, positionZ } = event.data;
+        // Update the car's position with the received positions
+        this.carModel.position.x = positionX;
+        this.carModel.position.z = positionZ;
+        };
 
         this.onWindowResize = this.onWindowResize.bind(this);
         window.addEventListener('resize', this.onWindowResize, false);
@@ -40,8 +51,9 @@ class VueGame {
 
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
-        document.body.appendChild(this.fpsCounter);
         
+        document.getElementById('Score').style.display = 'flex';
+        document.getElementById('Pause').style.display = 'block';
         
         this.score = 0;
         this.carInstances = [];
@@ -50,38 +62,28 @@ class VueGame {
         this.nextRoadPositionCounter = 0;
         this.distanceAhead = -1000;
 
-        this.fpsCounter.style.position = 'absolute';
-        this.fpsCounter.style.top = '10px';
-        this.fpsCounter.style.left = '10px';
-        this.fpsCounter.style.color = 'white';
-        this.fpsCounter.style.fontFamily = 'Arial, sans-serif';
         this.data=null
         this.speed = this.car.baseMaxSpeed;
     }
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs,cannonjs] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
                 import('nipplejs/dist/nipplejs.js'),
-                import('cannon-es/dist/cannon-es.js'),
             ]);
             this.backgroundMusic;
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
             this.nipplejs = nipplejs;
-            this.cannonjs = cannonjs;
             
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-            /*this.world = new this.cannonjs.World();
-            this.world.gravity.set(0, -9.81, 0);*/
 
             this.setupScene();
         } catch (error) {
@@ -92,7 +94,7 @@ class VueGame {
 
     addMusic(){
         // Créez un élément audio
-        this.backgroundMusic = new Audio('../music/GameMusic.mp3');
+        this.backgroundMusic = new Audio('music/GameMusic.mp3');
 
         // Configurez les propriétés de l'élément audio
         this.backgroundMusic.loop = true; // Pour répéter la musique en boucle
@@ -188,8 +190,6 @@ class VueGame {
         return size.z;
     }
     getTotalRoadLength() {
-        let totalLength = 0;
-    
         // Iterate over each roadInstance
         for (const roadInstance of this.roadInstances) {
             // Create a bounding box for the current roadInstance
@@ -199,23 +199,21 @@ class VueGame {
             const size = bbox.getSize(new this.THREE.Vector3());
     
             // Sum up the length component of the size (assuming the road extends along the z-axis)
-            totalLength += size.z;
+            this.totalLength += size.z;
         }
-    
-        return totalLength;
     }
 
   
 
-    moveRoadBehind(){
-        if (this.roadInstances.length > 0 && this.carModel) {
-            if (this.carModel.position.z + 7000 < this.roadInstances[0].position.z) {
+    moveRoadBehind(carModel, roadInstances, carInstances){
+        if (roadInstances.length > 0 && carModel) {
+            if (carModel.position.z + 7000 < roadInstances[0].position.z) {
 
-                const totalRoadLength = this.getTotalRoadLength();
-                this.roadInstances[0].position.z -= totalRoadLength;
-                this.roadInstances.push(this.roadInstances.shift());
+                const totalRoadLength = this.totalLength
+                roadInstances[0].position.z -= totalRoadLength;
+                roadInstances.push(roadInstances.shift());
 
-                this.carsGeneration();
+                this.carsGeneration(roadInstances, carInstances);
             }
         }
     }
@@ -273,11 +271,7 @@ class VueGame {
         });
     }
 
-    carsGeneration(){
-        /*function randint(range) {
-            return Math.floor(Math.random() * range);
-        }*/
-        
+    carsGeneration(roadInstances, carInstances){
         function generateRandomArray() {
             // Initialize an array with two 0s and one 1
             let array = [0, 0, 1];
@@ -290,9 +284,6 @@ class VueGame {
           
             return array;
         }
-        
-        let roadInstances = this.roadInstances
-        let carInstances = this.carInstances;
         
         function displayPath(path) {
             const probability = 20;
@@ -328,15 +319,9 @@ class VueGame {
             
             
         }
-        
-        //console.log(this.roadInstances[0].position.z)
-        // Let's do this for a 7x7 matrix:
-        let path = generateRandomArray(); // Start at X=2 at bottom, end at X=4 at top
-        //console.log(path);
-        //console.log(JSON.stringify(path));
-        displayPath(path);    
 
-        
+        let path = generateRandomArray();
+        displayPath(path);    
     }
 
     // Ajout de lumières à la scène
@@ -470,24 +455,24 @@ class VueGame {
 
     }
 
-    moveCarForward() {
+    moveCarForward(carModel) {
         // Déplacez la voiture dans la direction z en fonction de sa vitesse actuelle
-        const angle = this.carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
+        const angle = carModel.rotation.y; // Obtenez l'angle de rotation de la voiture
         
         // Calculez les composantes x et z de la direction de déplacement en fonction de l'angle
         const dx = Math.sin(angle) * this.speed;
         const dz = -Math.cos(angle) * this.speed;
     
         // Déplacez la voiture en fonction des composantes de direction calculées
-        if(this.carModel.position.x <= 800 && this.carModel.position.x >= -800){
-            this.carModel.position.x += dx;
-            if (this.carModel.position.x > 800) {
-                this.carModel.position.x = 800;
-            } else if (this.carModel.position.x < -800) {
-                this.carModel.position.x = -800;
+        if(carModel.position.x <= 800 && carModel.position.x >= -800){
+            carModel.position.x += dx;
+            if (carModel.position.x > 800) {
+                carModel.position.x = 800;
+            } else if (carModel.position.x < -800) {
+                carModel.position.x = -800;
             }
         }
-        this.carModel.position.z += dz;
+        carModel.position.z += dz;
 
         // Réinitialisez la position z de la voiture lorsqu'elle sort de l'écran
         
@@ -504,123 +489,135 @@ class VueGame {
     */
 
 
-    setCameraPosition(){
-        const cameraOffset = new this.THREE.Vector3(this.car.cameraRotationX, this.car.cameraRotationY, this.car.cameraDistance);
+    setCameraPosition(carModel,car,camera){
+        const cameraOffset = new this.THREE.Vector3(car.cameraRotationX, car.cameraRotationY, car.cameraDistance);
         const cameraPosition = new this.THREE.Vector3();
-        cameraPosition.copy(this.carModel.position).add(cameraOffset);
-        this.camera.position.copy(cameraPosition);
+        cameraPosition.copy(carModel.position).add(cameraOffset);
+        camera.position.copy(cameraPosition);
         // Look at the car
-        this.camera.lookAt(this.carModel.position);
-        this.camera.rotation.x -= -0.2;
+        camera.lookAt(carModel.position);
+        camera.rotation.x -= -0.2;
     }
     // Main loop to update the game state at each tick
     async update() {
         if(!this.isPaused) {
             this.frameCount++;
             const rotationSpeed=this.car.rotation;
-            document.getElementById('Score').style.display = 'flex';
-            document.getElementById('Pause').style.display = 'block';
+
             const now = Date.now();
             const deltaTime = now - this.lastTick;
 
-
-            const elapsedTime = now - this.lastFpsUpdate;
-            if (elapsedTime >= 1000) { // Update FPS every second
-                const fps = Math.round((this.frameCount * 1000) / elapsedTime);
-                this.fpsCounter.textContent = `FPS: ${fps}`;
-                this.frameCount = 0; // Reset frame count
-                this.lastFpsUpdate = now; // Update last FPS update time
-            }
-                
-            if (deltaTime >= this.tickInterval) {
-                // Call your method here
-                // For example:
-                if (this.frameCount % 5 === 0) {
-                    this.updateScore();
-                }
-                if (this.frameCount % 100 === 0) {
-                    this.speedIncrease();
-                }
-                // Subtract the interval from the accumulated time
-                this.lastTick = now - (deltaTime % this.tickInterval);
-            }
-
             if (deltaTime >= this.tickInterval) {
                 //console.time('update');
+                const carModel = this.carModel;
+                const car = this.car;
+                const camera = this.camera;
+                const roadInstances = this.roadInstances;
+                const carInstances = this.carInstances;
+
+                const scene = this.scene
+
+
+                /*
+                // Extract carModel properties
+                let positionX = this.carModel.position.x;
+                let positionZ = this.carModel.position.z;
+                let rotationY = this.carModel.rotation.y;
+                let speed = this.speed;
+
+                // Send data to the worker
+                this.moveCarWorker.postMessage({ positionX, positionZ, rotationY, speed });*/
+
+
                 this.TWEEN.update();
                 try {
-                    //this.callRoad(); // Asynchronous operation
-                    this.moveRoadBehind();
-                    this.moveCarForward();
-                    this.setCameraPosition();
-                    this.renderer.render(this.scene, this.camera);
+                    this.moveRoadBehind(carModel, roadInstances, carInstances);
+                    this.moveCarForward(carModel);
+                    this.setCameraPosition(carModel,car,camera);
+                    this.renderer.render(scene, camera);
                 } catch (error) {
                     console.error("Error in game loop:", error);
                 }
 
-                this.lastTick = now - (deltaTime % this.tickInterval);
                 //console.timeEnd('update');
-            }
-            let isCollision = this.detectCollision(this.carModel,this.carInstances)
-            if(isCollision){
-                this.shakeCamera();
-                this.renderer.render(this.scene, this.camera);
-                this.isPaused=true;
-                document.getElementById('joystick-container').style.display = 'none';
-                document.getElementById('Pause').style.display = 'none';
-                document.getElementById('Score').style.display = 'none';
-                
-                window.location.hash='EndScreen';
-            }
-            if(this.data){
-                if(this.isRight && !this.gotoright ){
-
-                    if (this.carModel.rotation.y>rotationSpeed*(this.data.distance/50)){
-                        this.carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
-
-                    }
-
-                }else if(this.isRight && this.gotoright){
-
-                    if (this.carModel.rotation.y < 0.30*(this.data.distance/50)) {
-                        this.carModel.rotation.y += rotationSpeed//*(this.data.distance/50);    
-                    }
-
-                }else if(this.isLeft && !this.gotoleft){
-                    if (this.carModel.rotation.y < rotationSpeed*(this.data.distance/50 )) {
-                        this.carModel.rotation.y += rotationSpeed//*(this.data.distance/50);
-                    }   
-                
-                }else if(this.isLeft && this.gotoleft){
-                    if (this.carModel.rotation.y > -0.30*(this.data.distance/50)) {
-                        this.carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
-                    }
-
-
+                let frameCount = this.frameCount;
+                if (frameCount % 5 === 0) {
+                    this.updateScore();
                 }
+                if (frameCount % 100 === 0) {
+                    this.speedIncrease(car);
+                }
+
+                let isCollision = this.detectCollision(carModel,carInstances)
+                if(isCollision){
+                    this.shakeCamera(camera);
+                    this.renderer.render(scene, camera);
+                    this.isPaused=true;
+                    document.getElementById('joystick-container').style.display = 'none';
+                    document.getElementById('Pause').style.display = 'none';
+                    document.getElementById('Score').style.display = 'none';
+
+                    window.location.hash='EndScreen';
+                }
+
+                let data = this.data;
+
+                if(data){
+                let gotoleft = this.gotoleft;
+                let gotoright = this.gotoright;
+                let isRight = this.isRight;
+                let isLeft = this.isLeft;
+                    if(isRight && !gotoright ){
+
+                        if (carModel.rotation.y > rotationSpeed*(data.distance/50)){
+                            carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
+
+                        }
+
+                    }else if(isRight && gotoright){
+
+                        if (carModel.rotation.y < 0.30*(data.distance/50)) {
+                            carModel.rotation.y += rotationSpeed//*(this.data.distance/50);    
+                        }
+
+                    }else if(isLeft && !gotoleft){
+                        if (carModel.rotation.y < rotationSpeed*(data.distance/50 )) {
+                            carModel.rotation.y += rotationSpeed//*(this.data.distance/50);
+                        }   
+                    
+                    }else if(isLeft && gotoleft){
+                        if (carModel.rotation.y > -0.30*(data.distance/50)) {
+                            carModel.rotation.y -= rotationSpeed//*(this.data.distance/50);
+                        }
+
+
+                    }
+                }
+                this.lastTick = now - (deltaTime % this.tickInterval);
             }
         }
-        
     } 
     updateScore(){
+        //console.time('update');
         if(!this.isPaused) {
             this.score++
             let realScore = this.getGameScore();
             document.getElementById('Score').innerHTML='SCORE: ' + realScore;
         }
+        //console.timeEnd('update');
     }
 
-    speedIncrease(){
+    speedIncrease(car){
         if(!this.isPaused) {
-            this.speed += this.car.acceleration;
+            this.speed += car.acceleration;
         }
     }
     
     animate() {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
-            //this.animate(); // Recursively call animate to keep the loop running
-            window.setTimeout(() => this.animate(), 0);
+            this.animate(); // Recursively call animate to keep the loop running
+            //window.setTimeout(() => this.animate(), 0);
         });
         
     }
@@ -694,6 +691,7 @@ class VueGame {
         this.mouvements();
         this.checkButtonClick();
         await this.addRoad();
+        this.getTotalRoadLength();
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
@@ -727,14 +725,14 @@ class VueGame {
     
         return false; // No collision detected
     }
-    shakeCamera() {
+    shakeCamera(camera) {
         const duration = 0.5; // Durée de l'animation en secondes
         const strength = 0.1; // Amplitude de la secousse
     
-        const startPosition = this.camera.position.clone(); // Position initiale de la caméra
+        const startPosition = camera.position.clone(); // Position initiale de la caméra
     
         // Créer l'animation de secousse avec Tween.js
-        new this.TWEEN.Tween(this.camera.position)
+        new this.TWEEN.Tween(camera.position)
             .to({
                 x: startPosition.x + Math.random() * strength * 2 - strength,
                 y: startPosition.y + Math.random() * strength * 2 - strength,

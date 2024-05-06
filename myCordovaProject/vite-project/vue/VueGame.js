@@ -28,7 +28,7 @@ class VueGame {
         this.totalLength = 0;
 
         
-        this.moveCarWorker = new Worker('vue/moveCarWorker.js');
+        this.moveCarWorker = new Worker('vue/worker/moveCarWorker.js');
         // Set up the onmessage event handler for the worker
         this.moveCarWorker.onmessage = (event) => {
         const { positionX, positionZ } = event.data;

@@ -916,25 +916,26 @@ background-color: inherit;
 }
 .displayManeuverabilityContainer{
   width: 83px;
-  height: 10px;
+  height: 7px;
+  
 }
 
 #displayBaseSpeed{
-  height: 10px;
+  height: 8px;
   margin-left: 5px;
   background-color: rgb(255, 196, 0);
   border-radius: 10px;
 }
 
 #displayAcceleration{
-  height: 10px;
+  height: 8px;
   margin-left: 5px;
   background-color: rgb(132, 0, 255);
   border-radius: 10px;
 }
 
 #displayManeuverability{
-  height: 10px;
+  height: 8px;
   margin-left: 5px;
   background-color: rgb(0, 162, 255);
   border-radius: 10px;

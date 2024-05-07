@@ -27,8 +27,6 @@ class VueGame {
 
         this.totalLength = 0;
 
-<<<<<<< HEAD
-=======
         
         this.moveCarWorker = new Worker('vue/moveCarWorker.js');
         // Set up the onmessage event handler for the worker
@@ -39,7 +37,6 @@ class VueGame {
         this.carModel.position.z = positionZ;
         };
 
->>>>>>> parent of 2c7c09a (nom)
         this.onWindowResize = this.onWindowResize.bind(this);
         window.addEventListener('resize', this.onWindowResize, false);
     }
@@ -137,14 +134,29 @@ class VueGame {
 
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
-
+/*
         
 
 // Chemin d'accès à l'image panoramique de la skybox
         const gradientTexture = this.createGradientBackground();
         this.scene.background = gradientTexture;
 
-        //this.scene.background = new this.THREE.Color(0xb88cff);
+        //this.scene.background = new this.THREE.Color(0xb88cff);*/
+        const textureLoader = new this.THREE.TextureLoader();
+
+// Chemin d'accès à l'image panoramique de la skybox
+        const textureUrl = 'img/Sky.png';
+
+        // Chargez la texture
+        const texture = textureLoader.load(textureUrl);
+
+        // Configurez le filtrage pour améliorer la qualité de la texture
+        texture.magFilter = this.THREE.LinearFilter;
+        texture.minFilter = this.THREE.LinearFilter;
+
+        // Utilisez la texture comme skybox
+        this.scene.background = texture;
+
         this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
     }
     createGradientBackground() {

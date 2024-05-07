@@ -75,6 +75,7 @@ class VueGame {
                 import('nipplejs/dist/nipplejs.js'),
             ]);
             this.backgroundMusic;
+            
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
@@ -96,14 +97,30 @@ class VueGame {
     addMusic(){
         // Créez un élément audio
         this.backgroundMusic = new Audio('music/GameMusic.mp3');
+        
 
         // Configurez les propriétés de l'élément audio
         this.backgroundMusic.loop = true; // Pour répéter la musique en boucle
-        this.backgroundMusic.volume = 0.05; // Réglez le volume de la musique (0.0 à 1.0)
+        //this.backgroundMusic.volume = 0.05;
+
+        
+        
 
         // Chargez et jouez la musique
         this.backgroundMusic.load();
         this.backgroundMusic.play();
+        
+        
+    }
+
+    setVolume(hasMusic, volume){
+        if(hasMusic){
+            this.backgroundMusic.volume = volume;
+        }
+        else{
+            this.backgroundMusic.volume = 0;
+        }
+
     }
     removeMusic(){
         this.backgroundMusic.pause();
@@ -118,7 +135,7 @@ class VueGame {
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
 
-        const textureLoader = new this.THREE.TextureLoader();
+        
 
 // Chemin d'accès à l'image panoramique de la skybox
         const gradientTexture = this.createGradientBackground();
@@ -662,6 +679,7 @@ class VueGame {
             if(!this.isPaused){
             this.changePauseState();}
             document.getElementById('game-pause').style.display = 'none';
+            document.getElementById('Score').style.display = 'none';
             
             
         });
@@ -696,7 +714,7 @@ class VueGame {
         await this.loadCars();
         this.startGameLoop();
         this.isPaused = false;
-        this.addMusic();
+        
     }
 
     detectCollision(carModel, otherCars) {

@@ -189,7 +189,7 @@ class VueHomePage{
         displayManeuverability.style.width = this.carList[this.selectedCar].rotation * 5000 + "px";
         
         //displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed;
-        document.getElementById("name").innerText = this.carList[this.selectedCar].name;
+        document.getElementById("name").innerText = "Name: " + this.carList[this.selectedCar].name;
         document.getElementById("baseSpeed").innerText = "Car Speed: " ;
         document.getElementById("acceleration").innerText = "Acceleration: ";
         document.getElementById("maneuverability").innerText = "Maniability: ";

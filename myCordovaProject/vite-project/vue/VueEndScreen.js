@@ -1,4 +1,4 @@
-import VueGame from "./VueGame";
+
 
 class VueEndScreen{
     constructor(){

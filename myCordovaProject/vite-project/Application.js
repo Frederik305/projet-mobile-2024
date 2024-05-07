@@ -4,9 +4,11 @@ import VueGame from './vue/VueGame.js';
 import VueEndScreen from './vue/VueEndScreen.js';
 import VuePlayer from './vue/VuePlayer.js';
 import playerDAO from './data/playerDAO.js';
+import settingsDAO from './data/SettingsDAO.js';
+import VueSettings from './vue/VueSettings.js';
 
 class Application{
-    constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen,vuePlayer,playerDAO){
+    constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen,vuePlayer,playerDAO,settingsDAO,VueSettings) {
         this.window = window;
         this.playerDAO = playerDAO;
         this.carDAO = carDAO;
@@ -14,16 +16,29 @@ class Application{
         this.vueHomePage = vueHomePage;
         this.vueGame = vueGame;
         this.vueEndScreen = vueEndScreen;
+        this.settingsDAO = settingsDAO;
+        this.vueSettings = VueSettings;
         this.idItem;
         this.vuePlayer.initializeActionModifierPlayer(player=>this.actionModifierPlayer(player))
-        this.window.addEventListener("hashchange", () => this.naviger());
-        this.naviger();
+        //this.window.addEventListener("hashchange", () => this.naviguer());
+        //this.naviguer();
         
         this.hasInitGame = false;
         this.hasInitHomePage = false;
-    }
+        document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
 
-    naviger(){
+        this.window.addEventListener("hashchange",() =>this.naviguer());
+    
+        this.naviguer();
+        }
+    
+        initialiserNavigation(){
+            console.log("Application-->initialiserNavigation");
+    
+            this.window.addEventListener("hashchange",()=>this.naviguer());
+            setTimeout(()=>this.naviguer(),3000);
+        } 
+    naviguer(){
         let hash = window.location.hash;
 
         if(!hash){
@@ -36,11 +51,13 @@ class Application{
 
             this.vueHomePage.afficher();
             this.vueHomePage.addMusic();
+            this.vueHomePage.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
             this.vueHomePage.setup()
                 .then(() => {
                     if(this.hasInitHomePage == false){
                         this.vueHomePage.init();
                         this.hasInitHomePage = true;
+                        
                     }else{
                         location.reload();
                     }
@@ -54,14 +71,17 @@ class Application{
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             
             this.vueGame.afficher();
+            this.vueGame.addMusic();
 
             // Setup and initialize VueGame asynchronously
+            this.vueGame.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
             this.vueGame.setup()
                 .then(() => {
                     if(this.hasInitGame == false){
                         this.vueGame.init();
                         this.hasInitGame = true;
                         this.vueHomePage.removeMusic();
+                        
                     }else{
                         location.reload();
                     }
@@ -80,6 +100,10 @@ class Application{
             this.playerDAO.modifierLevel(this.vueGame.getGameScore());
 
             console.log(this.playerDAO.getPlayer().level)
+        }else if(hash.match(/^#Settings/)){
+            
+            this.vueSettings.initialiserSettings(this.settingsDAO.getSettings());
+            this.vueSettings.afficher();
         }
     }
     actionModifierPlayer(player){
@@ -89,4 +113,4 @@ class Application{
 
 }
 
-new Application(window, new CarDAO(), new VueHomePage(), new VueGame(), new VueEndScreen(),new VuePlayer(), new playerDAO());
+new Application(window, new CarDAO(), new VueHomePage(), new VueGame(), new VueEndScreen(),new VuePlayer(), new playerDAO(),new settingsDAO(),new VueSettings());

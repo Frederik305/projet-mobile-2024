@@ -645,7 +645,8 @@ box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.47);
 #high-score-player{
   
   text-align: center;
-  background-color: #4b4b4b8f;
+  background-color: rgba(0, 0, 0, 0.432);
+  backdrop-filter: blur(5px); 
   position: absolute;
   top: 90px;
   right: 10px;
@@ -694,6 +695,7 @@ box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.47);
   margin: -150px;
   border-radius: 25px;
   background-color: #2623b9c2;
+  backdrop-filter: blur(5px); 
   width: 300px;
   height: 500px;
   margin-top:-250px;
@@ -871,8 +873,8 @@ background-color: inherit;
   border-radius: 15px;
   font-size: 30px;
   text-align: center;
-  background-color: #49494977;
-  
+  background-color: rgba(0, 0, 0, 0.432);
+  backdrop-filter: blur(5px); 
   justify-content: center;
   align-items: center;
   
@@ -946,4 +948,75 @@ background-color: inherit;
   margin-left: 5px;
   background-color: rgb(0, 162, 255);
   border-radius: 10px;
+}
+
+#settings-btn{
+  background-image: url("../img/parametres.png");
+  height: 45%;
+  aspect-ratio: 1/1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position:absolute;
+  top: 20px;
+  
+  right: 20px;
+  
+}
+
+#settings-container-home-page{
+  position: absolute;
+  display: None;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.432);
+  backdrop-filter: blur(5px); 
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  color: #ffffff;
+  
+}
+
+#settings-container{
+  display: flex;
+  background-color: #471a9bd5;
+  width: 80%;
+  height: 80%;
+  border-radius: 25px;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+#musicBtn{
+  background-image: url("../img/music.png");
+  width: 70px;
+  aspect-ratio: 1/1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-color: none;
+  border-radius: 20px;
+  border: none;
+  text-decoration: none;
+  
+  
+  
+}
+.settings-content{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  
+  width: 70%;
+  justify-content: space-around;
+  
+  
 }

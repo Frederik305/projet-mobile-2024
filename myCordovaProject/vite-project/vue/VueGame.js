@@ -27,8 +27,10 @@ class VueGame {
 
         this.totalLength = 0;
 
+<<<<<<< HEAD
+=======
         
-        this.moveCarWorker = new Worker('vue/worker/moveCarWorker.js');
+        this.moveCarWorker = new Worker('vue/moveCarWorker.js');
         // Set up the onmessage event handler for the worker
         this.moveCarWorker.onmessage = (event) => {
         const { positionX, positionZ } = event.data;
@@ -37,6 +39,7 @@ class VueGame {
         this.carModel.position.z = positionZ;
         };
 
+>>>>>>> parent of 2c7c09a (nom)
         this.onWindowResize = this.onWindowResize.bind(this);
         window.addEventListener('resize', this.onWindowResize, false);
     }
@@ -85,6 +88,7 @@ class VueGame {
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setPixelRatio(window.devicePixelRatio*2);
 
             this.setupScene();
         } catch (error) {
@@ -165,7 +169,7 @@ class VueGame {
 
     addStart(){
         const loader = new this.GLTFLoader();
-        loader.load("rooad.glb", (gltf) => {
+        loader.load("Road+Night.glb", (gltf) => {
             const road = gltf.scene;
             this.scene.add(road);
         }, undefined, (error) => {
@@ -526,25 +530,13 @@ class VueGame {
 
             if (deltaTime >= this.tickInterval) {
                 //console.time('update');
-                const carModel = this.carModel;
-                const car = this.car;
-                const camera = this.camera;
-                const roadInstances = this.roadInstances;
-                const carInstances = this.carInstances;
+                let carModel = this.carModel;
+                let car = this.car;
+                let camera = this.camera;
+                let roadInstances = this.roadInstances;
+                let carInstances = this.carInstances;
 
-                const scene = this.scene
-
-
-                /*
-                // Extract carModel properties
-                let positionX = this.carModel.position.x;
-                let positionZ = this.carModel.position.z;
-                let rotationY = this.carModel.rotation.y;
-                let speed = this.speed;
-
-                // Send data to the worker
-                this.moveCarWorker.postMessage({ positionX, positionZ, rotationY, speed });*/
-
+                let scene = this.scene
 
                 this.TWEEN.update();
                 try {

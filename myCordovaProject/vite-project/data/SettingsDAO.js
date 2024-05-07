@@ -2,7 +2,7 @@ import Settings from '../model/Settings.js';
 class settingsDAO{
     constructor(){
         this.settings = {};
-        this.defaultSettings={MusicVolume:0.05,hasMusic:true};
+        this.defaultSettings={id:0,MusicVolume:0.05,hasMusic:true};
     }
 
     getSettings(){
@@ -15,7 +15,7 @@ class settingsDAO{
             localStorage['settings']=JSON.stringify(this.defaultSettings);
             this.settings = JSON.parse(localStorage['settings']);
         }
-        let settings= new Settings(this.settings.MusicVolume,this.settings.hasMusic)
+        let settings= new Settings(this.settings.id,this.settings.MusicVolume,this.settings.hasMusic)
         this.settings=settings;
 
         
@@ -25,12 +25,12 @@ class settingsDAO{
 
     modifierSettings(settings) {
         
-        
+        if(this.settings){
             this.settings.hasMusic=settings.hasMusic;
             this.settings.MusicVolume=settings.MusicVolume;;
             
 
-            localStorage['settings'] = JSON.stringify(this.settings);
+            localStorage['settings'] = JSON.stringify(this.settings);}else{console.log("Settings")}
         
     }
 

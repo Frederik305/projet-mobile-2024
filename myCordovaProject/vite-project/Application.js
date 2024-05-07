@@ -20,8 +20,8 @@ class Application{
         this.vueSettings = VueSettings;
         this.idItem;
         this.vuePlayer.initializeActionModifierPlayer(player=>this.actionModifierPlayer(player))
-        //this.window.addEventListener("hashchange", () => this.naviguer());
-        //this.naviguer();
+        this.vueSettings.initialiserActionModifierSettings(settings=>this.actionModifierSettings(settings))
+        
         
         this.hasInitGame = false;
         this.hasInitHomePage = false;
@@ -50,6 +50,7 @@ class Application{
             this.vueHomePage.initializeHomePage(this.carDAO.getCars(),this.playerDAO.getPlayer());
 
             this.vueHomePage.afficher();
+            
             this.vueHomePage.addMusic();
             this.vueHomePage.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
             this.vueHomePage.setup()
@@ -102,12 +103,16 @@ class Application{
             console.log(this.playerDAO.getPlayer().level)
         }else if(hash.match(/^#Settings/)){
             
-            this.vueSettings.initialiserSettings(this.settingsDAO.getSettings());
-            this.vueSettings.afficher();
+            
+            this.vueSettings.afficher(this.settingsDAO.getSettings());
         }
     }
     actionModifierPlayer(player){
         this.playerDAO.modifierInfoPlayer(player)
+        this.window.location.hash="#";
+    }
+    actionModifierSettings(settings){
+        this.settingsDAO.modifierSettings(settings)
         this.window.location.hash="#";
     }
 

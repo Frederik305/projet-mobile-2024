@@ -304,7 +304,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
   background-color: #ffffff;
   text-decoration: none ;
-
+  max-width:300px;
   width: 70%;
   cursor: pointer;
   -webkit-touch-callout: none;
@@ -331,6 +331,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   width: 100%;
   font-size: 20px;
   color: black;
+  
   
 }
 .info-player::before {
@@ -360,7 +361,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   z-index: -1;
   
 }
-.apply-btn{
+.pink-btn{
   background-color: #d867c9;
   /*border: 2px #a933c0 solid;*/
 
@@ -368,7 +369,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
   box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
   
-
+  max-width:300px;
   text-decoration: none ;
   color: white;
   font-size: 30px;
@@ -380,7 +381,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   text-align: center;
   justify-content: center;
   
-  width: 70%;
+  width: 80%;
   
 
   cursor: pointer;
@@ -392,7 +393,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   -ms-user-select: none;
   user-select: none;
 
-  background: #d867c9;
+  
 
   position: relative;
   
@@ -402,7 +403,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   z-index: 0;
 
 }
-.apply-btn::before {
+.pink-btn::before {
   content: "";
   display: block;
   position: absolute;
@@ -415,7 +416,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   
 }
 
-.apply-btn::after {
+.pink-btn::after {
   content: "";
   display: block;
   position: absolute;
@@ -494,6 +495,8 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   flex-direction: column;
   text-align: center;
   width: 80%;
+  justify-content: center;
+  align-items: center;
   
 }
 #game-score{
@@ -515,18 +518,47 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 }
 
 
-#quit-btn{
+.red-btn{
   color: white;
   background-color: #ca0000;
+  /*border: 2px #a933c0 solid;*/
+
+  
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
+  
   max-width:300px;
-  border: none;
-  margin:  auto;
-  font-size: 25px;
-  width: 70%;
+  text-decoration: none ;
+  color: white;
+  font-size: 30px;
   padding: 5px 0;
-  text-decoration: none;
-  display: block;
+  
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  
+  width: 80%;
+  
+
+  cursor: pointer;
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  
+
   position: relative;
+  
+  margin: 10px;
+  
+  text-transform: uppercase;
+  z-index: 0;
 }
 .start-btn{
   text-decoration: none ;
@@ -712,26 +744,46 @@ h1{
   font-family: 'Honk';
   font-size: 60px;
 }
-#resume-btn{
+.green-btn{
   color: white;
   background-color: rgb(98, 196, 0);
-  border: none;
-  max-width:300px;
-  margin: 10px auto;
-  margin-top: 100px;
-  width: 70%;
+  -webkit-box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32); 
+  box-shadow: 0px 0px 25px 5px rgba(0,0,0,0.32);
   
-  text-decoration: none;
-  font-family: 'Jersey15';
-  font-size: 20px;
+  max-width:300px;
+  text-decoration: none ;
+  color: white;
+  font-size: 30px;
+  padding: 5px 0;
+  
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  
+  width: 80%;
+  
+
+  cursor: pointer;
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  
 
   position: relative;
-  display: block;
- 
-
+  
+  margin: 10px;
+  
   text-transform: uppercase;
+  z-index: 0;
 }
-#resume-btn:before {
+.green-btn:before {
   content: "";
   display: block;
   position: absolute;
@@ -756,7 +808,7 @@ h1{
    cursor: pointer;
   }
   
-  #resume-btn:after {
+  .green-btn:after {
   content: "";
   display: block;
   position: absolute;
@@ -769,7 +821,7 @@ h1{
   
   }
 
-#quit-btn:before {
+.red-btn:before {
 content: "";
 display: block;
 position: absolute;
@@ -783,7 +835,7 @@ z-index: -1;
 
 }
 
-#quit-btn:after {
+.red-btn:after {
 content: "";
 display: block;
 position: absolute;
@@ -796,53 +848,8 @@ z-index: -1;
 
 }
 
-#restart-btn{
-  color: white;
-  background-color: #6dda00;
-  border: none;
-  
-  margin: 10px auto;
-  margin-top: 100px;
-  width: 70%;
-  
-  font-size: 25px;
-  width: 70%;
-  padding: 5px 0;
-  text-decoration: none;
-  max-width:300px;
 
-  position: relative;
-  display: block;
- 
 
-  text-transform: uppercase;
-}
-#restart-btn:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: -10px;
-  right: -10px;
-  background: #6dda00;
-  z-index: -1;
-  
-  
-  }
-  
-  #restart-btn:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: -6px;
-  right: -6px;
-  background: #6dda00;
-  z-index: -1;
-  
-  }
 
 #Pause{
 position : absolute;
@@ -986,23 +993,26 @@ background-color: inherit;
 #settings-container{
   display: flex;
   background-color: #471a9bd5;
-  width: 80%;
+  width: 90%;
   height: 80%;
   border-radius: 25px;
   flex-direction: column;
   text-align: center;
   align-items: center;
+  position: relative;
+  
+  justify-content: space-around;
 }
 
 #musicBtn{
   background-image: url("../img/music.png");
-  width: 70px;
+  width: 60px;
   aspect-ratio: 1/1;
   background-position: center;
   background-repeat: no-repeat;
   background-size: 50%;
   background-color: none;
-  border-radius: 20px;
+  border-radius: 15px;
   border: none;
   text-decoration: none;
   
@@ -1012,11 +1022,39 @@ background-color: inherit;
 .settings-content{
   display: flex;
   justify-content: center;
+  text-align: right;
+  align-items: center;
+  font-size: 45px;
+  width: 80%;
+  gap: 10px;
+  
+  max-width: 300px;
+  background-color: rgba(0, 0, 0, 0.432);
+  backdrop-filter: blur(5px);
+  height: 100px;
+  border-radius: 20px;
+}
+
+#volume-slider {
+  appearance: none; /* removes browser-specific styling */
+  /* width of slider */
+  width: 70%;
+  max-width: 300px;
+  height: 10px; /* height of slider */
+  background: #ffd102 ; /* orange background */
+  outline: none; /* remove outline */
+  border-radius: 12px; /* round corners */
+}
+.btns-settings{
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   align-items: center;
-  
-  width: 70%;
-  justify-content: space-around;
-  
-  
+}
+.volume-icon{
+  width: 40px;
+  aspect-ratio: 1/1;
 }

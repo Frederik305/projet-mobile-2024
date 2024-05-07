@@ -24,7 +24,7 @@ class playerDAO{
     }
 
     modifierInfoPlayer(player) {
-        console.log(player.id);
+        
         if (this.player) {
             this.player.username=player.username;
             this.player.picture=player.picture;

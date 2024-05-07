@@ -27,16 +27,6 @@ class VueGame {
 
         this.totalLength = 0;
 
-        
-        this.moveCarWorker = new Worker('vue/worker/moveCarWorker.js');
-        // Set up the onmessage event handler for the worker
-        this.moveCarWorker.onmessage = (event) => {
-        const { positionX, positionZ } = event.data;
-        // Update the car's position with the received positions
-        this.carModel.position.x = positionX;
-        this.carModel.position.z = positionZ;
-        };
-
         this.onWindowResize = this.onWindowResize.bind(this);
         window.addEventListener('resize', this.onWindowResize, false);
     }
@@ -527,25 +517,13 @@ class VueGame {
 
             if (deltaTime >= this.tickInterval) {
                 //console.time('update');
-                const carModel = this.carModel;
-                const car = this.car;
-                const camera = this.camera;
-                const roadInstances = this.roadInstances;
-                const carInstances = this.carInstances;
+                let carModel = this.carModel;
+                let car = this.car;
+                let camera = this.camera;
+                let roadInstances = this.roadInstances;
+                let carInstances = this.carInstances;
 
-                const scene = this.scene
-
-
-                /*
-                // Extract carModel properties
-                let positionX = this.carModel.position.x;
-                let positionZ = this.carModel.position.z;
-                let rotationY = this.carModel.rotation.y;
-                let speed = this.speed;
-
-                // Send data to the worker
-                this.moveCarWorker.postMessage({ positionX, positionZ, rotationY, speed });*/
-
+                let scene = this.scene
 
                 this.TWEEN.update();
                 try {

@@ -4,22 +4,26 @@
 		<meta charset="utf-8">
 		<title>Sunday Drive</title>
 
-		<script type="module" crossorigin src="/assets/index-CmR0v1UA.js"></script>
-		<link rel="stylesheet" crossorigin href="/assets/index-DEko-0cJ.css">
+		<script type="module" crossorigin src="/assets/index-CuRTJ4EP.js"></script>
+		<link rel="stylesheet" crossorigin href="/assets/index-DebzGoZC.css">
 	</head>
 	<body>
 		<div id="page-chargement-application">
-			<div class="center">
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-				<div class="wave"></div>
-			</div>
+			<h1 class="title">SUNDAY <br>DRIVER</h1>
+			<div class="holder">
+				<div class="car"></div>
+				<div class="wheels"></div>
+				<div class="wind-holder">
+				  <div class="wind"></div>
+				</div>
+				<div class="tree tree1"></div>
+				<div class="tree tree2"></div>
+				<div class="tree tree3"></div>
+				<div class="hill hill1"></div>
+				<div class="hill hill2"></div>
+				
+			  </div>
+			
 		</div>
 
 		<script type="plain/text" id="html-vue-player">
@@ -62,10 +66,18 @@
 
 			  		<div id="threejs-container"></div>
 						<div id="Stats">
-							<span id=name>{Car.name}</span>
-							<span id=acceleration>{Car.acceleration}</span>
-							<span id=maneuverability>{Car.maneuverability}</span>
-							<span id=brakePower>{Car.brakePower}</span>
+							<span id=name>{Car.name}</span></br>
+							<div class="StatsContainer">
+								<div class="baseSpeedContainer">
+									<span id=baseSpeed>{Car.baseSpeed}</span><div class="displayBaseSpeedContainer"><div id=displayBaseSpeed></div></div></br>
+								</div>
+								<div class="accelerationContainer">
+									<span id=acceleration>{Car.acceleration}</span><div class="displayAccelerationContainer"><div id=displayAcceleration></div></div></br>
+								</div>
+								<div class="maneuverabilityContainer">
+									<span id=maneuverability>{Car.maneuverability}</span><div class="displayManeuverabilityContainer"><div id=displayManeuverability></div></div></br>
+								</div>
+							</div>
 						</div>
 					<div id="swipeCatcher"></div>
 						<a href="#Game/{Car.id}" id="btn-start" class="start-btn">START</a>
@@ -87,7 +99,7 @@
 			</div>
 			<div id="game-pause">
 				<h1>Pause</h1>
-				<span id='test'></span>
+				<span id='game-score-pause'></span>
                     <div class="btns-container">
                         <div id="resume-btn">
 
@@ -103,7 +115,7 @@
 			<div class="game-over-page">
 				<div class="game-over">
 		
-					<h1>GAME&thinsp;OVER</h1>
+					<h1>GAME&thinsp;OVER </h1>
 					<div id="game-score"></div>
 		
 				</div>

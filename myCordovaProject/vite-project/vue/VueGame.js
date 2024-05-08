@@ -82,7 +82,7 @@ class VueGame {
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.setPixelRatio(window.devicePixelRatio * 2);
+            //this.renderer.setPixelRatio(window.devicePixelRatio * 2);
     
             this.setupScene();
         } catch (error) {

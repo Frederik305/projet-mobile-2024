@@ -62,7 +62,7 @@ class Application{
                         this.hasInitHomePage = true;
                         
                     }else{
-                        //location.reload();
+                        location.reload();
                     }
                     
                 })

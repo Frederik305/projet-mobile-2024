@@ -30,6 +30,9 @@ class VueGame {
         this.lastFpsUpdate = Date.now();
 
         this.totalLength = 0;
+
+        this.onWindowResize = this.onWindowResize.bind(this);
+        window.addEventListener('resize', this.onWindowResize, false);
     }
 
     initialiserCar(car){
@@ -154,8 +157,8 @@ class VueGame {
         // Utilisez la texture comme skybox
         this.scene.background = texture;
 /*
-        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.19,1, 0);
-        //this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
+        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth/4, window.innerHeight/4), 0.2,0.5, 0.1);
+        this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
 
         // Ajoutez le pass UnrealBloom à votre pipeline de rendu
         this.composer = new this.EffectComposer(this.renderer);
@@ -163,7 +166,7 @@ class VueGame {
         this.composer.addPass(this.bloomPass);
         */
 
-        this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
+        this.scene.fog = new this.THREE.FogExp2(0xa360c4, 0.00005);
     }
     createGradientBackground() {
         /*const canvas = document.createElement('canvas');

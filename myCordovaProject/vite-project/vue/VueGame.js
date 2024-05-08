@@ -153,7 +153,7 @@ class VueGame {
 
         // Utilisez la texture comme skybox
         this.scene.background = texture;
-
+/*
         this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.19,1, 0);
         //this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
 
@@ -161,7 +161,7 @@ class VueGame {
         this.composer = new this.EffectComposer(this.renderer);
         this.composer.addPass(new this.RenderPass(this.scene, this.camera));
         this.composer.addPass(this.bloomPass);
-        
+        */
 
         this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
     }
@@ -185,7 +185,7 @@ class VueGame {
         return texture;*/
     }
     removeBloomPass(){
-        this.bloomPass.dispose();
+        //this.bloomPass.dispose();
     }
 
     addStart(){
@@ -647,7 +647,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            this.composer.render();
+            //this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         

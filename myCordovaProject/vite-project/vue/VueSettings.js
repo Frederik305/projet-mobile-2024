@@ -37,12 +37,12 @@ class VueSettings{
         this.musicBtn.addEventListener("click",()=>{
         if(this.hasMusic){
             this.hasMusic=false;
-            this.musicBtn.style.backgroundImage="url(../img/music-slash.png)";
+            this.musicBtn.style.backgroundImage="url(../public/img/music-slash.png)";
             
         }
         else{
             this.hasMusic=true;
-            this.musicBtn.style.backgroundImage="url(../img/music.png)";
+            this.musicBtn.style.backgroundImage="url(../public/img/music.png)";
             
         }})
     }

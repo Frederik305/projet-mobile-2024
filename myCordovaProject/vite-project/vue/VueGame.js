@@ -185,7 +185,7 @@ class VueGame {
         return texture;
     }
     removeBloomPass(){
-        this.bloomPass.dispose();
+        //this.bloomPass.dispose();
     }
 
     addStart(){
@@ -579,8 +579,8 @@ class VueGame {
                 }
 
                 let isCollision = this.detectCollision(carModel,carInstances)
-                /*if(isCollision){
-                    this.shakeCamera(camera);
+                if(isCollision){
+                    //this.shakeCamera(camera);
                     this.renderer.render(scene, camera);
                     this.isPaused=true;
                     document.getElementById('joystick-container').style.display = 'none';
@@ -588,7 +588,7 @@ class VueGame {
                     document.getElementById('Score').style.display = 'none';
 
                     window.location.hash='EndScreen';
-                }*/
+                }
 
                 let data = this.data;
 

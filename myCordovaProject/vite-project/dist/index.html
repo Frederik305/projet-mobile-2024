@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<title>Sunday Drive</title>
 
-		<script type="module" crossorigin src="/assets/index-T6YmZCqj.js"></script>
-		<link rel="stylesheet" crossorigin href="/assets/index-DDN61P0B.css">
+		<script type="module" crossorigin src="/assets/index-CzQ6KI--.js"></script>
+		<link rel="stylesheet" crossorigin href="/assets/index-DXLpxFfL.css">
 	</head>
 	<body>
 		<div id="page-chargement-application">
@@ -42,7 +42,7 @@
 						<input type="text" id="username" class="username-player" placeholder="Username">
 					</div>
 					
-					<a href="#HomePage/"class="apply-btn" id="modifier-player">APPLY</a>
+					<a href="#HomePage/" class="pink-btn" id="modifier-player">APPLY</a>
 				</div>
 			</div>
 
@@ -57,8 +57,9 @@
 
 						
 							<span id="username-player-home-page"></span></a>
-
+						<a href="#Settings" id="settings-btn"></a>
 					</div>
+					
 					<div id="high-score-player">
 						HIGH <br> SCORE <br> 
 
@@ -80,6 +81,7 @@
 					<div id="swipeCatcher"></div>
 						<a href="#Game/{Car.id}" id="btn-start" class="start-btn">START</a>
 				  	
+						<div id="settings-container-home-page"></div>
 				</div>
 			</div>
 			
@@ -99,14 +101,14 @@
 				<h1>Pause</h1>
 				<span id='game-score-pause'></span>
                     <div class="btns-container">
-                        <div id="resume-btn">
+                        <div id="resume-btn" class="green-btn">
 
                             <input type="button" id="resume" value="RESUME">
                         </div>
-                        <a href="#EndScreen" id="quit-btn">QUIT</a>
+                        <a href="#EndScreen" id="quit-btn" class="red-btn">QUIT</a>
                     </div>
 			</div>
-			<div id=game-over-container></div>
+			<div id="game-over-container"></div>
 		</script>
 
 		<script type="plain/text" id="html-vue-end-screen">
@@ -119,12 +121,27 @@
 				</div>
 				<div class="btns-container">
 					
-					<a href="#Game/{Car.id}" id="restart-btn">RESTART</a>
+					<a href="#Game/{Car.id}" id="restart-btn" class="green-btn">RESTART</a>
 					
-					<a href="#HomePage" id="quit-btn">QUIT</a>
+					<a href="#HomePage" id="quit-btn" class="red-btn">QUIT</a>
 		
 				</div>
 			</div>
+		</script>
+		<script type="plain/text" id="html-vue-settings">
+			<div id="settings-container">
+				<h1>Settings</h1>
+					<div class="settings-content"><img src="img/volume.svg" class="volume-icon"><input type="range" min="0" max="0.5" step="0.01" id="volume-slider" /></div>
+					<div class="settings-content"><Label for-"musicBtn">Music: </Label><input type="button" value="" id="musicBtn"></div>
+					
+
+					<div class="btns-settings">
+						<a href="#HomePage" class="green-btn" id="save-btn">SAVE</a>
+						
+						<a href="#HomePage" id="cancel-btn" class="red-btn">CANCEL</a>
+					</div> 
+			</div>
+
 		</script>
 		
 	</body>

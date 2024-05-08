@@ -54,6 +54,7 @@ class Application{
             
             this.vueHomePage.addMusic();
             this.vueHomePage.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
+            
             this.vueHomePage.setup()
                 .then(() => {
                     if(this.hasInitHomePage == false){
@@ -61,7 +62,7 @@ class Application{
                         this.hasInitHomePage = true;
                         
                     }else{
-                        location.reload();
+                        //location.reload();
                     }
                     
                 })

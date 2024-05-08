@@ -185,7 +185,7 @@ class VueGame {
         return texture;
     }
     removeBloomPass(){
-        this.bloomPass.dispose();
+        //this.bloomPass.dispose();
     }
 
     addStart(){
@@ -580,7 +580,7 @@ class VueGame {
 
                 let isCollision = this.detectCollision(carModel,carInstances)
                 if(isCollision){
-                    this.shakeCamera(camera);
+                    //this.shakeCamera(camera);
                     this.renderer.render(scene, camera);
                     this.isPaused=true;
                     document.getElementById('joystick-container').style.display = 'none';

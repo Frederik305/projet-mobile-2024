@@ -647,7 +647,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            this.composer.render();
+            //this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         

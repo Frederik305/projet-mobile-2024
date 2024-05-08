@@ -579,7 +579,7 @@ class VueGame {
                 }
 
                 let isCollision = this.detectCollision(carModel,carInstances)
-                /*if(isCollision){
+                if(isCollision){
                     this.shakeCamera(camera);
                     this.renderer.render(scene, camera);
                     this.isPaused=true;
@@ -588,11 +588,11 @@ class VueGame {
                     document.getElementById('Score').style.display = 'none';
 
                     window.location.hash='EndScreen';
-                }*/
+                }
 
                 let data = this.data;
 
-                /*if(data){
+                if(data){
                 let gotoleft = this.gotoleft;
                 let gotoright = this.gotoright;
                 let isRight = this.isRight;
@@ -622,7 +622,7 @@ class VueGame {
 
 
                     }
-                }*/
+                }
                 this.lastTick = now - (deltaTime % this.tickInterval);
             }
         }

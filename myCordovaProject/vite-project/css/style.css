@@ -61,7 +61,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 }
 
 .car {
-	background-image: url('../img/car.svg');
+	background-image: url('img/car.svg');
 	background-repeat: no-repeat;
 	width: 150px;
 	height: 65px;
@@ -76,7 +76,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 }
 
 .wheels {
-	background-image: url('../img/wheels.svg');
+	background-image: url('img/wheels.svg');
 	background-repeat: no-repeat;
 	width: 118px;
 	height: 30px;
@@ -133,18 +133,18 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
 	animation: move 5s linear infinite;
 	
 	&.tree1 {
-		background-image: url('../img/tree1.svg');
+		background-image: url('img/tree1.svg');
 		z-index: 1;
 	}
 
 	&.tree2 {
-		background-image: url('../img/tree2.svg');
+		background-image: url('img/tree2.svg');
 		animation: move 8s linear infinite;
 		height: 75px;
 	}
 
 	&.tree3 {
-		background-image: url('../img/tree3.svg');
+		background-image: url('img/tree3.svg');
 		animation: move 11s linear infinite;
 		height: 50px;
 	}
@@ -445,7 +445,7 @@ background: linear-gradient(0deg, rgba(195,192,34,1) 0%, rgba(207,118,225,1) 51%
   border: none;
   background-color: rgb(255, 191, 73);
   border-radius: 50%;
-  background-image: url('../img/edit.svg');
+  background-image: url('img/edit.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 60%;
@@ -853,7 +853,7 @@ right : 10px;
 
 height : 30px;
 width : 30px;
-background-image: url('../img/pause.png');
+background-image: url('img/pause.png');
 background-size: cover;
 background-repeat: no-repeat;
 display: none;
@@ -952,7 +952,7 @@ background-color: inherit;
 }
 
 #settings-btn{
-  background-image: url("../img/parametres.png");
+  background-image: url("img/parametres.png");
   height: 45%;
   aspect-ratio: 1/1;
   background-position: center;
@@ -999,7 +999,7 @@ background-color: inherit;
 }
 
 #musicBtn{
-  background-image: url("../img/music.png");
+  background-image: url("img/music.png");
   width: 60px;
   aspect-ratio: 1/1;
   background-position: center;

@@ -7,6 +7,7 @@ import playerDAO from './data/playerDAO.js';
 import settingsDAO from './data/SettingsDAO.js';
 import VueSettings from './vue/VueSettings.js';
 
+
 class Application{
     constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen,vuePlayer,playerDAO,settingsDAO,VueSettings) {
         this.window = window;
@@ -25,7 +26,7 @@ class Application{
         
         this.hasInitGame = false;
         this.hasInitHomePage = false;
-        document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
+        //document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
 
         this.window.addEventListener("hashchange",() =>this.naviguer());
     
@@ -90,6 +91,7 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
+            this.vueGame.removeBloomPass();
             this.vueGame.removeMusic();
             this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();

@@ -222,6 +222,10 @@ class VueGame {
                 this.nextRoadPositionCounter++;
                 let nextRoadPosition = this.nextRoadPositionCounter * -roadLength;
                 road.position.z = nextRoadPosition;
+
+                road.traverse(function(node) {
+                    node.castShadow = true;
+                });
                 this.scene.add(road);
                 this.roadInstances.push(road);
             } catch (error) {

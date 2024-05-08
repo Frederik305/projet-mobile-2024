@@ -30,6 +30,9 @@ class VueGame {
         this.lastFpsUpdate = Date.now();
 
         this.totalLength = 0;
+
+        this.onWindowResize = this.onWindowResize.bind(this);
+        window.addEventListener('resize', this.onWindowResize, false);
     }
 
     initialiserCar(car){

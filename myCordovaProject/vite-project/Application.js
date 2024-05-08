@@ -26,7 +26,7 @@ class Application{
         
         this.hasInitGame = false;
         this.hasInitHomePage = false;
-        //document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
+        document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
 
         this.window.addEventListener("hashchange",() =>this.naviguer());
     

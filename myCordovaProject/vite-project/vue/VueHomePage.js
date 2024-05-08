@@ -9,7 +9,6 @@ class VueHomePage{
         this.onWindowResize = this.onWindowResize.bind(this);
         this.backgroundMusic= new Audio('music/HomePageMusic.mp3');;
         window.addEventListener('resize', this.onWindowResize, false);
-        this.cacheModel={};
     }
 
     initializeHomePage(carList,player){

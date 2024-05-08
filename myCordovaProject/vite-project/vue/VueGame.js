@@ -154,19 +154,19 @@ class VueGame {
         // Utilisez la texture comme skybox
         this.scene.background = texture;
 
-        //this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
+        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.19,1, 0);
         //this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
 
         // Ajoutez le pass UnrealBloom à votre pipeline de rendu
-        //this.composer = new this.EffectComposer(this.renderer);
-        //this.composer.addPass(new this.RenderPass(this.scene, this.camera));
-        //this.composer.addPass(this.bloomPass);
-
+        this.composer = new this.EffectComposer(this.renderer);
+        this.composer.addPass(new this.RenderPass(this.scene, this.camera));
+        this.composer.addPass(this.bloomPass);
+        
 
         this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
     }
     createGradientBackground() {
-        const canvas = document.createElement('canvas');
+        /*const canvas = document.createElement('canvas');
         canvas.width = window.innerWidth; // Définissez la largeur du canvas sur la largeur de la fenêtre
         canvas.height = window.innerHeight; // Définissez la hauteur du canvas sur la hauteur de la fenêtre
         const context = canvas.getContext('2d');
@@ -182,10 +182,10 @@ class VueGame {
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         const texture = new this.THREE.CanvasTexture(canvas);
-        return texture;
+        return texture;*/
     }
     removeBloomPass(){
-        //this.bloomPass.dispose();
+        this.bloomPass.dispose();
     }
 
     addStart(){
@@ -647,7 +647,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            //this.composer.render();
+            this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         

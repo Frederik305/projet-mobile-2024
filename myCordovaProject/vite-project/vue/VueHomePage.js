@@ -9,7 +9,6 @@ class VueHomePage{
         this.onWindowResize = this.onWindowResize.bind(this);
         this.backgroundMusic= new Audio('music/HomePageMusic.mp3');;
         window.addEventListener('resize', this.onWindowResize, false);
-        this.cacheModel={};
     }
 
     initializeHomePage(carList,player){
@@ -110,7 +109,6 @@ class VueHomePage{
         this.scene = new this.THREE.Scene();
         this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
         this.renderer = new this.THREE.WebGLRenderer();
-        //this.renderer.setPixelRatio(window.devicePixelRatio * 2);
 
         const width = window.innerWidth;
         const height = window.innerHeight;

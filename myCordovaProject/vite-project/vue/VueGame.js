@@ -371,8 +371,8 @@ class VueGame {
 
     // Ajout de lumières à la scène
     addLights() {
-        const ambientLight = new this.THREE.AmbientLight(0xffffff,3); // Lumière ambiante
-        const directionalLight = new this.THREE.DirectionalLight(0xffffff,5); // Lumière directionnelle
+        const ambientLight = new this.THREE.AmbientLight(0xbbb5eb,3); // Lumière ambiante
+        const directionalLight = new this.THREE.DirectionalLight(0xbbb5eb,5); // Lumière directionnelle
         directionalLight.position.set(1, 1, 1);
         this.scene.add(ambientLight, directionalLight);
     }

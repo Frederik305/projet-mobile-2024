@@ -8,10 +8,14 @@ class VueGame {
         this.GLTFLoader = null;
         this.TWEEN = null;
         this.nipplejs = null;
+        this.UnrealBloomPass=null;
+        this.EffectComposer=null;
+        this.RenderPass=null;
+
         this.car;
         this.carModel;
         this.setup = this.setup.bind(this); // Bind the setup method to the current instance
-
+        this.bloomPass =null;
         this.gotoleft=false;
         this.gotoright=false;
         this.isLeft=false;
@@ -26,9 +30,6 @@ class VueGame {
         this.lastFpsUpdate = Date.now();
 
         this.totalLength = 0;
-
-        this.onWindowResize = this.onWindowResize.bind(this);
-        window.addEventListener('resize', this.onWindowResize, false);
     }
 
     initialiserCar(car){
@@ -58,25 +59,31 @@ class VueGame {
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN },nipplejs] = await Promise.all([
+            const [THREE, { GLTFLoader }, { default: TWEEN }, nipplejs, { UnrealBloomPass },{ EffectComposer },{ RenderPass}] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
                 import('@tweenjs/tween.js'),
                 import('nipplejs/dist/nipplejs.js'),
+                import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
+                import('three/examples/jsm/postprocessing/EffectComposer.js'),
+                import('three/examples/jsm/postprocessing/RenderPass.js'),
+                
             ]);
-            this.backgroundMusic;
-            
+    
+          
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
             this.TWEEN = TWEEN;
             this.nipplejs = nipplejs;
-            
+            this.UnrealBloomPass = UnrealBloomPass;
+            this.EffectComposer = EffectComposer;
+            this.RenderPass = RenderPass;
             this.scene = new this.THREE.Scene();
             this.camera = new this.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100000);
             this.renderer = new this.THREE.WebGLRenderer();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.renderer.setPixelRatio(window.devicePixelRatio*2);
-
+            this.renderer.setPixelRatio(window.devicePixelRatio * 2);
+    
             this.setupScene();
         } catch (error) {
             console.error('Error setting up Three.js:', error);
@@ -124,14 +131,38 @@ class VueGame {
 
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
-
+/*
         
 
 // Chemin d'accès à l'image panoramique de la skybox
         const gradientTexture = this.createGradientBackground();
         this.scene.background = gradientTexture;
 
-        //this.scene.background = new this.THREE.Color(0xb88cff);
+        //this.scene.background = new this.THREE.Color(0xb88cff);*/
+        const textureLoader = new this.THREE.TextureLoader();
+
+// Chemin d'accès à l'image panoramique de la skybox
+        const textureUrl = 'img/Sky.png';
+
+        // Chargez la texture
+        const texture = textureLoader.load(textureUrl);
+
+        // Configurez le filtrage pour améliorer la qualité de la texture
+        texture.magFilter = this.THREE.LinearFilter;
+        texture.minFilter = this.THREE.LinearFilter;
+
+        // Utilisez la texture comme skybox
+        this.scene.background = texture;
+
+        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
+        this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
+
+        // Ajoutez le pass UnrealBloom à votre pipeline de rendu
+        this.composer = new this.EffectComposer(this.renderer);
+        this.composer.addPass(new this.RenderPass(this.scene, this.camera));
+        this.composer.addPass(this.bloomPass);
+
+
         this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);
     }
     createGradientBackground() {
@@ -152,6 +183,9 @@ class VueGame {
 
         const texture = new this.THREE.CanvasTexture(canvas);
         return texture;
+    }
+    removeBloomPass(){
+        this.bloomPass.dispose();
     }
 
     addStart(){
@@ -545,7 +579,7 @@ class VueGame {
                 }
 
                 let isCollision = this.detectCollision(carModel,carInstances)
-                if(isCollision){
+                /*if(isCollision){
                     this.shakeCamera(camera);
                     this.renderer.render(scene, camera);
                     this.isPaused=true;
@@ -554,11 +588,11 @@ class VueGame {
                     document.getElementById('Score').style.display = 'none';
 
                     window.location.hash='EndScreen';
-                }
+                }*/
 
                 let data = this.data;
 
-                if(data){
+                /*if(data){
                 let gotoleft = this.gotoleft;
                 let gotoright = this.gotoright;
                 let isRight = this.isRight;
@@ -588,7 +622,7 @@ class VueGame {
 
 
                     }
-                }
+                }*/
                 this.lastTick = now - (deltaTime % this.tickInterval);
             }
         }
@@ -613,6 +647,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
+            this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         

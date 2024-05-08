@@ -7,6 +7,7 @@ import playerDAO from './data/playerDAO.js';
 import settingsDAO from './data/SettingsDAO.js';
 import VueSettings from './vue/VueSettings.js';
 
+
 class Application{
     constructor(window, carDAO, vueHomePage, vueGame, vueEndScreen,vuePlayer,playerDAO,settingsDAO,VueSettings) {
         this.window = window;
@@ -20,12 +21,12 @@ class Application{
         this.vueSettings = VueSettings;
         this.idItem;
         this.vuePlayer.initializeActionModifierPlayer(player=>this.actionModifierPlayer(player))
-        //this.window.addEventListener("hashchange", () => this.naviguer());
-        //this.naviguer();
+        this.vueSettings.initialiserActionModifierSettings(settings=>this.actionModifierSettings(settings))
+        
         
         this.hasInitGame = false;
         this.hasInitHomePage = false;
-        document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
+        //document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
 
         this.window.addEventListener("hashchange",() =>this.naviguer());
     
@@ -50,6 +51,7 @@ class Application{
             this.vueHomePage.initializeHomePage(this.carDAO.getCars(),this.playerDAO.getPlayer());
 
             this.vueHomePage.afficher();
+            
             this.vueHomePage.addMusic();
             this.vueHomePage.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
             this.vueHomePage.setup()
@@ -89,6 +91,7 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
+            this.vueGame.removeBloomPass();
             this.vueGame.removeMusic();
             this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();
@@ -102,12 +105,16 @@ class Application{
             console.log(this.playerDAO.getPlayer().level)
         }else if(hash.match(/^#Settings/)){
             
-            this.vueSettings.initialiserSettings(this.settingsDAO.getSettings());
-            this.vueSettings.afficher();
+            
+            this.vueSettings.afficher(this.settingsDAO.getSettings());
         }
     }
     actionModifierPlayer(player){
         this.playerDAO.modifierInfoPlayer(player)
+        this.window.location.hash="#";
+    }
+    actionModifierSettings(settings){
+        this.settingsDAO.modifierSettings(settings)
         this.window.location.hash="#";
     }
 

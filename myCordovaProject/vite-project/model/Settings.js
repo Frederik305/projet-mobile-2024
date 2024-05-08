@@ -1,5 +1,6 @@
 class Settings {
-    constructor(MusicVolume, hasMusic) {
+    constructor(id,MusicVolume, hasMusic) {
+        this.id=id;
         this.MusicVolume = MusicVolume;
         this.hasMusic = hasMusic;
     }

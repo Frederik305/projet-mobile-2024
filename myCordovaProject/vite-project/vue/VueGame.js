@@ -757,27 +757,7 @@ class VueGame {
     
         return false; // No collision detected
     }
-    shakeCamera(camera) {
-        const duration = 0.5; // Durée de l'animation en secondes
-        const strength = 0.1; // Amplitude de la secousse
     
-        const startPosition = camera.position.clone(); // Position initiale de la caméra
-    
-        // Créer l'animation de secousse avec Tween.js
-        new this.TWEEN.Tween(camera.position)
-            .to({
-                x: startPosition.x + Math.random() * strength * 2 - strength,
-                y: startPosition.y + Math.random() * strength * 2 - strength,
-                z: startPosition.z + Math.random() * strength * 2 - strength,
-            }, duration * 1000) // Convertir la durée en millisecondes
-            .easing(this.TWEEN.Easing.Quadratic.InOut) // Type d'interpolation
-            .onComplete(() => {
-                // Réinitialiser la position de la caméra à sa position initiale à la fin de l'animation
-                //this.camera.position.copy(startPosition);
-                //this.renderer.render(this.camera);
-            })
-            .start(); // Démarrer l'animation
-    }
 
     
 }

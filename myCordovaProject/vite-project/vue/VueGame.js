@@ -190,7 +190,7 @@ class VueGame {
 
     addStart(){
         const loader = new this.GLTFLoader();
-        loader.load("Road+Night.glb", (gltf) => {
+        loader.load("3dModels/Road+Night.glb", (gltf) => {
             const road = gltf.scene;
             this.scene.add(road);
         }, undefined, (error) => {
@@ -200,7 +200,7 @@ class VueGame {
     async loadRoad() {
         return new Promise((resolve, reject) => {
             const loader = new this.GLTFLoader();
-            loader.load("Road+Night.glb", (gltf) => {
+            loader.load("3dModels/Road+Night.glb", (gltf) => {
                 const road = gltf.scene;
                 resolve(road);
             }, undefined, (error) => {
@@ -263,16 +263,16 @@ class VueGame {
     async loadCars() {
         
         const modelFiles = [
-            { file: 'Sedan.glb', weight: 4 },     
-            { file: 'Police Muscle.glb', weight: 2 },       
-            { file: 'Muscle 2.glb', weight: 3 },     
-            { file: 'Limousine.glb', weight: 1 },  
-            { file: 'Bus.glb', weight: 2 }, 
-            { file: 'Muscle.glb', weight: 3 }, 
-            { file: 'Firetruck.glb', weight: 1 }, 
-            { file: 'Hatchback.glb', weight: 4 }, 
-            { file: 'Ambulance.glb', weight: 2 }, 
-            { file: 'Sports.glb', weight: 2 }, 
+            { file: '3dModels/Sedan.glb', weight: 4 },     
+            { file: '3dModels/Police Muscle.glb', weight: 2 },       
+            { file: '3dModels/Muscle 2.glb', weight: 3 },     
+            { file: '3dModels/Limousine.glb', weight: 1 },  
+            { file: '3dModels/Bus.glb', weight: 2 }, 
+            { file: '3dModels/Muscle.glb', weight: 3 }, 
+            { file: '3dModels/Firetruck.glb', weight: 1 }, 
+            { file: '3dModels/Hatchback.glb', weight: 4 }, 
+            { file: '3dModels/Ambulance.glb', weight: 2 }, 
+            { file: '3dModels/Sports.glb', weight: 2 }, 
         ];
     
         const maxCars = 12; // Nombre maximum de voitures à charger

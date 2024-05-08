@@ -153,7 +153,7 @@ class VueHomePage{
                 });
 
                 const gltf2 = await new Promise((resolve, reject) => {
-                    loader.load("Parking.glb", resolve, undefined, reject);
+                    loader.load("3dModels/Parking.glb", resolve, undefined, reject);
                 });
                 this.carModel = gltf.scene;
                 this.carModel.position.set(i * -400, 0, 0); // Positioning

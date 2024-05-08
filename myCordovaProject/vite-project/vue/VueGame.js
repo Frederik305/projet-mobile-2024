@@ -142,10 +142,10 @@ class VueGame {
         const textureLoader = new this.THREE.TextureLoader();
 
 // Chemin d'accès à l'image panoramique de la skybox
-        const textureUrl = 'img/Sky.png';
+        const texturePath = 'img/Sky.png';
 
         // Chargez la texture
-        const texture = textureLoader.load(textureUrl);
+        const texture = textureLoader.load(texturePath);
 
         // Configurez le filtrage pour améliorer la qualité de la texture
         texture.magFilter = this.THREE.LinearFilter;
@@ -154,13 +154,13 @@ class VueGame {
         // Utilisez la texture comme skybox
         this.scene.background = texture;
 
-        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
-        this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
+        //this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.4, 0.85);
+        //this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
 
         // Ajoutez le pass UnrealBloom à votre pipeline de rendu
-        this.composer = new this.EffectComposer(this.renderer);
-        this.composer.addPass(new this.RenderPass(this.scene, this.camera));
-        this.composer.addPass(this.bloomPass);
+        //this.composer = new this.EffectComposer(this.renderer);
+        //this.composer.addPass(new this.RenderPass(this.scene, this.camera));
+        //this.composer.addPass(this.bloomPass);
 
 
         this.scene.fog = new this.THREE.FogExp2(0xd8c2ff, 0.00005);

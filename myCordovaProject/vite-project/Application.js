@@ -92,7 +92,7 @@ class Application{
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){
-            this.vueGame.removeBloomPass();
+            
             this.vueGame.removeMusic();
             this.vueEndScreen.initialiserVueEndScreen(this.carDAO.getCars()[this.idItem],this.vueGame.getGameScore());
             this.vueEndScreen.afficher();

@@ -124,17 +124,10 @@ class VueGame {
 
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
-/*      
-        
-
-// Chemin d'accès à l'image panoramique de la skybox
-        const gradientTexture = this.createGradientBackground();
-        this.scene.background = gradientTexture;
-
-        //this.scene.background = new this.THREE.Color(0xb88cff);*/
+      
         const textureLoader = new this.THREE.TextureLoader();
 
-// Chemin d'accès à l'image panoramique de la skybox
+
         const texturePath = 'img/Sky.png';
 
         // Chargez la texture
@@ -147,42 +140,12 @@ class VueGame {
         // Utilisez la texture comme skybox
         this.scene.background = texture;
 
-        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth/2, window.innerHeight/2), 0.5,0.3, 0.1);
-        this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
-
-        // Ajoutez le pass UnrealBloom à votre pipeline de rendu
-        this.composer = new this.EffectComposer(this.renderer);
-        this.composer.addPass(new this.RenderPass(this.scene, this.camera));
-        this.composer.addPass(this.bloomPass);
-        
-
         this.scene.fog = new this.THREE.FogExp2(0xa360c4, 0.00005);
 
         
         document.getElementById('Pause').style.display = 'block';
     }
-    createGradientBackground() {
-        /*const canvas = document.createElement('canvas');
-        canvas.width = window.innerWidth; // Définissez la largeur du canvas sur la largeur de la fenêtre
-        canvas.height = window.innerHeight; // Définissez la hauteur du canvas sur la hauteur de la fenêtre
-        const context = canvas.getContext('2d');
-        const gradient = context.createLinearGradient(0, 0, 0, window.innerHeight);
-       
     
-        gradient.addColorStop(0, '#983275'); // Couleur du dégradé au début
-        gradient.addColorStop(0.1, '#983275'); // Couleur du dégradé à la fin
-        gradient.addColorStop(0.5, '#FED800');
-        gradient.addColorStop(1, '#FED800');
-
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, canvas.width, canvas.height);
-
-        const texture = new this.THREE.CanvasTexture(canvas);
-        return texture;*/
-    }
-    removeBloomPass(){
-        //this.bloomPass.dispose();
-    }
 
     addStart(){
         const loader = new this.GLTFLoader();
@@ -419,22 +382,12 @@ class VueGame {
                     this.isRight=true;
                     this.isLeft=false;
                     if (Distance && Distance>data.distance){
-                        
-                        /*
-                        if (this.carModel.rotation.y>0){
-                            this.carModel.rotation.y -= rotationSpeed;
-                            */
-                           
+                                           
                            this.gotoright=false;
-                           
-                        
+       
                     }else{
                         this.gotoright=true;
-                        
-                        /*
-                        if (this.carModel.rotation.y < 0.30) {
-                            this.carModel.rotation.y += rotationSpeed*(data.distance/50);    
-                        }*/
+
                     }
                     
                 }  
@@ -443,20 +396,12 @@ class VueGame {
                     this.isLeft=true;
                     // La voiture tourne à gauche
                     if (Distance && Distance>data.distance){
-/*
-                        if (this.carModel.rotation.y < 0) {
-                                this.carModel.rotation.y += rotationSpeed;
-                        }   */
+
+                       
                         this.gotoleft=false;
                     }       
                     else{
-/*
-                    if (this.carModel.rotation.y > -0.30) {
-                            this.carModel.rotation.y -= rotationSpeed*(data.distance/50);
-                            
 
-                    
-                        }*/
                         this.gotoleft=true;  
                     }             
                 } 
@@ -640,7 +585,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            this.composer.render();
+            //this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         

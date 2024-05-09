@@ -52,7 +52,7 @@ class Application{
 
             this.vueHomePage.afficher();
             
-            this.vueHomePage.addMusic();
+            
             this.vueHomePage.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
             
             this.vueHomePage.setup()
@@ -64,7 +64,7 @@ class Application{
                     }else{
                         location.reload();
                     }
-                    
+                    this.vueHomePage.addMusic();
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#Game\/([0-9]+)/)){
@@ -74,7 +74,7 @@ class Application{
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             
             this.vueGame.afficher();
-            this.vueGame.addMusic();
+            
 
             // Setup and initialize VueGame asynchronously
             this.vueGame.setVolume(this.settingsDAO.getSettings().hasMusic, this.settingsDAO.getSettings().MusicVolume);
@@ -88,7 +88,7 @@ class Application{
                     }else{
                         location.reload();
                     }
-                    
+                    this.vueGame.addMusic();
                 })
                 .catch(error => console.error(error));
         }else if(hash.match(/^#EndScreen/)){

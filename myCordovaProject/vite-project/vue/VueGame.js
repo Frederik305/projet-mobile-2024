@@ -6,7 +6,7 @@ class VueGame {
         this.renderer = null;
         this.THREE = null;
         this.GLTFLoader = null;
-        this.TWEEN = null;
+        
         this.nipplejs = null;
         this.UnrealBloomPass=null;
         this.EffectComposer=null;
@@ -33,6 +33,7 @@ class VueGame {
 
         this.onWindowResize = this.onWindowResize.bind(this);
         window.addEventListener('resize', this.onWindowResize, false);
+        this.backgroundMusic = new Audio('music/GameMusic.mp3');
     }
 
     initialiserCar(car){
@@ -46,8 +47,7 @@ class VueGame {
     afficher() {
         document.getElementsByTagName("body")[0].innerHTML = this.html;
         
-        document.getElementById('Score').style.display = 'flex';
-        document.getElementById('Pause').style.display = 'block';
+        
         
         this.score = 0;
         this.carInstances = [];
@@ -62,10 +62,9 @@ class VueGame {
 
     async setup() {
         try {
-            const [THREE, { GLTFLoader }, { default: TWEEN }, nipplejs, { UnrealBloomPass },{ EffectComposer },{ RenderPass}] = await Promise.all([
+            const [THREE, { GLTFLoader },  nipplejs, { UnrealBloomPass },{ EffectComposer },{ RenderPass}] = await Promise.all([
                 import('three'),
                 import('three/examples/jsm/loaders/GLTFLoader.js'),
-                import('@tweenjs/tween.js'),
                 import('nipplejs/dist/nipplejs.js'),
                 import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
                 import('three/examples/jsm/postprocessing/EffectComposer.js'),
@@ -76,7 +75,7 @@ class VueGame {
           
             this.THREE = THREE;
             this.GLTFLoader = GLTFLoader;
-            this.TWEEN = TWEEN;
+            
             this.nipplejs = nipplejs;
             this.UnrealBloomPass = UnrealBloomPass;
             this.EffectComposer = EffectComposer;
@@ -96,17 +95,8 @@ class VueGame {
 
     addMusic(){
         // Créez un élément audio
-        this.backgroundMusic = new Audio('music/GameMusic.mp3');
         
-
-        // Configurez les propriétés de l'élément audio
-        this.backgroundMusic.loop = true; // Pour répéter la musique en boucle
-        //this.backgroundMusic.volume = 0.05;
-
-        
-        
-
-        // Chargez et jouez la musique
+        this.backgroundMusic.loop = true; 
         this.backgroundMusic.load();
         this.backgroundMusic.play();
         
@@ -134,7 +124,7 @@ class VueGame {
 
     setupScene() {
         document.body.appendChild(this.renderer.domElement);
-/*
+/*      
         
 
 // Chemin d'accès à l'image panoramique de la skybox
@@ -156,17 +146,20 @@ class VueGame {
 
         // Utilisez la texture comme skybox
         this.scene.background = texture;
-/*
-        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth/4, window.innerHeight/4), 0.2,0.5, 0.1);
+
+        this.bloomPass = new this.UnrealBloomPass(new this.THREE.Vector2(window.innerWidth/2, window.innerHeight/2), 0.5,0.3, 0.1);
         this.bloomPass.renderToScreen = true; // Définissez ceci à true si vous voulez que le rendu final passe par cet effet
 
         // Ajoutez le pass UnrealBloom à votre pipeline de rendu
         this.composer = new this.EffectComposer(this.renderer);
         this.composer.addPass(new this.RenderPass(this.scene, this.camera));
         this.composer.addPass(this.bloomPass);
-        */
+        
 
         this.scene.fog = new this.THREE.FogExp2(0xa360c4, 0.00005);
+
+        
+        document.getElementById('Pause').style.display = 'block';
     }
     createGradientBackground() {
         /*const canvas = document.createElement('canvas');
@@ -537,14 +530,7 @@ class VueGame {
         //console.log(this.carModel.position.z);
     }
 
-    /*resetCarRotationSmooth() {
-        // Création d'une nouvelle animation Tween pour la rotation de la voiture
-        new this.TWEEN.Tween(this.car.rotation)
-            .to({ y: 0 }, 100) // Animation sur 500 millisecondes jusqu'à la rotation de base
-            .easing(TWEEN.Easing.Quadratic.InOut) // Type d'animation fluide
-            .start();
-        }
-    */
+    
 
 
     setCameraPosition(carModel,car,camera){
@@ -575,7 +561,7 @@ class VueGame {
 
                 let scene = this.scene
 
-                this.TWEEN.update();
+                
                 try {
                     this.moveRoadBehind(carModel, roadInstances, carInstances);
                     this.moveCarForward(carModel);
@@ -663,7 +649,7 @@ class VueGame {
         requestAnimationFrame(() => {
             this.update(); // Call update inside requestAnimationFrame
             this.animate(); // Recursively call animate to keep the loop running
-            //this.composer.render();
+            this.composer.render();
             //window.setTimeout(() => this.animate(), 0);
         });
         
@@ -718,6 +704,7 @@ class VueGame {
     startGameLoop() {
         // Update the game state
         this.animate();
+        document.getElementById('Score').style.display = 'flex'
     }
 
     onWindowResize() {
@@ -733,6 +720,7 @@ class VueGame {
 
     async init() {
         //this.setupScene();
+        this.isPaused = false;
         await this.loadCar();
         this.addStart();
         this.addLights();
@@ -742,7 +730,7 @@ class VueGame {
         this.getTotalRoadLength();
         await this.loadCars();
         this.startGameLoop();
-        this.isPaused = false;
+        
         
     }
 

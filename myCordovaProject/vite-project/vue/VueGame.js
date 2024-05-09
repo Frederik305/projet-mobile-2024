@@ -223,9 +223,13 @@ class VueGame {
                 let nextRoadPosition = this.nextRoadPositionCounter * -roadLength;
                 road.position.z = nextRoadPosition;
 
-                road.traverse(function(node) {
-                    node.castShadow = true;
-                });
+                /*road.traverse(child => {
+                    if (child.isMesh) {
+                        child.castShadow = true; // Enable shadow casting
+                        child.receiveShadow = true; // Enable shadow receiving
+                    }
+                    else{console.warn("issue");}
+                });*/
                 this.scene.add(road);
                 this.roadInstances.push(road);
             } catch (error) {
@@ -377,7 +381,12 @@ class VueGame {
     addLights() {
         const ambientLight = new this.THREE.AmbientLight(0xbbb5eb,3); // Lumière ambiante
         const directionalLight = new this.THREE.DirectionalLight(0xbbb5eb,5); // Lumière directionnelle
-        directionalLight.position.set(1, 1, 1);
+        directionalLight.position.set(2, 10, 1);
+        /*directionalLight.castShadow = true; // Enable shadow casting
+        directionalLight.shadow.mapSize.width = 5000; // Shadow map width
+        directionalLight.shadow.mapSize.height = 5000; // Shadow map height
+        directionalLight.shadow.camera.near = 500; // Near plane
+        directionalLight.shadow.camera.far = 500; // Far plane*/
         this.scene.add(ambientLight, directionalLight);
     }
 

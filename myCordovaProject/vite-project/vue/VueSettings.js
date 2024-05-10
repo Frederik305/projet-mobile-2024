@@ -45,6 +45,12 @@ class VueSettings{
             this.musicBtn.style.backgroundImage="url(../public/img/music.png)";
             
         }})
+        this.volumeSlider.addEventListener('input', function() {
+            let value = document.getElementById("volume-slider").value;
+            console.log('La valeur a changé : ' + value);
+        
+            // Vous pouvez ajouter ici le code pour réagir au changement de valeur
+        });
     }
 
 

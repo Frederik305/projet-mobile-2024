@@ -697,7 +697,10 @@ box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.47);
   text-align: right;
 }
 .name{
-  font-size: 30px;
+  font-size: 35px;
+  font-family: 'Honk';
+  text-transform: uppercase;
+  
 }
 #swipeCatcher{
   position: absolute;
@@ -932,22 +935,31 @@ background-color: inherit;
 #displayBaseSpeed{
   height: 8px;
   margin-left: 5px;
-  background-color: rgb(255, 196, 0);
+  /*background: rgb(255,196,0);*/
+  /*background: linear-gradient(90deg, rgba(255,196,0,1) 0%, rgb(255, 103, 1) 100%); */
   border-radius: 10px;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 #displayAcceleration{
   height: 8px;
   margin-left: 5px;
-  background-color: rgb(132, 0, 255);
+  
+  /*background: rgb(132,0,255);*/
+  /*background: linear-gradient(90deg, rgb(132,0,255) 0%, rgb(164, 0, 240) 100%); */
   border-radius: 10px;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 #displayManeuverability{
   height: 8px;
   margin-left: 5px;
-  background-color: rgb(0, 162, 255);
+  /*
+  background: rgb(132,0,255);
+  background: linear-gradient(90deg, rgba 0%, rgba(188,67,255,) 100%); */
+  
   border-radius: 10px;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 #settings-btn{
@@ -998,7 +1010,7 @@ background-color: inherit;
 }
 
 #musicBtn{
-  background-image: url("../public/img/music.png");
+  /*background-image: url("../public/img/music.png");*/
   width: 60px;
   aspect-ratio: 1/1;
   background-position: center;

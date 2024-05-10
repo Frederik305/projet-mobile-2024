@@ -9,6 +9,9 @@ class VueHomePage{
         this.onWindowResize = this.onWindowResize.bind(this);
         this.backgroundMusic= new Audio('music/HomePageMusic.mp3');;
         window.addEventListener('resize', this.onWindowResize, false);
+        this.fastestCarSpeed=0
+        this.fastestCarAcceleration = 0
+        this.BestCarManiability = 0
     }
 
     initializeHomePage(carList,player){
@@ -147,8 +150,18 @@ class VueHomePage{
         
         for (let i = 0; i < this.carList.length; i++) {
             try {
+                if (this.carList[i].baseMaxSpeed>this.fastestCarSpeed){
+                    this.fastestCarSpeed=this.carList[i].baseMaxSpeed;
+                }
+                if (this.carList[i].acceleration>this.fastestCarAcceleration){
+                    this.fastestCarAcceleration=this.carList[i].acceleration;
+                }
+                if (this.carList[i].rotation>this.BestCarManiability){
+                    this.BestCarManiability=this.carList[i].rotation;
+                }
                 const gltf = await new Promise((resolve, reject) => {
                     loader.load(this.carList[i].model, resolve, undefined, reject);
+                    
                 });
 
                 const gltf2 = await new Promise((resolve, reject) => {
@@ -157,7 +170,7 @@ class VueHomePage{
                 this.carModel = gltf.scene;
                 this.carModel.position.set(i * -400, 0, 0); // Positioning
                 this.carModel.rotateY(Math.PI);
-    
+                
                 this.carPositions.push(this.carModel.position); // Store position of loaded car model
 
                 const parkingModel = gltf2.scene;
@@ -183,13 +196,22 @@ class VueHomePage{
         let displayBaseSpeed = document.getElementById("displayBaseSpeed");
         let displayAcceleration = document.getElementById("displayAcceleration");
         let displayManeuverability = document.getElementById("displayManeuverability");
-
-        displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed + "px";
-        displayAcceleration.style.width = this.carList[this.selectedCar].acceleration * 100 + "px";
-        displayManeuverability.style.width = this.carList[this.selectedCar].rotation * 5000 + "px";
         
+        
+        displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed/this.fastestCarSpeed*100 + "px";
+        displayBaseSpeed.style.background='linear-gradient(90deg, rgb(255, 103, 1) 0%, rgb(255,196,0)'+ (((this.fastestCarSpeed-this.carList[this.selectedCar].baseMaxSpeed+this.fastestCarSpeed)/this.fastestCarSpeed)*100).toString() +'%)';
+        
+
+        displayAcceleration.style.width = this.carList[this.selectedCar].acceleration/this.fastestCarAcceleration * 100 + "px";
+        displayAcceleration.style.background= 'linear-gradient(90deg, rgb(132,0,255) 0%,rgb(188,67,255)'+ (((this.fastestCarAcceleration-this.carList[this.selectedCar].acceleration+this.fastestCarAcceleration)/this.fastestCarAcceleration)*100).toString()+'%)'; 
+        
+        displayManeuverability.style.width = this.carList[this.selectedCar].rotation/this.BestCarManiability * 100  + "px";
+        displayManeuverability.style.background = 'linear-gradient(90deg, rgb(0,110,255) 0%, rgb(0,162,255)'+(((this.BestCarManiability-this.carList[this.selectedCar].rotation+this.BestCarManiability)/this.BestCarManiability)*100).toString()+'%)'
+        
+        console.log((((this.BestCarManiability-this.carList[this.selectedCar].maneuverability+this.BestCarManiability)/this.BestCarManiability)*100).toString()+'%')
         //displayBaseSpeed.style.width = this.carList[this.selectedCar].baseMaxSpeed;
         document.getElementById("name").innerText = this.carList[this.selectedCar].name;
+        document.getElementById("name").fontSize='35px';
         document.getElementById("baseSpeed").innerText = "Car Speed: " ;
         document.getElementById("acceleration").innerText = "Acceleration: ";
         document.getElementById("maneuverability").innerText = "Maniability: ";
@@ -315,16 +337,18 @@ class VueHomePage{
 
         
     
-            this.setupScene();
+        this.setupScene();
         this.startAnimation();
-        this.setLinkSelectedCar();
+        
         
         await this.loader();
+        this.setLinkSelectedCar();
         this.setCameraPosition();
-        this.appendSceneToDiv();
+        
         this.catchSwipeEvent();
-
+        
         this.checkCarsOwned();
+        this.appendSceneToDiv();
     }
 }
 export default VueHomePage;

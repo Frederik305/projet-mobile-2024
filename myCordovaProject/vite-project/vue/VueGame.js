@@ -58,6 +58,16 @@ class VueGame {
 
         this.data=null
         this.speed = this.car.baseMaxSpeed;
+
+        document.addEventListener("visibilitychange", event => {
+            if (document.visibilityState === "visible") {
+                //if(this.backgroundMusic){this.backgroundMusic.play();}
+            } else {
+              
+                if(!this.isPaused){this.changePauseState()}
+              
+            }
+          })
     }
 
     async setup() {
@@ -113,8 +123,7 @@ class VueGame {
 
     }
     removeMusic(){
-        this.backgroundMusic.pause();
-        this.backgroundMusic.currentTime = 0;
+        this.backgroundMusic.remove();
     }
     pauseMusic(){
        {this.backgroundMusic.pause();}
@@ -614,6 +623,7 @@ class VueGame {
             document.getElementById('game-pause').style.display = 'flex';
             gamepause.appendChild(scoreContainer);
             scoreContainer.style.backgroundColor = '#444444d3';
+
                 
         } else {
             this.playMusic();

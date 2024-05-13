@@ -83,6 +83,7 @@ class Application{
                     if(this.hasInitGame == false){
                         this.vueGame.init();
                         this.hasInitGame = true;
+                        
                         this.vueHomePage.removeMusic();
                         
                     }else{

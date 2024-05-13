@@ -27,6 +27,16 @@ class VueHomePage{
         document.getElementById("username-player-home-page").innerHTML = this.player.username;
         document.getElementById('photo-player-home-page').src=this.player.picture;
         document.getElementById("high-score-player").innerHTML += this.player.highscore;
+
+        document.addEventListener("visibilitychange", event => {
+            if (document.visibilityState === "visible") {
+                if(this.backgroundMusic){this.backgroundMusic.play();}
+            } else {
+              
+                if(this.backgroundMusic){this.backgroundMusic.pause();}
+              
+            }
+          })
     }
 
     checkCarsOwned(){
@@ -59,9 +69,9 @@ class VueHomePage{
         }
 
     }
+    
     removeMusic(){
-        this.backgroundMusic.pause();
-        this.backgroundMusic.currentTime = 0;
+        this.backgroundMusic.remove();
     }
 
     loadTexture(){

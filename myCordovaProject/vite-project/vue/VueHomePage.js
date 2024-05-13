@@ -30,12 +30,12 @@ class VueHomePage{
     }
 
     checkCarsOwned(){
-        if(this.player.carsUnlocked.includes(this.selectedCar)){
+        /*if(this.player.carsUnlocked.includes(this.selectedCar)){
             console.log("car already owned", this.selectedCar);
         }
         else{
             console.log("car not owned", this.selectedCar);
-        }
+        }*/
     }
 
     addMusic(){
@@ -139,8 +139,8 @@ class VueHomePage{
     }
 
     addLights() {
-        const ambientLight = new this.THREE.AmbientLight(0xffffff, 2); // Lumière ambiante
-        const directionalLight = new this.THREE.DirectionalLight(0xffffff, 7); // Lumière directionnelle
+        const ambientLight = new this.THREE.AmbientLight(0xbbb5eb,7); // Lumière ambiante
+        const directionalLight = new this.THREE.DirectionalLight(0xbbb5eb,15); // Lumière directionnelle
         directionalLight.position.set(10, 20, -10);
         this.scene.add(ambientLight, directionalLight);
     }

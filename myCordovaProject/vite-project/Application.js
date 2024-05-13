@@ -70,7 +70,7 @@ class Application{
         }else if(hash.match(/^#Game\/([0-9]+)/)){
             let navigation = hash.match(/^#Game\/([0-9]+)/)
             this.idItem = navigation[1];
-            
+            this.vueHomePage.removeMusic();
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             
             this.vueGame.afficher();
@@ -84,7 +84,7 @@ class Application{
                         this.vueGame.init();
                         this.hasInitGame = true;
                         
-                        this.vueHomePage.removeMusic();
+                        
                         
                     }else{
                         location.reload();

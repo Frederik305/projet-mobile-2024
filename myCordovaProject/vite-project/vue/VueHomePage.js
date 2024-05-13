@@ -30,7 +30,7 @@ class VueHomePage{
 
         document.addEventListener("visibilitychange", event => {
             if (document.visibilityState === "visible") {
-                if(this.backgroundMusic){this.backgroundMusic.play();}
+                if(document.getElementById('high-score-player') && this.backgroundMusic){this.backgroundMusic.play();}
             } else {
               
                 if(this.backgroundMusic){this.backgroundMusic.pause();}
@@ -71,6 +71,9 @@ class VueHomePage{
     }
     
     removeMusic(){
+        
+        this.backgroundMusic.currentTime = 0;
+        this.backgroundMusic.pause();
         this.backgroundMusic.remove();
     }
 

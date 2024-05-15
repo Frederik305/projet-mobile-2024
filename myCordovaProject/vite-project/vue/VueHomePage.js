@@ -30,16 +30,6 @@ class VueHomePage{
         document.getElementById("username-player-home-page").innerHTML = this.player.username;
         document.getElementById('photo-player-home-page').src=this.player.picture;
         document.getElementById("high-score-player").innerHTML += this.player.highscore;
-
-        document.addEventListener("visibilitychange", event => {
-            if (document.visibilityState === "visible") {
-                if(document.getElementById('high-score-player') && this.backgroundMusic){this.backgroundMusic.play();}
-            } else {
-              
-                if(this.backgroundMusic){this.backgroundMusic.pause();}
-              
-            }
-          })
     }
 
     checkCarsOwned(){
@@ -72,12 +62,9 @@ class VueHomePage{
         }
 
     }
-    
     removeMusic(){
-        
-        this.backgroundMusic.currentTime = 0;
         this.backgroundMusic.pause();
-        this.backgroundMusic.remove();
+        this.backgroundMusic.currentTime = 0;
     }
 
     loadTexture(){
@@ -252,19 +239,13 @@ class VueHomePage{
     myRegion.bind(touchArea, 'swipe', (e) => {
         if (e.detail.data[0].currentDirection <= 90 || e.detail.data[0].currentDirection >= 270) {
             if (this.selectedCar > 0) {
-                this.selectedCar--;
                 this.moveCameraPositionLeft();
-                this.updateLinkSelectedCar();
-                this.checkCarsOwned();
             }
         }
 
         if (e.detail.data[0].currentDirection >= 90 && e.detail.data[0].currentDirection <= 270) {
             if (this.selectedCar + 1 < this.carList.length) {
-                this.selectedCar++;
                 this.moveCameraPositionRight();
-                this.updateLinkSelectedCar();
-                this.checkCarsOwned();
             }
         }
     });

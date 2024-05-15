@@ -1,50 +1,159 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Sunday Driver</title>
 
-    http://www.apache.org/licenses/LICENSE-2.0
+		
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <meta charset="utf-8">
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
-            https://cordova.apache.org/docs/en/latest/
-        Some notes:
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-        <meta name="color-scheme" content="light dark">
-        <link rel="stylesheet" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script src="cordova.js"></script>
-        <script src="js/index.js"></script>
-    </body>
+
+
+
+
+
+
+		<script type="module" crossorigin src="/assets/index-DJUH8f7p.js"></script>
+		<link rel="stylesheet" crossorigin href="/assets/index-CSTdNwXT.css">
+	</head>
+	<body>
+		<div id="page-chargement-application">
+			<h1 class="title">SUNDAY <br>DRIVER</h1>
+			<div class="holder">
+				<div class="car"></div>
+				<div class="wheels"></div>
+				<div class="wind-holder">
+				  <div class="wind"></div>
+				</div>
+				<div class="tree tree1"></div>
+				<div class="tree tree2"></div>
+				<div class="tree tree3"></div>
+				<div class="hill hill1"></div>
+				<div class="hill hill2"></div>
+				
+			  </div>
+			
+		</div>
+
+		<script type="plain/text" id="html-vue-player">
+			<div class="page">
+				<div class="container-info-player">
+					<h1 class="title">SUNDAY <br>DRIVER</h1>
+					<div class="container-photo-player">
+						
+						<img id="output" class="photo-player">
+							<label for="fileInput" id="edit"></label>
+							<input type="file" id="fileInput" class="img-input" accept="image/*">
+						
+						
+					</div>
+					<div class="info-player">
+						<input type="text" id="username" class="username-player" placeholder="Username">
+					</div>
+					
+					<a href="#HomePage/" class="pink-btn" id="modifier-player">APPLY</a>
+				</div>
+			</div>
+
+		</script>
+
+		<script type="plain/text" id="html-vue-home-page">
+			<div class="page">
+				<div class="max-page-size">
+					<div class="info-player-home-page">
+						<a href="" class="link-vue-player">
+							<img id="photo-player-home-page">
+
+						
+							<span id="username-player-home-page"></span></a>
+						<a href="#Settings" id="settings-btn"></a>
+					</div>
+					
+					<div id="high-score-player">
+						HIGH <br> SCORE <br> 
+
+					</div>
+
+			  		<div id="threejs-container"></div>
+						<div id="Stats">
+							<span class="name" id=name>{Car.name}</span></br>
+							<div class="StatsContainer">
+								<div class="baseSpeedContainer">
+									<span id=baseSpeed>{Car.baseSpeed}</span><div class="displayBaseSpeedContainer"><div id=displayBaseSpeed></div></div></br>
+								</div>
+								<div class="accelerationContainer">
+									<span id=acceleration>{Car.acceleration}</span><div class="displayAccelerationContainer"><div id=displayAcceleration></div></div></br>
+								</div>
+								<div class="maneuverabilityContainer">
+									<span id=maneuverability>{Car.maneuverability}</span><div class="displayManeuverabilityContainer"><div id=displayManeuverability></div></div></br>
+								</div>
+							</div>
+						</div>
+					<div id="swipeCatcher"></div>
+						<a href="#Game/{Car.id}" id="btn-start" class="start-btn">START</a>
+				  	
+						<div id="settings-container-home-page"></div>
+				</div>
+			</div>
+			
+		</script>
+
+		<script type="plain/text" id="html-vue-game">
+			<div id="joystick-container">
+				
+				
+				
+			</div>
+			<div id="container-score-pause">
+				<div id=Score></div>
+				<button id="Pause"></button>
+			</div>
+			<div id="game-pause">
+				<h1>Pause</h1>
+				<span id='game-score-pause'></span>
+                    <div class="btns-container">
+                        <div id="resume-btn" class="green-btn">
+
+                            <input type="button" id="resume" value="RESUME">
+                        </div>
+                        <a href="#EndScreen" id="quit-btn" class="red-btn">QUIT</a>
+                    </div>
+			</div>
+			<div id="game-over-container"></div>
+		</script>
+
+		<script type="plain/text" id="html-vue-end-screen">
+			<div class="game-over-page">
+				<div class="game-over">
+		
+					<h1>GAME&thinsp;OVER </h1>
+					<div id="game-score"></div>
+		
+				</div>
+				<div class="btns-container" id="end">
+					
+					<a href="#Game/{Car.id}" id="restart-btn" class="green-btn">RESTART</a>
+					
+					<a href="#HomePage" id="quit-btn" class="red-btn">QUIT</a>
+		
+				</div>
+			</div>
+		</script>
+		<script type="plain/text" id="html-vue-settings">
+			<div id="settings-container">
+				
+				<h1>Settings</h1>
+					<div class="settings-content"><img src="img/volume.svg" class="volume-icon"><input type="range" min="0" max="0.5" step="0.01" id="volume-slider" /></div>
+					<div class="settings-content"><Label for-"musicBtn">Music: </Label><input type="button" value="" id="musicBtn"></div>
+					
+
+					<div class="btns-settings">
+						<a href="#HomePage" class="green-btn" id="save-btn">SAVE</a>
+						
+						<a href="#HomePage" id="cancel-btn" class="red-btn">CANCEL</a>
+					</div> 
+			</div>
+
+		</script>
+		
+	</body>
 </html>

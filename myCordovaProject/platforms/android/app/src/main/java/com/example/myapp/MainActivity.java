@@ -17,7 +17,7 @@
        under the License.
  */
 
-package ca.cegepgim.sundaydriver;
+package com.example.myapp;
 
 import android.os.Bundle;
 

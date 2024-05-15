@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+/*
        Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
        distributed with this work for additional information
@@ -16,9 +15,28 @@
        KIND, either express or implied.  See the License for the
        specific language governing permissions and limitations
        under the License.
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+ */
 
-  android:versionName="1.0"
-  android:versionCode="1">
-</manifest>
+package ca.cegepgim.sundaydriver;
+
+import android.os.Bundle;
+
+import org.apache.cordova.*;
+
+public class MainActivity extends CordovaActivity
+{
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        // enable Cordova apps to be started in the background
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
+            moveTaskToBack(true);
+        }
+
+        // Set by <content src="index.html" /> in config.xml
+        loadUrl(launchUrl);
+    }
+}

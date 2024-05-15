@@ -276,27 +276,29 @@ class VueHomePage{
         this.camera.lookAt(this.carPositions[this.selectedCar].clone().add(new this.THREE.Vector3(0, 0, -100)));
     }
     moveCameraPositionLeft() {
-        this.camera.position.x += 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos <= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionLeft();
-            }
-        }, 0.1);
+        let cameraPos = { x: this.camera.position.x };
+        let carPos = this.carPositions[this.selectedCar].x + 400;
+        
+        new this.TWEEN.Tween(cameraPos)
+            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
+            .onUpdate(() => {
+                this.camera.position.x = cameraPos.x;
+            })
+            .start();
     }
-
+    
     moveCameraPositionRight() {
-        this.camera.position.x -= 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos >= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionRight();
-            }
-        }, 0.1);
+        let cameraPos = { x: this.camera.position.x };
+        let carPos = this.carPositions[this.selectedCar].x + 400;
+    
+        new this.TWEEN.Tween(cameraPos)
+            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
+            .onUpdate(() => {
+                this.camera.position.x = cameraPos.x;
+            })
+            .start();
     }
 
 

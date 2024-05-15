@@ -30,16 +30,6 @@ class VueHomePage{
         document.getElementById("username-player-home-page").innerHTML = this.player.username;
         document.getElementById('photo-player-home-page').src=this.player.picture;
         document.getElementById("high-score-player").innerHTML += this.player.highscore;
-
-        document.addEventListener("visibilitychange", event => {
-            if (document.visibilityState === "visible") {
-                if(document.getElementById('high-score-player') && this.backgroundMusic){this.backgroundMusic.play();}
-            } else {
-              
-                if(this.backgroundMusic){this.backgroundMusic.pause();}
-              
-            }
-          })
     }
 
     checkCarsOwned(){
@@ -72,12 +62,9 @@ class VueHomePage{
         }
 
     }
-    
     removeMusic(){
-        
-        this.backgroundMusic.currentTime = 0;
         this.backgroundMusic.pause();
-        this.backgroundMusic.remove();
+        this.backgroundMusic.currentTime = 0;
     }
 
     loadTexture(){
@@ -252,19 +239,13 @@ class VueHomePage{
     myRegion.bind(touchArea, 'swipe', (e) => {
         if (e.detail.data[0].currentDirection <= 90 || e.detail.data[0].currentDirection >= 270) {
             if (this.selectedCar > 0) {
-                this.selectedCar--;
                 this.moveCameraPositionLeft();
-                this.updateLinkSelectedCar();
-                this.checkCarsOwned();
             }
         }
 
         if (e.detail.data[0].currentDirection >= 90 && e.detail.data[0].currentDirection <= 270) {
             if (this.selectedCar + 1 < this.carList.length) {
-                this.selectedCar++;
                 this.moveCameraPositionRight();
-                this.updateLinkSelectedCar();
-                this.checkCarsOwned();
             }
         }
     });
@@ -275,28 +256,49 @@ class VueHomePage{
         console.log(this.carPositions[this.selectedCar].x);
         this.camera.lookAt(this.carPositions[this.selectedCar].clone().add(new this.THREE.Vector3(0, 0, -100)));
     }
-    moveCameraPositionLeft() {
-        this.camera.position.x += 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos <= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionLeft();
-            }
-        }, 0.1);
-    }
 
+    moveCameraPositionLeft() {
+        this.isAnimating = true;
+        if (this.selectedCar > 0) {
+            this.selectedCar--;
+            let targetX = this.camera.position.x + 400;
+            let cameraPos = { x: this.camera.position.x }; 
+
+            new this.TWEEN.Tween(cameraPos)
+                .to({ x: targetX }, 500)
+                .easing(this.TWEEN.Easing.Quartic.Out)
+                .onUpdate(() => {
+                    this.camera.position.x = cameraPos.x;
+                })
+                .onComplete(() => {
+                    this.isAnimating = false;
+                    this.updateLinkSelectedCar();
+                    this.checkCarsOwned();
+                })
+                .start();
+        }
+    }
+    
     moveCameraPositionRight() {
-        this.camera.position.x -= 2;
-        let cameraPos = this.camera.position.x;
-        let carPos = this.carPositions[this.selectedCar].x;
-        setTimeout(() => {
-            if (cameraPos >= carPos + 400) {
-                console.log(cameraPos);
-                this.moveCameraPositionRight();
-            }
-        }, 0.1);
+        this.isAnimating = true;
+        if (this.selectedCar + 1 < this.carList.length) {
+            this.selectedCar++;
+            let targetX = this.camera.position.x - 400;
+            let cameraPos = { x: this.camera.position.x };
+    
+            new this.TWEEN.Tween(cameraPos)
+                .to({ x: targetX }, 500)
+                .easing(this.TWEEN.Easing.Quartic.Out)
+                .onUpdate(() => {
+                    this.camera.position.x = cameraPos.x;
+                })
+                .onComplete(() => {
+                    this.isAnimating = false;
+                    this.updateLinkSelectedCar();
+                    this.checkCarsOwned();
+                })
+                .start();
+        }
     }
 
 

@@ -12,6 +12,9 @@ class VueHomePage{
         this.fastestCarSpeed=0
         this.fastestCarAcceleration = 0
         this.BestCarManiability = 0
+
+        this.leftSwipes = 0;
+        this.rightSwipes = 0;
     }
 
     initializeHomePage(carList,player){
@@ -243,84 +246,57 @@ class VueHomePage{
     }
 
     catchSwipeEvent() {
-        var touchArea = document.getElementById('swipeCatcher');
-        var myRegion = new this.ZingTouch.Region(touchArea);
-    
-        myRegion.bind(touchArea, 'swipe', (e) => {
-            
-            
-            // check for left swipes
-            if ((e.detail.data[0].currentDirection <= 270 && e.detail.data[0].currentDirection >= 90) && !this.isAnimating) {
-                if(this.selectedCar+1<this.carList.length){
-                this.selectedCar++
+    const touchArea = document.getElementById('swipeCatcher');
+    const myRegion = new this.ZingTouch.Region(touchArea);
+
+    myRegion.bind(touchArea, 'swipe', (e) => {
+        if (e.detail.data[0].currentDirection <= 90 || e.detail.data[0].currentDirection >= 270) {
+            if (this.selectedCar > 0) {
+                this.selectedCar--;
+                this.moveCameraPositionLeft();
                 this.updateLinkSelectedCar();
-                //this.setCameraPosition();
-                this.moveCameraPositionRight()
                 this.checkCarsOwned();
-                }
             }
-    
-            if ((e.detail.data[0].currentDirection >= 270 || e.detail.data[0].currentDirection <= 90) && !this.isAnimating) {
-                if (this.selectedCar <= 0){
-                    return
-                }
-                else{
-                    this.selectedCar--
-                    this.updateLinkSelectedCar();
-                    //this.setCameraPosition();
-                    this.moveCameraPositionLeft()
-                    this.checkCarsOwned();
-                }
+        }
+
+        if (e.detail.data[0].currentDirection >= 90 && e.detail.data[0].currentDirection <= 270) {
+            if (this.selectedCar + 1 < this.carList.length) {
+                this.selectedCar++;
+                this.moveCameraPositionRight();
+                this.updateLinkSelectedCar();
+                this.checkCarsOwned();
             }
-        });
-    }   
+        }
+    });
+}
 
     setCameraPosition() {
         this.camera.position.set(this.carPositions[this.selectedCar].x + 400, 300, -800);
         console.log(this.carPositions[this.selectedCar].x);
         this.camera.lookAt(this.carPositions[this.selectedCar].clone().add(new this.THREE.Vector3(0, 0, -100)));
     }
-
     moveCameraPositionLeft() {
-        this.isAnimating = true;
-        let targetX = this.camera.position.x + 400; // Calculate target position
-        let cameraPos = { x: this.camera.position.x }; // Initial camera position object
-    
-        // Create a new tween for camera position
-        new this.TWEEN.Tween(cameraPos)
-            .to({ x: targetX },500) // Duration of the tween (e.g., 1000 ms)
-            .easing(this.TWEEN.Easing.Quartic.Out) // Easing function for smooth motion
-            .onUpdate(() => {
-                this.camera.position.x = cameraPos.x; // Update camera position
-                
-            })
-            .onComplete(() => {
-                //console.log('Animation completed'); // Optional: Log completion
-                this.isAnimating = false;
-            })
-            .start(); // Start the tween
+        this.camera.position.x += 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos <= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionLeft();
+            }
+        }, 0.1);
     }
-    
+
     moveCameraPositionRight() {
-        this.isAnimating = true;
-        let targetX = this.camera.position.x - 400; // Calculate target position
-        let cameraPos = { x: this.camera.position.x }; // Initial camera position object
-    
-        // Create a new tween for camera position
-        new this.TWEEN.Tween(cameraPos)
-            .to({ x: targetX }, 500) // Duration of the tween (e.g., 1000 ms)
-            .easing(this.TWEEN.Easing.Quartic.Out) // Easing function for smooth motion
-            .onUpdate(() => {
-                 // Update camera position
-                this.camera.position.x = cameraPos.x;
-                
-            })
-            .onComplete(() => {
-                //console.log('Animation completed'); // Optional: Log completion
-                this.isAnimating = false;
-                
-            })
-            .start(); // Start the tween
+        this.camera.position.x -= 2;
+        let cameraPos = this.camera.position.x;
+        let carPos = this.carPositions[this.selectedCar].x;
+        setTimeout(() => {
+            if (cameraPos >= carPos + 400) {
+                console.log(cameraPos);
+                this.moveCameraPositionRight();
+            }
+        }, 0.1);
     }
 
 

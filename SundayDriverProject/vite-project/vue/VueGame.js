@@ -126,7 +126,7 @@ class VueGame {
         this.backgroundMusic.remove();
     }
     pauseMusic(){
-       {this.backgroundMusic.pause();}
+       this.backgroundMusic.pause();
         
     }
     playMusic(){this.backgroundMusic.play()}

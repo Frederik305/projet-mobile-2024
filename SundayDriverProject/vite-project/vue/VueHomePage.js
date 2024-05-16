@@ -33,13 +33,11 @@ class VueHomePage{
 
         document.addEventListener("visibilitychange", event => {
             if (document.visibilityState === "visible") {
+                
                 if(document.getElementById('high-score-player') && this.backgroundMusic){this.backgroundMusic.play();}
             } else {
               
-                if(this.backgroundMusic){this.backgroundMusic.pause();}
-              
-            }
-          })
+                if(this.backgroundMusic){this.backgroundMusic.pause();}}})
     }
 
     checkCarsOwned(){
@@ -72,9 +70,7 @@ class VueHomePage{
         }
 
     }
-    
     removeMusic(){
-        
         this.backgroundMusic.currentTime = 0;
         this.backgroundMusic.pause();
         this.backgroundMusic.remove();
@@ -280,7 +276,7 @@ class VueHomePage{
         let carPos = this.carPositions[this.selectedCar].x + 400;
         
         new this.TWEEN.Tween(cameraPos)
-            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .to({ x: carPos }, 500) // Durée de l'animation en millisecondes
             .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
             .onUpdate(() => {
                 this.camera.position.x = cameraPos.x;
@@ -293,7 +289,7 @@ class VueHomePage{
         let carPos = this.carPositions[this.selectedCar].x + 400;
     
         new this.TWEEN.Tween(cameraPos)
-            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .to({ x: carPos }, 500) // Durée de l'animation en millisecondes
             .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
             .onUpdate(() => {
                 this.camera.position.x = cameraPos.x;

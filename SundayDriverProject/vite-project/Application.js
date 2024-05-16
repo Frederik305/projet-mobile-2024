@@ -28,16 +28,18 @@ class Application{
         this.hasInitHomePage = false;
         document.addEventListener("deviceready",()=>this.initialiserNavigation(),false);
 
-        this.window.addEventListener("hashchange",() =>this.naviguer());
+        //this.window.addEventListener("hashchange",() =>this.naviguer());
     
-        this.naviguer();
+        //this.naviguer();
         }
     
         initialiserNavigation(){
-            console.log("Application-->initialiserNavigation");
-    
+            document.addEventListener("backbutton", function (e) {
+                e.preventDefault();
+            }, false );
+            console.log("Application-initialiserNavigation");
             this.window.addEventListener("hashchange",()=>this.naviguer());
-            setTimeout(()=>this.naviguer(),3000);
+            setTimeout(()=>this.naviguer(),1500);
         } 
     naviguer(){
         let hash = window.location.hash;
@@ -71,6 +73,7 @@ class Application{
             let navigation = hash.match(/^#Game\/([0-9]+)/)
             this.idItem = navigation[1];
             this.vueHomePage.removeMusic();
+
             this.vueGame.initialiserCar(this.carDAO.getCars()[this.idItem]);
             
             this.vueGame.afficher();

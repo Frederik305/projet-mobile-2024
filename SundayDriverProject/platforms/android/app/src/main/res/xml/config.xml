@@ -8,5 +8,6 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <icon src="SundayDriver.png" />
     <preference name="loglevel" value="DEBUG" />
 </widget>

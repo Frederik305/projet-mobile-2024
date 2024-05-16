@@ -239,13 +239,19 @@ class VueHomePage{
     myRegion.bind(touchArea, 'swipe', (e) => {
         if (e.detail.data[0].currentDirection <= 90 || e.detail.data[0].currentDirection >= 270) {
             if (this.selectedCar > 0) {
+                this.selectedCar--;
                 this.moveCameraPositionLeft();
+                this.updateLinkSelectedCar();
+                this.checkCarsOwned();
             }
         }
 
         if (e.detail.data[0].currentDirection >= 90 && e.detail.data[0].currentDirection <= 270) {
             if (this.selectedCar + 1 < this.carList.length) {
+                this.selectedCar++;
                 this.moveCameraPositionRight();
+                this.updateLinkSelectedCar();
+                this.checkCarsOwned();
             }
         }
     });
@@ -261,7 +267,7 @@ class VueHomePage{
         let carPos = this.carPositions[this.selectedCar].x + 400;
         
         new this.TWEEN.Tween(cameraPos)
-            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .to({ x: carPos }, 500) // Durée de l'animation en millisecondes
             .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
             .onUpdate(() => {
                 this.camera.position.x = cameraPos.x;
@@ -274,7 +280,7 @@ class VueHomePage{
         let carPos = this.carPositions[this.selectedCar].x + 400;
     
         new this.TWEEN.Tween(cameraPos)
-            .to({ x: carPos }, 1000) // Durée de l'animation en millisecondes
+            .to({ x: carPos }, 500) // Durée de l'animation en millisecondes
             .easing(this.TWEEN.Easing.Quadratic.Out) // Style d'interpolation pour une transition fluide
             .onUpdate(() => {
                 this.camera.position.x = cameraPos.x;

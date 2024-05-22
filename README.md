@@ -23,3 +23,4 @@ Composant de l'appareil : accès aux photos enregistrées, et accès aux notific
   • Bouton rejouer
   • Bouton retour VueHomePage
 
+liens vers la video de démonstrastion: https://youtu.be/WqlDyzAlnes?si=Lt6W211YrTyf3mhn
